@@ -8,8 +8,6 @@ gem 'rails', '3.2.16'
 
 gem 'sqlite3'
 
-gem 'pg'
-
 gem 'angular-rails-templates'
 gem 'bower-rails'
 
