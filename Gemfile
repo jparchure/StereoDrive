@@ -5,7 +5,7 @@ gem 'rails', '4.2.0'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
-
+gem 'protected_attributes'
 gem 'sqlite3'
 
 gem 'angular-rails-templates'
