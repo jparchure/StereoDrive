@@ -2946,3 +2946,49 @@ Started GET "/assets/app.js?body=1" for ::1 at 2015-02-15 17:35:03 -0600
 
 
 Started GET "/assets/application.js?body=1" for ::1 at 2015-02-15 17:35:03 -0600
+DEPRECATION WARNING: You didn't set `secret_key_base`. Read the upgrade documentation to learn more about this new config option. (called from service at /System/Library/Frameworks/Ruby.framework/Versions/2.0/usr/lib/ruby/2.0.0/webrick/httpserver.rb:138)
+
+
+Started GET "/" for ::1 at 2015-02-15 17:44:07 -0600
+Processing by AppController#index as HTML
+  Rendered app/index.html.erb within layouts/application (1.4ms)
+Completed 200 OK in 144ms (Views: 143.7ms | ActiveRecord: 0.0ms)
+
+
+Started GET "/assets/application.css?body=1" for ::1 at 2015-02-15 17:44:08 -0600
+
+
+Started GET "/assets/app.css?body=1" for ::1 at 2015-02-15 17:44:08 -0600
+
+
+Started GET "/assets/angular-rails-templates.js?body=1" for ::1 at 2015-02-15 17:44:08 -0600
+
+
+Started GET "/assets/jquery.js?body=1" for ::1 at 2015-02-15 17:44:08 -0600
+
+
+Started GET "/assets/jquery_ujs.js?body=1" for ::1 at 2015-02-15 17:44:08 -0600
+
+
+Started GET "/assets/angular-app/plugins/angular.min.js?body=1" for ::1 at 2015-02-15 17:44:08 -0600
+
+
+Started GET "/assets/angular-app/plugins/angular-route.min.js?body=1" for ::1 at 2015-02-15 17:44:08 -0600
+
+
+Started GET "/assets/angular-app/app/app.js?body=1" for ::1 at 2015-02-15 17:44:08 -0600
+
+
+Started GET "/assets/angular-app/app/controllers/homeCtrl.js?body=1" for ::1 at 2015-02-15 17:44:08 -0600
+
+
+Started GET "/assets/daw.js?body=1" for ::1 at 2015-02-15 17:44:08 -0600
+
+
+Started GET "/assets/home.js?body=1" for ::1 at 2015-02-15 17:44:08 -0600
+
+
+Started GET "/assets/app.js?body=1" for ::1 at 2015-02-15 17:44:08 -0600
+
+
+Started GET "/assets/application.js?body=1" for ::1 at 2015-02-15 17:44:08 -0600
