@@ -6,17 +6,14 @@
 development:
   access_key_id: DEV_ACCESS_KEY_ID
   secret_access_key: DEV_ACCESS_KEY_ID
-  bucket: mygitlab.production.us
   region: us-east-1
 
 test:
   access_key_id: DEV_ACCESS_KEY_ID
   secret_access_key: DEV_ACCESS_KEY_ID
-  bucket: mygitlab.production.us
   region: us-east-1
 
 production:
   access_key_id: DEV_ACCESS_KEY_ID
   secret_access_key: DEV_ACCESS_KEY_ID
-  bucket: mygitlab.production.us
   region: us-east-1
