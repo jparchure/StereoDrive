@@ -1,0 +1,16 @@
+# may need editing
+# s3 credential config
+
+# Remember not to track ID or SECRET in source control
+
+development:
+  access_key_id: DEV_ACCESS_KEY_ID
+  secret_access_key: DEV_ACCESS_KEY_ID
+
+test:
+  access_key_id: DEV_ACCESS_KEY_ID
+  secret_access_key: DEV_ACCESS_KEY_ID
+
+production:
+  access_key_id: DEV_ACCESS_KEY_ID
+  secret_access_key: DEV_ACCESS_KEY_ID
