@@ -1,14 +1,16 @@
 .user-row {
     margin-bottom: 14px;
 }
-.panel{
-	
-}
+
 .user-row:last-child {
     margin-bottom: 0;
 }
-
-
+.dis-image{
+	display: inline-block;
+  vertical-align: middle;
+  max-height: 100%;
+  max-width: 100%;
+}
 .dis-image{
 	padding: 5px;
 }
