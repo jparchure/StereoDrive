@@ -10,6 +10,8 @@ gem 'sqlite3'
 
 gem 'angular-rails-templates'
 gem 'bower-rails'
+gem 'bootstrap-sass', '~> 3.3.0'
+gem 'omniauth-facebook'
 
 gem 'aws-sdk'
 
