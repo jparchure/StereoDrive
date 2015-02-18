@@ -1,1 +1,17 @@
-{{"daw "}}
+<div>
+    {{"daw "}}
+    <br/>
+    {{message}}
+    <div ng-file-drop ng-model="files" class="drop-box"
+         drag-over-class="dragover" ng-multiple="true" allow-dir="true"
+         accept="audio/*">
+        Drop Audio here
+        <br/>
+        <div ng-repeat="file in files">
+            {{file.name}}
+        </div>
+    </div>
+
+
+    <div ng-no-file-drop>File Drag/Drop is not supported for this browser</div>
+</div>

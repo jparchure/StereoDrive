@@ -1,4 +1,5 @@
 class Audio < ActiveRecord::Base
-  attr_accessible :audioFile, :startTime, :length
-  #belongs_to :track
+  attr_accessible :audioFile
+  #belongs_to :project
+  #has_many :sounds
 end

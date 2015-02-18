@@ -41,6 +41,9 @@ GEM
       sprockets
       tilt
     arel (6.0.0)
+    autoprefixer-rails (5.1.5)
+      execjs
+      json
     aws-sdk (2.0.24)
       aws-sdk-resources (= 2.0.24)
     aws-sdk-core (2.0.24)
@@ -50,9 +53,6 @@ GEM
       multi_xml (~> 0.5)
     aws-sdk-resources (2.0.24)
       aws-sdk-core (= 2.0.24)
-    autoprefixer-rails (5.1.5)
-      execjs
-      json
     bootstrap-sass (3.3.3)
       autoprefixer-rails (>= 5.0.0.1)
       sass (>= 3.2.19)

@@ -2,7 +2,7 @@
  * Created by saasbook on 09/02/15.
  */
 
-var app = angular.module("app", ['ngRoute', 'templates']);
+var app = angular.module("app", ['ngRoute', 'templates','angularFileUpload','angularFileUpload']);
 
 app.config(['$routeProvider',
     function($routeProvider) {
@@ -14,7 +14,7 @@ app.config(['$routeProvider',
         .when('/daw', {
             title: 'daw',
             templateUrl: 'daw.html',
-            controller: 'homeCtrl'
+            controller: 'dawCtrl'
         })
         .otherwise({
             redirectTo: '/home'

@@ -1,5 +1,6 @@
 Team7::Application.routes.draw do
   root :to => "app#index"
+  post '/audio' => 'audio#create'
 
 
   # The priority is based upon order of creation:

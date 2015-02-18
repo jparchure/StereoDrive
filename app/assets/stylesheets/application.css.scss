@@ -1,2 +1,14 @@
 @import "bootstrap-sprockets";
 @import "bootstrap";
+
+.drop-box {
+  background: #F0F000;
+  width: 90%;
+  height: 100px;
+  text-align: center;
+  padding-top: 25px;
+  margin: 5%;
+}
+.dragover {
+  background: blue;
+}
