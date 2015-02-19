@@ -18,13 +18,13 @@ app.controller("dawCtrl", ['$scope','$upload','$http',function($scope, $upload, 
         $upload.upload({
             url: '/audio',
             file: file
+        }).success(function (data, status, headers, config) {
+            $scope.message = data;
         });
         //$http.post('/audio',file).success(function(data){
         //    $scope.message = data;
         //});
     }
-    $scope.message = "it will work";
-
 
     function upload(files){
         if (files && files.length) {

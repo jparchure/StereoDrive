@@ -1,19 +1,28 @@
 class AudioController < ApplicationController
 
+  # upload file to s3, and on success, add the filename and key to the database
   def create
-    # Here we will upload file to s3
-
+    file = params[:file]
     s3 = Aws::S3::Resource.new(
-      :access_key_id => 'ACCESS_KEY',
-      :secret_access_key => 'SECRET_KEY',
+      :access_key_id => 'AKIAIMHCBU7BTMVYEWOA',
+      :secret_access_key => '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',
       :region => 'us-east-1'
     )
     bucket = s3.bucket('stereodrive.dev')
-    obj = bucket.object('newFile.mp3')
-    obj.upload_file(params[:file].tempfile)
+    uuid = UUIDTools::UUID.random_create
 
 
-    render :json => {"implimented" => false, "test"=>"testing!"}
+    # create object key  {project}/{UUID}.mp3
+    fileName = 'ExampleProject/' << uuid << '.mp3'
+    obj = bucket.object(fileName)
+
+    if(obj.upload_file(file.tempfile))
+      Audio.create!(file_name: file.original_filename,key: uuid)
+      # create sound in track
+      render :json => { 'success' => true}
+    else
+      render :json => { 'success' => false}
+    end
   end
 
   def delete
