@@ -21,9 +21,6 @@ app.controller("dawCtrl", ['$scope','$upload','$http',function($scope, $upload, 
         }).success(function (data, status, headers, config) {
             $scope.message = data;
         });
-        //$http.post('/audio',file).success(function(data){
-        //    $scope.message = data;
-        //});
     }
 
     function upload(files){

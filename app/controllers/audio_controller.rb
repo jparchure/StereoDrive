@@ -32,7 +32,7 @@ class AudioController < ApplicationController
 
   def index
     # This method will return all sounds from a given project? possibly
-    render :json => {"implimented" => false}
+    render :json => Audio.all
   end
 
   private
