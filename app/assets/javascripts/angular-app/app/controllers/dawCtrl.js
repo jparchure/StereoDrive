@@ -14,6 +14,9 @@ app.controller("dawCtrl", ['$scope','$upload','$http',function($scope, $upload, 
     initializeAudioTools();
     getAudio();
 
+    loadSound({
+        url: 'assets/test.mp3'
+    });
     // This function will make the API call to get the audio files from our backend
     function getAudio(){
         $http.get('/audio').success(function(data){
@@ -32,26 +35,26 @@ app.controller("dawCtrl", ['$scope','$upload','$http',function($scope, $upload, 
         request.open('GET',url,true);
         request.responseType = 'arraybuffer';
 
-        request.onload = function(){
+        request.onload = function(a){
+            alert(request.response);
             audioContext.decodeAudioData(request.response, function(buffer) {
                 data.buffer = buffer;
                 alert('sound is loaded');
-            }, function(){
-                alert('sound was not loaded');
+            }, function(e){
+                alert("sound was not loaded: "+ e);
             });
         };
-
         request.send();
-
         return data;
     }
 
     $scope.playSound = function(buffer){
+        alert("hey I felt that");
         var source = audioContext.createBufferSource();
         source.buffer = buffer;
         sources.connect(audioContext.destination);
         source.start(0);
-    }
+    };
 
     // This function will set up the WebAudioApi
     function initializeAudioTools(){
