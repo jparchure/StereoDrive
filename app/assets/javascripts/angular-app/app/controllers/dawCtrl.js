@@ -1,7 +1,7 @@
 
 app.controller("dawCtrl", ['$scope','$upload','$http',function($scope, $upload, $http){
 
-    $scope.audioFiles = [{fileName: "test!"}];
+    $scope.audioFiles = [{file_name: "test!"}];
     $scope.$watch('rejectedFiles', function(){
         if($scope.rejectedFiles)
             alert("Only .mp3 files are supported");
@@ -11,20 +11,48 @@ app.controller("dawCtrl", ['$scope','$upload','$http',function($scope, $upload, 
     });
     var audioContext;
 
-    getAudio();
     initializeAudioTools();
+    getAudio();
 
     // This function will make the API call to get the audio files from our backend
     function getAudio(){
         $http.get('/audio').success(function(data){
             $scope.message = data;
             for(var i=0; i<data.length;i++){
-                $scope.audioFiles.push({fileName: data[i].file_name});
+                $scope.audioFiles.push(loadSound(data[i]));
             }
         }).error(function(){
             alert("could not retrieve audio");
         });
     }
+
+    function loadSound(data){
+        var url = data.url;
+        var request = new XMLHttpRequest();
+        request.open('GET',url,true);
+        request.responseType = 'arraybuffer';
+
+        request.onload = function(){
+            audioContext.decodeAudioData(request.response, function(buffer) {
+                data.buffer = buffer;
+                alert('sound is loaded');
+            }, function(){
+                alert('sound was not loaded');
+            });
+        };
+
+        request.send();
+
+        return data;
+    }
+
+    $scope.playSound = function(buffer){
+        var source = audioContext.createBufferSource();
+        source.buffer = buffer;
+        sources.connect(audioContext.destination);
+        source.start(0);
+    }
+
     // This function will set up the WebAudioApi
     function initializeAudioTools(){
         try{
@@ -42,7 +70,7 @@ app.controller("dawCtrl", ['$scope','$upload','$http',function($scope, $upload, 
                 file: file
             }).success(function (data, status, headers, config) {
                 $scope.message = data;
-                $scope.audioFiles.push(file);
+                $scope.audioFiles.push(data);
             }).error(function (){
                 alert("file could not be uploaded");
             });

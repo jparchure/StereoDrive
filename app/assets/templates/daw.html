@@ -7,8 +7,8 @@
                     Audio Files
                 </div>
                 <ul class="list-group">
-                    <li class="list-group-item" ng-repeat="file in audioFiles">
-                        {{"Audio File: "+file.fileName}}
+                    <li class="list-group-item" ng-repeat="file in audioFiles" ng-click="playSound(file.buffer)">
+                        {{"Audio File: "+file.file_name}}
                     </li>
                 </ul>
             </div>
