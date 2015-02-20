@@ -79,6 +79,4 @@ app.controller("dawCtrl", ['$scope','$upload','$http',function($scope, $upload, 
             });
         }
     }
-
-
 }]);
