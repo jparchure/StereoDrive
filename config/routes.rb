@@ -1,4 +1,6 @@
 Team7::Application.routes.draw do
+  get 'bandhome_pages/bandhomepage'
+
   root :to => "app#index"
   post '/audio' => 'audio#create'
 
