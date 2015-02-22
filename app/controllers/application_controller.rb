@@ -5,5 +5,6 @@ class ApplicationController < ActionController::Base
     @current_user ||= session[:token] && User.find_by_session(session[:token])
     respond_to do |format|
 	format.json { render json: @current_user.as_json }
+    end
   end
 end
