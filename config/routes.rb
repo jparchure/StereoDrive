@@ -1,7 +1,9 @@
 Team7::Application.routes.draw do
   root :to => "app#index"
-
-
+  post '/audio' => 'audio#create'
+  get  '/paytonleevieno' => 'application#send_current_user'
+  match 'auth/:provider/callback', to: 'sessions#create', via: :get
+  match '/logout', to: 'sessions#destroy', via: :delete
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
