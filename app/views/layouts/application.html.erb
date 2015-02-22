@@ -18,11 +18,15 @@
                 <span class='icon-bar'></span>
                 <span class='icon-bar'></span>
             </button>
-            <a class="navbar-brand" href="/home">StereoDrive</a>
+            <a class="navbar-brand" href="#">StereoDrive</a>
         </div>
         <div class='navbar-collapse collapse' id='navbar'>
             <ul class='nav navbar-nav navbar-right'>
-            	<li class="navbar-link"><%= link_to "Login", '#' %></li> 
+            	<% if @current_user.nil? %>
+			<li class="navbar-link"><%= button_to "#{@current_user[:name]}", '/auth/facebook', class:'btn btn-link' %></li> 
+		<% else %>
+			<li class="navbar-link"><%= button_to "Logout", '#', class:'btn btn-link' %></li> 
+		<% end %>	
 	    </ul>
         </div>
     </div>
