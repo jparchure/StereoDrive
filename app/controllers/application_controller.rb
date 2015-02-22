@@ -1,8 +1,5 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
-<<<<<<< HEAD
-  
-=======
   before_filter :set_current_user
   def set_current_user
     @current_user ||= session[:token] && User.find_by_session(session[:token])
@@ -13,5 +10,5 @@ class ApplicationController < ActionController::Base
 	format.json { render json: @current_user }
     end
   end
->>>>>>> 6031f5a1f066111b315a37f29057451ace001e32
+
 end
