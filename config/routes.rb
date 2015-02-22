@@ -3,7 +3,7 @@ Team7::Application.routes.draw do
   post '/audio' => 'audio#create'
 
   match 'auth/:provider/callback', to: 'sessions#create', via: :get
-
+  match '/logout', to: 'sessions#destroy', via: :delete
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
