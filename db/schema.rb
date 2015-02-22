@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150220160525) do
+ActiveRecord::Schema.define(version: 20150222222618) do
 
   create_table "audios", force: :cascade do |t|
     t.string   "file_name"
@@ -34,6 +34,9 @@ ActiveRecord::Schema.define(version: 20150220160525) do
     t.string "image"
     t.string "token"
     t.string "session"
+    t.string "sex"
+    t.string "location"
+    t.string "page"
   end
 
 end
