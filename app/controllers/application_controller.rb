@@ -7,4 +7,5 @@ class ApplicationController < ActionController::Base
 #	format.json { render json: @current_user }
 #    end
   end
+
 end
