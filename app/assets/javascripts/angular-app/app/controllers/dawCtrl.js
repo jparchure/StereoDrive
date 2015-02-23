@@ -1,32 +1,33 @@
 
-app.controller("dawCtrl", ['$scope','$upload','$http',function($scope, $upload, $http){
+app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', function($scope, $upload, $http, usSpinnerService){
 
-    $scope.audioFiles = [{file_name: "test!"}];
-    $scope.$watch('rejectedFiles', function(){
-        if($scope.rejectedFiles)
-            alert("Only .mp3 files are supported");
-    });
+    $scope.audioFiles = [];
     $scope.$watch('file', function () {
         upload($scope.file);
     });
     var audioContext;
+    var numOfLoadedSounds = 0;
 
     initializeAudioTools();
     getAudio();
 
-    loadSound({
-        url: 'assets/test.mp3'
-    });
     // This function will make the API call to get the audio files from our backend
     function getAudio(){
         $http.get('/audio').success(function(data){
-            $scope.message = data;
             for(var i=0; i<data.length;i++){
                 $scope.audioFiles.push(loadSound(data[i]));
             }
         }).error(function(){
             alert("could not retrieve audio");
         });
+    }
+
+    function hideSpinner(){
+        usSpinnerService.stop('spinner');
+    }
+
+    function showSpinner(){
+        usSpinnerService.spin('spinner');
     }
 
     function loadSound(data){
@@ -36,24 +37,27 @@ app.controller("dawCtrl", ['$scope','$upload','$http',function($scope, $upload, 
         request.responseType = 'arraybuffer';
 
         request.onload = function(a){
-            alert(request.response);
             audioContext.decodeAudioData(request.response, function(buffer) {
                 data.buffer = buffer;
-                alert('sound is loaded');
+                console.log('sound is loaded: ' + buffer);
+                numOfLoadedSounds++;
+                if (numOfLoadedSounds == $scope.audioFiles.length){
+                    hideSpinner();
+                }
             }, function(e){
-                alert("sound was not loaded: "+ e);
+                alert("sounds were not loaded properly");
             });
         };
         request.send();
         return data;
     }
 
-    $scope.playSound = function(buffer){
-        alert("hey I felt that");
+    $scope.playSound = function(file){
+        console.log("playing sound: "+file.file_name+"\nbuffer: "+file.buffer);
         var source = audioContext.createBufferSource();
-        source.buffer = buffer;
-        sources.connect(audioContext.destination);
-        source.start(0);
+        source.buffer = file.buffer;
+        source.connect(audioContext.destination);
+        source.start();
     };
 
     // This function will set up the WebAudioApi
@@ -72,7 +76,6 @@ app.controller("dawCtrl", ['$scope','$upload','$http',function($scope, $upload, 
                 url: '/audio',
                 file: file
             }).success(function (data, status, headers, config) {
-                $scope.message = data;
                 $scope.audioFiles.push(data);
             }).error(function (){
                 alert("file could not be uploaded");
