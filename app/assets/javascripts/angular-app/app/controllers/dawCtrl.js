@@ -2,9 +2,13 @@
 app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', function($scope, $upload, $http, usSpinnerService){
 
     $scope.audioFiles = [];
+
     $scope.$watch('file', function () {
+
+        console.log("file changed: "+$scope.file);
         upload($scope.file);
     });
+
     var audioContext;
     var numOfLoadedSounds = 0;
 
@@ -52,12 +56,15 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', funct
         return data;
     }
 
-    $scope.playSound = function(file){
-        console.log("playing sound: "+file.file_name+"\nbuffer: "+file.buffer);
-        var source = audioContext.createBufferSource();
-        source.buffer = file.buffer;
-        source.connect(audioContext.destination);
-        source.start();
+    $scope.playSound = function(file) {
+        if(file.buffer && file.file_name){
+            console.log("playing sound: " + file.file_name + "\nbuffer: " + file.buffer);
+            var source = audioContext.createBufferSource();
+            source.buffer = file.buffer;
+            source.connect(audioContext.destination);
+            source.start();
+        }
+        return false;
     };
 
     // This function will set up the WebAudioApi
@@ -72,14 +79,22 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', funct
 
     function upload(file){
         if (file) {
+
+            console.log("uploading file: "+file);
             $upload.upload({
                 url: '/audio',
                 file: file
             }).success(function (data, status, headers, config) {
-                $scope.audioFiles.push(data);
+                if(data.success) {
+                    $scope.audioFiles.push(data);
+                }else{
+                    alert(data.error);
+                }
             }).error(function (){
                 alert("file could not be uploaded");
             });
+        }else{
+            console.log("no file: "+file);
         }
     }
 }]);
