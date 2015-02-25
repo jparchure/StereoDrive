@@ -4,7 +4,7 @@ class AudioController < ApplicationController
   def create
     file = params[:file]
 
-    if( (file.content_type <=> "audio/mpeg") == 0)
+    if( ((file.content_type <=> "audio/mpeg") == 0)||((file.content_type <=> "audio/mp3") == 0))
       s3 = Aws::S3::Resource.new(
         :access_key_id => 'AKIAIMHCBU7BTMVYEWOA',
         :secret_access_key => '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',
@@ -22,9 +22,11 @@ class AudioController < ApplicationController
         Audio.create!(file_name: file.original_filename,key: uuid)
         # create sound in track
         render :json => { 'success' => true, 'file_name' => file.original_filename, 'key' => uuid}
+      else
+        render :json => { 'success' => false, 'error' => "Could not upload"}
       end
     else
-      render :json => { 'success' => false}
+      render :json => { 'success' => false, 'error' => ("Invalid file type: "+file.content_type)}
     end
   end
 

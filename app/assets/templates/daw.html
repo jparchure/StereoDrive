@@ -9,9 +9,9 @@
                     Audio Files
                 </div>
                 <ul class="list-group">
-                    <li class="list-group-item" ng-repeat="file in audioFiles" ng-click="playSound(file)">
+                    <li class="list-group-item" ng-repeat="audioFile in audioFiles" ng-click="playSound(audioFile)">
                         <div >
-                            {{file.file_name}}
+                            {{audioFile.file_name}}
                         </div>
                     </li>
                 </ul>
