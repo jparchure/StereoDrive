@@ -1,20 +1,37 @@
 
+<div us-spinner="{radius:30, width:8, length: 16}" spinner-key="spinner" spinner-start-active="true"></div>
 <div>
-    <h1>{{"DAW"}}</h1>
     <br/>
-    <div class="alert alert-success">
-        {{message}}
-    </div>
-    <br/>
-    <br/>
-    Drop Audio here
-    <div ng-file-drop ng-model="files" class="drop-box"
-         drag-over-class="dragover" ng-multiple="true" allow-dir="true"
-         accept=".mp3">
-        <div ng-repeat="file in files">
-            {{file.name}}
+    <div class="row-fluid">
+        <div class="col-md-3">
+            <div class="panel panel-success">
+                <div class="panel-heading">
+                    Audio Files
+                </div>
+                <ul class="list-group">
+                    <li class="list-group-item" ng-repeat="file in audioFiles" ng-click="playSound(file)">
+                        <div >
+                            {{file.file_name}}
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div class="panel panel-default">
+            <div class="panel-heading">
+                <h1>{{"DAW"}}</h1>
+            </div>
+            Drop Audio here
+            <div ng-file-drop ng-model="file" class="drop-box"
+                 drag-over-class="dragover" ng-multiple="true" allow-dir="true"
+                 accept=".mp3">
+                <div ng-repeat="file in files">
+                    {{file.name}}
+                </div>
+            </div>
+            <div ng-no-file-drop>File Drag/Drop is not supported for this browser</div>
+        </div>
         </div>
     </div>
-
-    <div ng-no-file-drop>File Drag/Drop is not supported for this browser</div>
 </div>
