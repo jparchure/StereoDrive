@@ -1,62 +1,85 @@
 
-app.controller("dawCtrl", ['$scope','$upload','$http',function($scope, $upload, $http){
+app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', function($scope, $upload, $http, usSpinnerService){
 
-    function getPolicy(){
-
-    }
-
-    function getSignature(){
-
-    }
-
-    $scope.$watch('files', function () {
-        upload($scope.files);
+    $scope.audioFiles = [];
+    $scope.$watch('file', function () {
+        upload($scope.file);
     });
+    var audioContext;
+    var numOfLoadedSounds = 0;
 
-    function testAPI(file){
+    initializeAudioTools();
+    getAudio();
 
-        $upload.upload({
-            url: '/audio',
-            file: file
-        }).success(function (data, status, headers, config) {
-            $scope.message = data;
+    // This function will make the API call to get the audio files from our backend
+    function getAudio(){
+        $http.get('/audio').success(function(data){
+            for(var i=0; i<data.length;i++){
+                $scope.audioFiles.push(loadSound(data[i]));
+            }
+        }).error(function(){
+            alert("could not retrieve audio");
         });
-        //$http.post('/audio',file).success(function(data){
-        //    $scope.message = data;
-        //});
     }
 
-    function upload(files){
-        if (files && files.length) {
-            testAPI(files[0]);
-            for (var i = 0; i < files.length; i++) {
-                var file = files[i];
+    function hideSpinner(){
+        usSpinnerService.stop('spinner');
+    }
 
-                // Here we must decide whether we should upload through the front end or the back end.
-                // for a small project I would say the backend. For a large product, the front end,
-                // Lets start with the back end, and change it as our needs grow. Priority is getting a demo out there
+    function showSpinner(){
+        usSpinnerService.spin('spinner');
+    }
 
-                    // Code for an upload to the backend
+    function loadSound(data){
+        var url = data.url;
+        var request = new XMLHttpRequest();
+        request.open('GET',url,true);
+        request.responseType = 'arraybuffer';
 
+        request.onload = function(a){
+            audioContext.decodeAudioData(request.response, function(buffer) {
+                data.buffer = buffer;
+                console.log('sound is loaded: ' + buffer);
+                numOfLoadedSounds++;
+                if (numOfLoadedSounds == $scope.audioFiles.length){
+                    hideSpinner();
+                }
+            }, function(e){
+                alert("sounds were not loaded properly");
+            });
+        };
+        request.send();
+        return data;
+    }
 
-                    // Code for a front end upload
-                //$upload.upload({
-                //    url: 'https://stereodrive.dev.s3.amazonaws.com/', //S3 upload url including bucket name
-                //    method: 'POST',
-                //    fields: {
-                //        key: file.name, // the key to store the file on S3, could be file name or customized
-                //        AWSAccessKeyId: "",
-                //        acl: 'private', // sets the access to the uploaded file in the bucket: private or public
-                //        policy: $scope.policy, // base64-encoded json policy (see article below)
-                //        signature: $scope.signature, // base64-encoded signature based on policy string (see article below)
-                //        "Content-Type": file.type != '' ? file.type : 'application/octet-stream', // content type of the file (NotEmpty)
-                //        filename: file.name // this is needed for Flash polyfill IE8-9
-                //    },
-                //    file: file
-                //});
-            }
+    $scope.playSound = function(file){
+        console.log("playing sound: "+file.file_name+"\nbuffer: "+file.buffer);
+        var source = audioContext.createBufferSource();
+        source.buffer = file.buffer;
+        source.connect(audioContext.destination);
+        source.start();
+    };
+
+    // This function will set up the WebAudioApi
+    function initializeAudioTools(){
+        try{
+            window.AudioContext = window.AudioContext||window.webkitAudioContext;
+            audioContext = new AudioContext();
+        }catch(e){
+            alert("This browser does not support our Audio tools");
         }
     }
 
-
+    function upload(file){
+        if (file) {
+            $upload.upload({
+                url: '/audio',
+                file: file
+            }).success(function (data, status, headers, config) {
+                $scope.audioFiles.push(data);
+            }).error(function (){
+                alert("file could not be uploaded");
+            });
+        }
+    }
 }]);

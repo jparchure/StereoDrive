@@ -1,5 +1,5 @@
 class User < ActiveRecord::Base
-  attr_accessible :provider, :uid, :email, :name, :first_name, :image, :token, :session
+  attr_accessible :provider, :uid, :email, :name, :first_name, :image, :token, :session, :page, :sex, :location
   before_save { self.email = email.downcase }
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
   validates :email, presence: true, length: { maximum: 255 },format: { with: VALID_EMAIL_REGEX }
@@ -13,6 +13,9 @@ class User < ActiveRecord::Base
       user.email = auth.info.email
       user.name = auth.info.name
       user.first_name = auth.info.first_name
+      user.location = auth.info.location
+      user.sex = auth.extra.raw_info.gender
+      user.page = auth.info.urls.facebook
       user.image = auth.info.image + "?type=large"
       user.token = auth.credentials.token
       user.session = SecureRandom.base64
