@@ -2,7 +2,7 @@
  * Created by saasbook on 09/02/15.
  */
 
-var app = angular.module("app", ['ngRoute', 'templates','angularFileUpload','angularFileUpload']);
+var app = angular.module("app", ['ngRoute', 'templates','angularFileUpload','angularSpinner']);
 
 app.config(['$routeProvider',
     function($routeProvider) {
