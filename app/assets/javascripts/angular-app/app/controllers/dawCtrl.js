@@ -4,8 +4,6 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', funct
     $scope.audioFiles = [];
 
     $scope.$watch('file', function () {
-
-        console.log("file changed: "+$scope.file);
         upload($scope.file);
     });
 
@@ -20,6 +18,10 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', funct
         $http.get('/audio').success(function(data){
             for(var i=0; i<data.length;i++){
                 $scope.audioFiles.push(loadSound(data[i]));
+            }
+
+            if(data.length == 0){
+                hideSpinner();
             }
         }).error(function(){
             alert("could not retrieve audio");
