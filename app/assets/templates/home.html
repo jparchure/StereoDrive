@@ -1,10 +1,10 @@
-
+<div ng-controller="homeCtrl" ng-init="getData()">
 <div class="container">
               <div id="sidebar-wrapper">
             <ul class="sidebar-nav">
                 <li class="sidebar-brand">
                     <a href="#">
-                        Audio Workplace
+                       Projects
                     </a>
                 </li>
                 <li>
@@ -32,22 +32,19 @@
    
           <div class="panel panel-info">
             <div class="panel-heading">
-              <h3 class="panel-title">John doe</h3>
+              <h3 class="panel-title">{{currentuser.name}}</h3>
             </div>
 
             <div class="panel-body">
               <div class="row">
-                <div class="col-md-12 col-lg-12 " align="center"> <img alt="User Pic" src="https://lh5.googleusercontent.com/-b0-k99FZlyE/AAAAAAAAAAI/AAAAAAAAAAA/eu7opA4byxI/photo.jpg?sz=100" class="img-circle"> </div>
+                <div class="col-md-12 col-lg-12 " align="center"> <img alt="User Pic" src="{{currentuser.image}}" class="img-circle"> </div>
                 
          
                 <div class=" col-md-9 col-lg-12 "> 
                  <p class="tagline"> "In Heaven There's No Beer"</p>
                   <table class="table table-user-information">
                     <tbody>
-                      <tr>
-                        <td><label>Department:</label></td>
-                        <td>Programming</td>
-                      </tr>
+                     
                    
                       <tr>
                         <td><label>Date of Birth</label></td>
@@ -61,11 +58,11 @@
                       </tr>
                         <tr>
                         <td><label>Location</label></td>
-                        <td>Metro Manila,Philippines</td>
+                        <td>{{currentuser.location}}</td>
                       </tr>
                       <tr>
                         <td><label>Email<label></td>
-                        <td><a href="mailto:info@support.com">info@support.com</a></td>
+                        <td><a href="{{currentuser.email}}">{{currentuser.email}}</a></td>
                       </tr>
                    
                            
@@ -120,4 +117,8 @@
       </div>
 
     </div>
+<<<<<<< HEAD
 
+=======
+</div>
+>>>>>>> Jay
