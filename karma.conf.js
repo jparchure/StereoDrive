@@ -12,6 +12,14 @@ module.exports = function(config) {
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
     frameworks: ['jasmine'],
 
+    preprocessors: {
+      '**/*.html': ['ng-html2js']
+    },
+
+    ngHtml2JsPreprocessor: {
+      // we want all templates to be loaded in the same module called 'templates'
+      moduleName: 'templates'
+    },
 
     // list of files / patterns to load in the browser
     files: [
@@ -19,19 +27,14 @@ module.exports = function(config) {
         'app/assets/javascripts/angular-app/plugins/angular-route.min.js',
         'app/assets/javascripts/angular-app/plugins/*.js',
         'app/assets/javascripts/angular-app/app/**/*.js',
-        'spec/unit/**/*_spec.js'
+        'spec/unit/**/*_spec.js',
+        'app/assets/templates/*.html'
     ],
 
 
     // list of files to exclude
     exclude: [
     ],
-
-
-    // preprocess matching files before serving them to the browser
-    // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
-    preprocessors: {
-    },
 
 
     // test results reporter to use
