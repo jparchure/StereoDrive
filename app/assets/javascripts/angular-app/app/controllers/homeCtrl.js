@@ -3,7 +3,7 @@
  */
 
 app.controller("homeCtrl", ['$scope', '$http',function($scope, $http){
-
+		
 		$http.get('/paytonleevieno').success(function(data){
 
 			$scope.currentuser=data;
