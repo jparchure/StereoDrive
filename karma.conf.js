@@ -25,10 +25,15 @@ module.exports = function(config) {
     files: [
         'app/assets/javascripts/angular-app/plugins/angular.min.js',
         'app/assets/javascripts/angular-app/plugins/angular-route.min.js',
+        'node_modules/angular-mocks/angular-mocks.js',
+        'node_modules/angular-route/angular-route.js',
         'app/assets/javascripts/angular-app/plugins/*.js',
         'app/assets/javascripts/angular-app/app/**/*.js',
         'spec/unit/**/*_spec.js',
-        'app/assets/templates/*.html'
+        'spec/unit/mock/*.js',
+        'app/assets/templates/*.html',
+        //{pattern: 'unit/mock/*.json', watched: true, served: true, included: false}
+
     ],
 
 
