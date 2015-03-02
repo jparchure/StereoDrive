@@ -32,7 +32,7 @@
    
           <div class="panel panel-info">
             <div class="panel-heading">
-              <h3 class="panel-title">{{currentuser.name}}</h3>
+              <h3 class="panel-title"><a href="{currentuser.page}}">{{currentuser.name}}</a></h3>
             </div>
 
             <div class="panel-body">
@@ -54,7 +54,7 @@
                          <tr>
                              <tr>
                         <td><label>Gender</label></td>
-                        <td>Male</td>
+                        <td>{{currentuser.sex}}</td>
                       </tr>
                         <tr>
                         <td><label>Location</label></td>
