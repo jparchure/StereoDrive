@@ -16,6 +16,11 @@ app.config(['$routeProvider',
             templateUrl: 'daw.html',
             controller: 'dawCtrl'
         })
+        .when('/band',{
+            title: 'band',
+            templateUrl: 'band.html',
+            controller: 'bandCtrl'
+        })
         .otherwise({
             redirectTo: '/home'
         })
