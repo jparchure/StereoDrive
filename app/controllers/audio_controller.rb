@@ -2,32 +2,36 @@ class AudioController < ApplicationController
 
   # upload file to s3, and on success, add the filename and key to the database
   def create
-    file = params[:file]
+    if(params[:file])
+      file = params[:file]
 
-    if( ((file.content_type <=> "audio/mpeg") == 0)||((file.content_type <=> "audio/mp3") == 0))
-      s3 = Aws::S3::Resource.new(
-        :access_key_id => 'AKIAIMHCBU7BTMVYEWOA',
-        :secret_access_key => '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',
-        :region => 'us-east-1'
-      )
-      bucket = s3.bucket('stereodrive.dev')
-      uuid = UUIDTools::UUID.random_create
+      if( ((file.content_type <=> "audio/mpeg") == 0)||((file.content_type <=> "audio/mp3") == 0))
+        s3 = Aws::S3::Resource.new(
+          :access_key_id => 'AKIAIMHCBU7BTMVYEWOA',
+          :secret_access_key => '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',
+          :region => 'us-east-1'
+        )
+        bucket = s3.bucket('stereodrive.dev')
+        uuid = UUIDTools::UUID.random_create
 
 
-      # create object key  {project}/{UUID}.mp3
-      fileName = 'ExampleProject/' << uuid << '.mp3'
-      obj = bucket.object(fileName)
+        # create object key  {project}/{UUID}.mp3
+        fileName = 'ExampleProject/' << uuid << '.mp3'
+        obj = bucket.object(fileName)
 
-      if(obj.upload_file(file.tempfile))
-        Audio.create!(file_name: file.original_filename,key: uuid)
-        # create sound in track
-        render :json => { 'success' => true, 'file_name' => file.original_filename, 'key' => uuid}
+        if(obj.upload_file(file.tempfile))
+          Audio.create!(file_name: file.original_filename,key: uuid)
+          # create sound in track
+          render :json => { 'success' => true, 'file_name' => file.original_filename, 'key' => uuid}
+        else
+          render :json => { 'success' => false, 'error' => "Could not upload"}
+        end
       else
-        render :json => { 'success' => false, 'error' => "Could not upload"}
+        render :json => { 'success' => false, 'error' => ("Invalid file type: "+file.content_type)}
       end
-    else
-      render :json => { 'success' => false, 'error' => ("Invalid file type: "+file.content_type)}
+      render :json => { 'success' => false, 'error' => "No file"}
     end
+    render :json => { 'success' => false, 'error' => ("Incorrect FileType")}
   end
 
   def delete
