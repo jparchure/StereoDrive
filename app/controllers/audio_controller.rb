@@ -20,18 +20,19 @@ class AudioController < ApplicationController
         obj = bucket.object(fileName)
 
         if(obj.upload_file(file.tempfile))
+          url = create_sound_url "ExampleProject", uuid
           Audio.create!(file_name: file.original_filename,key: uuid)
           # create sound in track
-          render :json => { 'success' => true, 'file_name' => file.original_filename, 'key' => uuid}
+          render :json => { 'success' => true, 'file_name' => file.original_filename, 'key' => uuid, 'audioUrl' => url}
         else
           render :json => { 'success' => false, 'error' => "Could not upload"}
         end
       else
         render :json => { 'success' => false, 'error' => ("Invalid file type: "+file.content_type)}
       end
-      render :json => { 'success' => false, 'error' => "No file"}
+    else
+      render :json => { 'success' => false, 'error' => ("Incorrect FileType")}
     end
-    render :json => { 'success' => false, 'error' => ("Incorrect FileType")}
   end
 
   def delete
@@ -47,27 +48,14 @@ class AudioController < ApplicationController
     allAudio  = Array.new
     # Get info from db
     audio = Audio.all
-    digest = OpenSSL::Digest::Digest.new('sha1')
-    expire_date = (Time.now + 10.minutes).to_i
-    bucket = 'stereodrive.dev'
-
-
-    #######
-    #signer = Aws::S3::Presigner.new :region => 'us-east-1'
 
     #get signed urls for each audio file
     audio.each{ |a|
-
-      path = 'ExampleProject/' << a.key << '.mp3'
-      can_string = "GET\n\n\n#{expire_date}\n/#{bucket}/#{path}"
-      hmac = OpenSSL::HMAC.digest(digest, 'dl5FHHH2PphG7ccWAucn7RSsTiljHAkm7lgEr//O', can_string)
-      signature = URI.escape(Base64.encode64(hmac).strip).encode_signs
-
+      project_name = 'ExampleProject'
       sound = Hash.new
       sound['file_name'] = a.file_name
       sound['key'] = a.key
-      #url = signer.presigned_url(:get_object, bucket: bucket, key: a.key)
-      sound['url'] = "https://s3.amazonaws.com/#{bucket}/#{path}?AWSAccessKeyId=AKIAIMHCBU7BTMVYEWOA&Expires=#{expire_date}&Signature=#{signature}"
+      sound['audioUrl'] = create_sound_url project_name, a.key
       allAudio.push(sound)
     }
     # add them into the same reply
@@ -75,6 +63,19 @@ class AudioController < ApplicationController
   end
 
   private
+
+  def create_sound_url (project, key)
+    bucket = 'stereodrive.dev'
+    path = project << '/' << key << '.mp3'
+    expire_date = (Time.now + 10.minutes).to_i
+    digest = OpenSSL::Digest.new('sha1')
+    can_string = "GET\n\n\n#{expire_date}\n/#{bucket}/#{path}"
+    hmac = OpenSSL::HMAC.digest(digest, 'dl5FHHH2PphG7ccWAucn7RSsTiljHAkm7lgEr//O', can_string)
+    signature = URI.escape(Base64.encode64(hmac).strip).encode_signs
+
+    "https://s3.amazonaws.com/#{bucket}/#{path}?AWSAccessKeyId=AKIAIMHCBU7BTMVYEWOA&Expires=#{expire_date}&Signature=#{signature}"
+  end
+
   def audio_params
     params.require(:audio).permit(:file, :key)
   end

@@ -36,7 +36,7 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', funct
     }
 
     function loadSound(data) {
-        var url = data.url;
+        var url = data.audioUrl;
         var request = new XMLHttpRequest();
         request.open('GET', url, true);
         request.responseType = 'arraybuffer';
@@ -92,14 +92,12 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', funct
                 file: file
             }).success(function (data, status, headers, config) {
                 if (data.success) {
-                    console.log(file);
-                    data.url = file.webkitRelativePath;
                     data = loadSound(data);
                     $scope.audioFiles.push(data);
                 } else {
                     alert(data.error);
+                    hideSpinner();
                 }
-                hideSpinner();
             }).error(function () {
                 hideSpinner();
                 alert("file could not be uploaded");
