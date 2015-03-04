@@ -57,6 +57,11 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', funct
         return data;
     }
 
+    $scope.sounds = 0;
+    $scope.onSoundDrop = function(data, event){
+        $scope.sounds++;
+    };
+
     $scope.playSound = function (file) {
         if (file && file.buffer && file.file_name) {
             console.log("playing sound: " + file.file_name + "\nbuffer: " + file.buffer);
