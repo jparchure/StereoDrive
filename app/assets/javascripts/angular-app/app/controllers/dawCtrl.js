@@ -126,4 +126,41 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', funct
             console.log("no file: " + file);
         }
     }
+
+
+    //////////////////////////////////////////////
+
+    $scope.tracks = [
+        {number:1, name:"testTrack"}
+    ];
+
+    $scope.addTrack = function(){
+        var track = {
+            number: $scope.tracks.length+1,
+            name: 'track #' //needs track number in there too
+        };
+
+        $http.post('/track', {track: track}).success(function(data){//data is returned from track_controller.rb#create
+
+            $scope.tracks.push(track);
+        }).error(function(data, status, headers, config){
+            console.log(status);
+            alert("could not add track");
+        });
+
+    };
+    $scope.removeTrack = function(index){
+        $http.post('/track#delete', track).success(function(data){//data is returned from track_controller.rb#create
+            $scope.message = data;
+            $scope.tracks.splice(index,1);
+        }).error(function(data, status, headers, config){
+            console.log(status);
+            alert("could not add track");
+        });
+
+    };
+
+
+
+
 }]);
