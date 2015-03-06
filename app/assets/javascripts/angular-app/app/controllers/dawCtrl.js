@@ -57,12 +57,51 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', funct
         return data;
     }
 
-    $scope.sounds = 0;
-    $scope.onSoundDrop = function(data, event){
-        $scope.sounds++;
-        element = document.getElementById("audioImg");
-        drawWaveform(element.width,element.height,element.getContext("2d"),data.buffer)
+    $scope.deleteAudio = function(audioFile){
+        //var index = $scope.audioFiles.indexOf(audioFile);
+        //$scope.audioFiles = $scope.audioFiles.splice(index,1);
+        alert('Delete not implimented');
     };
+
+    $scope.onSoundDrop = function(data, event, track){
+        console.log(track);
+        var clip = {
+            sound: data,
+            startPos: 0,
+            id: track.name+"-clip"+track.clips.length
+        };
+        track.clips.push(clip);
+        $scope.$apply();
+        attachSlider(clip.id);
+        element = document.getElementById(clip.id);
+        drawWaveform(element.width,element.height,element.getContext("2d"),clip.sound.buffer)
+    };
+
+    function attachSlider(id){
+        interact('#'+id)                   // target the matches of that selector
+            .draggable({                        // make the element fire drag events
+                max: Infinity,                     // allow drags on multiple elements
+                restrict: {
+                    restriction: "parent", // keep the drag within the parent
+                    endOnly: false,
+                    elementRect: { top: 0, left: 0, bottom: 1, right: 1 }
+                },
+                inertia: false,                      // start inertial movement if thrown
+                onmove: function (event) {
+                    var target = event.target,
+                    // keep the dragged position in the data-x/data-y attributes
+                    x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx;
+                    // translate the element
+                    // target.style.webkitTransform =
+                    target.style.transform = 'translate(' + x + 'px, ' + 0 + 'px)';
+
+                    // update the posiion attributes
+                    target.setAttribute('data-x', x);
+                }
+            });
+
+        interact.maxInteractions(Infinity);   // Allow multiple interactions
+    }
 
     function drawWaveform( width, height, context, buffer ) {
         var data = buffer.getChannelData( 0 );
@@ -131,13 +170,14 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', funct
     //////////////////////////////////////////////
 
     $scope.tracks = [
-        {number:1, name:"testTrack"}
+        {number:1, name:"testTrack", clips:[]}
     ];
 
     $scope.addTrack = function(){
         var track = {
             number: $scope.tracks.length+1,
-            name: 'track #' //needs track number in there too
+            name: 'track'+$scope.tracks.length+1, //needs track number in there too
+            clips: []
         };
 
         $http.post('/track', {track: track}).success(function(data){//data is returned from track_controller.rb#create
@@ -159,8 +199,4 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', funct
         });
 
     };
-
-
-
-
 }]);
