@@ -5,7 +5,7 @@ class AudioController < ApplicationController
     if(params[:file])
       file = params[:file]
 
-      if( ((file.content_type <=> "audio/mpeg") == 0)||((file.content_type <=> "audio/mp3") == 0))
+      if( ((file.content_type <=> "audio/mpeg") == 0)||((file.content_type <=> "audio/mp3") == 0)||((file.content_type <=> "audio/x-m4a") == 0))
         s3 = Aws::S3::Resource.new(
           :access_key_id => 'AKIAIMHCBU7BTMVYEWOA',
           :secret_access_key => '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',
