@@ -25,7 +25,7 @@
             Drop Audio here
             <div ng-file-drop ng-model="file" class="drop-box"
                  drag-over-class="dragover" ng-multiple="true" allow-dir="true"
-                 accept=".mp3" ng-drop="true" ng-drop-success="onSoundDrop($data,$event)">
+                 accept=".mp3,.m4a" ng-drop="true" ng-drop-success="onSoundDrop($data,$event)">
                 {{"Sounds in track: "+sounds}}
                 <div ng-repeat="file in files">
                     {{file.name}}
