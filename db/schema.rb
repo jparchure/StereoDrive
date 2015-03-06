@@ -13,6 +13,19 @@
 
 ActiveRecord::Schema.define(version: 20150306002740) do
 
+  create_table "artists", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "artists_users", id: false, force: :cascade do |t|
+    t.integer "user_id"
+    t.integer "artist_id"
+  end
+
+  add_index "artists_users", ["artist_id"], name: "index_artists_users_on_artist_id"
+  add_index "artists_users", ["user_id"], name: "index_artists_users_on_user_id"
+
   create_table "audios", force: :cascade do |t|
     t.string   "file_name"
     t.string   "key"
