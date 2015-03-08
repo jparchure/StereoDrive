@@ -37,10 +37,26 @@ class AudioController < ApplicationController
 
   def delete
     # This will remove a sound
+    key = params[:key]
+    if(key)
+      s3 = Aws::S3::Resource.new(
+          :access_key_id => 'AKIAIMHCBU7BTMVYEWOA',
+          :secret_access_key => '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',
+          :region => 'us-east-1'
+      )
+      bucket = s3.bucket('stereodrive.dev')
 
-    # Remove from s3
-    #if successful, remove from db
-    render :json => {"implimented" => false}
+      # create object key  {project}/{UUID}.mp3
+      fileName = 'ExampleProject/' << key << '.mp3'
+      if(bucket.object(fileName).delete)
+        Audio.where(key: key).destroy_all
+        render :json => {"success" => true}
+      else
+        render :json => {"success" => false}
+      end
+    else
+      render :json => {"success" => false}
+    end
   end
 
   def index

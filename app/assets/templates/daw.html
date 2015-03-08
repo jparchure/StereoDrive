@@ -1,6 +1,8 @@
 
 <div us-spinner="{radius:30, width:8, length: 16}" spinner-key="spinner" spinner-start-active="true"></div>
-<div>
+<div ng-file-drop ng-model="file"
+     drag-over-class="dragover" ng-multiple="true" allow-dir="true"
+     accept=".mp3,.m4a" >
     <br/>
     <div class="row-fluid">
         <div class="col-md-3">
@@ -32,12 +34,12 @@
                                 <br/>
                                 {{ track.name }}
                             </div>
-                            <div ng-file-drop ng-model="file" class="drop-box col-md-10 panel"
-                             drag-over-class="dragover" ng-multiple="true" allow-dir="true"
-                             accept=".mp3,.m4a" ng-drop="true" ng-drop-success="onSoundDrop($data,$event,track)">
-                                <canvas ng-repeat="clip in track.clips" id="{{clip.id}}" class="panel" width="200" height="71"/>
+                            <div ng-drop="true" class="drop-box col-md-10 panel" ng-drop-success="onSoundDrop($data,$event,track)">
+                                <canvas ng-repeat="clip in track.clips" id="{{clip.id}}" class="panel pull-left" width="200" height="71"></canvas>
+
+                                <br/>
+                                <div ng-repeat="clip in track.clips">{{"startPos: " + clip.startPos}}</div>
                             </div>
-                            <div ng-no-file-drop>File Drag/Drop is not supported for this browser</div>
                         </div>
                         <button class="btn btn-default" type="button" ng-click="addTrack()">Add Track</button>
                     </div>
