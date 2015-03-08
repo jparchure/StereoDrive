@@ -13,6 +13,8 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', funct
     initializeAudioTools();
     getAudio();
 
+    getTrack();
+
     // This function will make the API call to get the audio files from our backend
     function getAudio() {
         $http.get('/audio').success(function (data) {
@@ -130,15 +132,15 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', funct
 
     //////////////////////////////////////////////
 
-    $scope.tracks = [
-        {number:1, name:"testTrack"}
-    ];
+    $scope.tracks = [];
 
     $scope.addTrack = function(){
-        var track = {
-            number: $scope.tracks.length+1,
-            name: 'track #' //needs track number in there too
+        var track;
+        track = {
+            number: $scope.tracks.length + 1,
+            name: ''//needs track number in there too
         };
+        track.name= makeid();
 
         $http.post('/track', {track: track}).success(function(data){//data is returned from track_controller.rb#create
 
@@ -149,17 +151,47 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', funct
         });
 
     };
-    $scope.removeTrack = function(index){
-        $http.post('/track#delete', track).success(function(data){//data is returned from track_controller.rb#create
+    $scope.removeTrack = function(deleteTrack){
+        var index;
+        for (var i =0; i < $scope.tracks.length; i++)
+            if ($scope.tracks[i].name === deleteTrack.name) {
+                index = i;
+                break;
+            }
+        console.log(index);
+        $http.post('/deleteTrack', {track:deleteTrack}).success(function(data){//data is returned from track_controller.rb#create
             $scope.message = data;
-            $scope.tracks.splice(index,1);
+            for (var i =0; i < $scope.tracks.length; i++)
+                if ($scope.tracks[i].name === deleteTrack.name) {
+                    $scope.tracks.splice(i,1);
+                    break;
+                }
         }).error(function(data, status, headers, config){
             console.log(status);
-            alert("could not add track");
+            alert("could not delete track");
         });
 
     };
+    // This function will make the API call to get the audio files from our backend
+    function getTrack() {
+        $http.get('/track').success(function (data) {
+            for (var i = 0; i < data.length; i++) {
+                $scope.tracks.push(data[i]);
+            }
+        }).error(function () {
+            alert("could not retrieve tracks");
+        });
+    }
+    function makeid()
+    {
+        var text = "";
+        var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
+        for( var i=0; i < 15; i++ )
+            text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+        return text;
+    }
 
 
 

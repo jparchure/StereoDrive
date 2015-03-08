@@ -45,22 +45,24 @@
                     <h3 class="panel-title">Tracks</h3>
                 </div>
                 <div class="panel-body">
-                    <div ng-repeat="track in tracks">
-                        <div class ="row-fluid">
-                            <div class="col-md-1">
-                                {{ track.number }}
-                            </div>
-                            <div class="col-md-1">
-                                {{ track.name }}
-                            </div>
-                            <div class="col-md-10">
-                                <div class = "drop-box">
-                                    coolstuffffbrooooo
+                    <div class = "container-fluid">
+                        <div ng-repeat="track in tracks">
+                            <div class ="row">
+                                <div class="col-md-2">
+                                    Track Name: {{ track.name }}
+                                </div>
+                                <div class="drop-box col-md-6">
+                                        coolstuffffbrooooo
+                                </div>
+                                <div class="col-md-1">
+                                    <button class="btn btn-default" type="button" ng-click="removeTrack(track)">Delete {{ track.name }}</button>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <button class="btn btn-default" type="button" ng-click="addTrack()">Add Track</button>
+                    <div>
+                        <button class="btn btn-default" type="button" ng-click="addTrack()">Add Track</button>
+                    </div>
                 </div>
             </div>
         </div>
