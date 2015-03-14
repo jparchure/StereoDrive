@@ -4,7 +4,7 @@
 
 app.controller("homeCtrl", ['$scope', '$http',function($scope, $http){
 		
-		$http.get('/paytonleevieno').success(function(data){
+		$http.get('/users/1').success(function(data){
 
 			$scope.currentuser=data;
 		})
