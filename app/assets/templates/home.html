@@ -1,7 +1,7 @@
 <div ng-controller="homeCtrl" ng-init="getData()">
 <div class="container">
               <div id="sidebar-wrapper">
-            <ul class="sidebar-nav">
+              <ul class="sidebar-nav">
                 <li class="sidebar-brand">
                     <a href="#">
                        Projects
@@ -25,14 +25,17 @@
               
             </ul>
         </div>
+      
       <div class="row">
+        <form editable-form name="editableForm" onaftersave="saveUser()">
 
+        <!--Code for the Profile Information-->
         <div class="roles col-xs-10 col-sm-10 col-md-4 col-lg-4 col-xs-offset-0 col-sm-offset-0 col-md-offset-0 col-lg-offset-0 toppad" >
    
    
           <div class="panel panel-info">
             <div class="panel-heading">
-              <h3 class="panel-title">{{currentuser.name}}</h3>
+              <h3 class="panel-title"><a href="{currentuser.page}}" editable-text="currentuser.name" e-required>{{currentuser.name}}</a></h3>
             </div>
 
             <div class="panel-body">
@@ -41,28 +44,28 @@
                 
          
                 <div class=" col-md-9 col-lg-12 "> 
-                 <p class="tagline"> "In Heaven There's No Beer"</p>
+                 <p class="tagline" align="center" editable-text="currentuser.tagline" e-name="status"> {{currentuser.tagline|| "In Heaven there is no beer"}}</p>
                   <table class="table table-user-information">
                     <tbody>
                      
                    
                       <tr>
                         <td><label>Date of Birth</label></td>
-                        <td>01/24/1988</td>
+                        <td><span editable-text="currentuser.dob">01/24/1988</span></td>
                       </tr>
                    
                          <tr>
                              <tr>
                         <td><label>Gender</label></td>
-                        <td>Male</td>
+                        <td>{{currentuser.sex}}</td>
                       </tr>
                         <tr>
                         <td><label>Location</label></td>
-                        <td>{{currentuser.location}}</td>
+                        <td><span editable-text="currentuser.location" e-required>{{currentuser.location||"empty"}}</span></td>
                       </tr>
                       <tr>
                         <td><label>Email<label></td>
-                        <td><a href="{{currentuser.email}}">{{currentuser.email}}</a></td>
+                        <td><a href="mailto:{{currentuser.email}}" editable-text="currentuser.email">{{currentuser.email}}</a></td>
                       </tr>
                    
                            
@@ -74,17 +77,30 @@
                  
                 </div>
               </div>
+
             </div>
                  <div class="panel-footer">
+                   <div class="buttons">
+                        
                         <a data-original-title="Broadcast Message" data-toggle="tooltip" type="button" class="btn btn-sm btn-primary"><i class="glyphicon glyphicon-plus"></i></a>
                         <span class="pull-right">
-                            <a href="edit.html" data-original-title="Edit this user" data-toggle="tooltip" type="button" class="btn btn-sm btn-warning"><i class="glyphicon glyphicon-edit"></i></a>
-                            <a data-original-title="Remove this user" data-toggle="tooltip" type="button" class="btn btn-sm btn-danger"><i class="glyphicon glyphicon-remove"></i></a>
+                          <!--button to show form-->
+                            <a data-original-title="Edit this user" data-toggle="tooltip" type="button" class="btn btn-sm btn-warning" ng-click="editableForm.$show()" ng-show="!editableForm.$visible"><i class="glyphicon glyphicon-edit"></i></a>
+                            
+
+                            <!-- buttons to submit / cancel form -->
+      <span ng-show="editableForm.$visible">
+         <button data-original-title="Accept Changes" data-toggle="tooltip" type="submit" class="btn btn-sm btn-default" ng-disabled="editableForm.$waiting"><i class="glyphicon glyphicon-thumbs-up"></i></a>
+        
+        <button data-original-title="Remove this user" data-toggle="tooltip" type="button" class="btn btn-sm btn-danger" ng-disabled="editableForm.$waiting" ng-click="editableForm.$cancel()"><i class="glyphicon glyphicon-remove"></i></a>
+      </span>
                         </span>
+                      </div>
                     </div>
             
           </div>
         </div>
+        </form>
         <!--Code for Bands Section-->
          <div class="roles col-xs-10 col-sm-10 col-md-4 col-lg-4 col-xs-offset-0 col-sm-offset-0 col-md-offset-0 col-lg-offset-0 toppad" >
    

@@ -1,4 +1,5 @@
 class ApplicationController < ActionController::Base
+  respond_to :html, :json
   protect_from_forgery
   before_filter :set_current_user
   def set_current_user
