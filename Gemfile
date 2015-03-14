@@ -7,7 +7,7 @@ gem 'rails', '4.2.0'
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 gem 'protected_attributes'
 gem 'sqlite3'
-
+gem 'responders', '~> 2.0'
 gem 'angular-rails-templates'
 gem 'bower-rails'
 gem 'bootstrap-sass', '~> 3.3.0'
@@ -15,6 +15,9 @@ gem 'omniauth-facebook'
 
 gem 'aws-sdk'
 gem 'uuidtools'
+source "https://rails-assets.org" do
+  gem "rails-assets-angular-devise"
+end
 
 group :developement, :test do
   gem 'rspec-rails'
