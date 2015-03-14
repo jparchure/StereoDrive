@@ -1,68 +1,62 @@
-<div ng-controller="homeCtrl" ng-init="getData()">
+<div ng-controller="bandCtrl" ng-init="getData()">
 <div class="container">
               <div id="sidebar-wrapper">
             <ul class="sidebar-nav">
                 <li class="sidebar-brand">
                     <a href="#">
-                       Projects
+                       Songs:
                     </a>
                 </li>
-                <li>
-                    <a href="#">Project 1</a>
-                </li>
-                <li>
-                    <a href="#">Project 2</a>
-                </li>
-                <li>
-                    <a href="#">Project 3</a>
-                </li>
-                <li>
-                    <a href="#">Project 4</a>
-                </li>
-                <li>
-                    <a href="#">Project 5</a>
-                </li>
-              
+                
+
+
+              <li ng-repeat = "song in band.songs" >
+                    <a href="#">{{song}}</a>
+              </li>
+
+                
+
+
             </ul>
         </div>
       <div class="row">
 
-        <div class="roles col-xs-10 col-sm-10 col-md-4 col-lg-4 col-xs-offset-0 col-sm-offset-0 col-md-offset-0 col-lg-offset-0 toppad" >
+        <div class="roles col-xs-10 col-sm-10 col-md-10 col-lg-10 col-xs-offset-0 col-sm-offset-0 col-md-offset-0 col-lg-offset-0 toppad" >
    
    
           <div class="panel panel-info">
             <div class="panel-heading">
-              <h3 class="panel-title">{{currentuser.name}}</h3>
+              <h3 class="panel-title">{{band.name}}</h3>
             </div>
 
             <div class="panel-body">
               <div class="row">
-                <div class="col-md-12 col-lg-12 " align="center"> <img alt="User Pic" src="{{currentuser.image}}" class="img-circle"> </div>
+                <div class="col-md-12 col-lg-12 " align="center"> <img alt="User Pic" width=50% src="{{band.image}}" class="img-circle"> </div>
                 
          
                 <div class=" col-md-9 col-lg-12 "> 
-                 <p class="tagline"> "In Heaven There's No Beer"</p>
+                 <p class="tagline"> {{band.tagline}}</p>
                   <table class="table table-user-information">
                     <tbody>
                      
                    
                       <tr>
-                        <td><label>Date of Birth</label></td>
-                        <td>01/24/1988</td>
+                        <td><label>Jamming Since:</label></td>
+                        <td>{{band.origin}}</td>
                       </tr>
                    
                          <tr>
                              <tr>
-                        <td><label>Gender</label></td>
-                        <td>Male</td>
+                        <td><label>Genre</label></td>
+                        <td>{{band.genre}}</td>
                       </tr>
                         <tr>
                         <td><label>Location</label></td>
-                        <td>{{currentuser.location}}</td>
+                        <td>{{band.location}}</td>
                       </tr>
                       <tr>
                         <td><label>Email<label></td>
-                        <td><a href="{{currentuser.email}}">{{currentuser.email}}</a></td>
+                        <td><a href="{{band.email}}">{{band.email}}</a></td>
                       </tr>
                    
                            
@@ -86,18 +80,25 @@
           </div>
         </div>
         <!--Code for Bands Section-->
-         <div class="roles col-xs-10 col-sm-10 col-md-4 col-lg-4 col-xs-offset-0 col-sm-offset-0 col-md-offset-0 col-lg-offset-0 toppad" >
+         <div class="roles col-xs-10 col-sm-10 col-md-10 col-lg-10 col-xs-offset-0 col-sm-offset-0 col-md-offset-0 col-lg-offset-0 toppad" >
    
    
           <div class="panel panel-info">
             <div class="panel-heading">
-              <h3 class="panel-title">Bands associated with</h3>
+              <h3 class="panel-title">Band Members:</h3>
             </div>
 
             <div class="panel-body">
                 <!--Repeat the div below for multiple bands-->
-                <div class="dis-image col-md-2 col-lg-2 " align="center"> <img alt="User Pic" src="https://lh5.googleusercontent.com/-b0-k99FZlyE/AAAAAAAAAAI/AAAAAAAAAAA/eu7opA4byxI/photo.jpg?sz=100" class="img-thumbnail"> </div>
+                <ul style="list-style-type: none">
+                  <li ng-repeat = "member in band.members" >
+                      <div class="dis-image col-md-2 col-lg-3 " align="center"> <img alt="User Pic" src="{{member.image}}" class="img-thumbnail"><h4><a href="#">{{member.name}}</a></h4></div>
+                  </li>
+                </ul>  
 
+              
+                      
+                
               
             </div>
                  <div class="panel-footer">
@@ -115,4 +116,5 @@
     </div>
 
 </div>
+
 
