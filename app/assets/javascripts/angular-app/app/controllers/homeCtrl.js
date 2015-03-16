@@ -2,7 +2,7 @@
  * Created by saasbook on 09/02/15.
  */
 
-app.controller("homeCtrl", ['$scope', '$http', 'Auth',function($scope, $http, Auth){
+app.controller("homeCtrl", ['$scope', '$http',function($scope, $http){
 		$scope.currentuser={};
     //console.log(globalAppCtx['user']);
 		$http.get('/paytonleevieno').success(function(data){
