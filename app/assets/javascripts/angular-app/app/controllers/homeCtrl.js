@@ -2,7 +2,7 @@
  * Created by saasbook on 09/02/15.
  */
 
-app.controller("homeCtrl", ['$scope', '$http', 'Auth',function($scope, $http, Auth){
+app.controller("homeCtrl", ['$scope', '$http',function($scope, $http){
 		$scope.currentuser={};
     //console.log(globalAppCtx['user']);
 		$http.get('/paytonleevieno').success(function(data){
@@ -10,6 +10,8 @@ app.controller("homeCtrl", ['$scope', '$http', 'Auth',function($scope, $http, Au
 			$scope.currentuser=data;
 			
 		});
+        //If param set route= show + cookie
+        //route = show
 		//console.log($scope.currentuser);
     //Authorization
     /*Auth.currentUser().then(function(user) {
@@ -20,18 +22,7 @@ app.controller("homeCtrl", ['$scope', '$http', 'Auth',function($scope, $http, Au
             // unauthenticated error
         });*/
 
-		 $scope.saveUser = function() {
-    // $scope.user already updated!
-    	return true;/*$http.post('/saveUser', $scope.user).error(function(err) {
-      	if(err.field && err.msg) {
-        // err like {field: "name", msg: "Server-side error for this username!"} 
-        $scope.editableForm.$setError(err.field, err.msg);
-      } else { 
-        // unknown error
-        $scope.editableForm.$setError('name', 'Unknown error!');
-      };
-    });*/
-  };
+		
 	
 }]);
 //$location for angular routes
