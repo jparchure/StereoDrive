@@ -6,7 +6,7 @@ var app = angular.module("app", ['ngRoute', 'templates','angularFileUpload','ang
 
 app.config(['$routeProvider',
     function($routeProvider) {
-        $routeProvider.when('/home', {
+        $routeProvider.when('/home/:op?', {
             title: 'home',
             templateUrl: 'home.html',
             controller: 'homeCtrl'

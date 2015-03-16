@@ -5,7 +5,7 @@ class SessionsController < ApplicationController
     user = User.omniauth(auth)
     user.update_attributes(:token => auth["credentials"]["token"])
     session[:token] = user.session
-    cookies[:token] = session[:token]
+    cookies[:id] = user.id
     redirect_to app_path(user.id)
   end
   def destroy
