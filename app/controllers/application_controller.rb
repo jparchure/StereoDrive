@@ -6,7 +6,6 @@ class ApplicationController < ActionController::Base
     @current_user ||= session[:token] && User.find_by_session(session[:token])
   end
   def send_current_user
-    @current_user ||= session[:token] && User.find_by_session(session[:token])
 	render json: @current_user
   end
 

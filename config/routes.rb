@@ -1,8 +1,8 @@
 Team7::Application.routes.draw do
   resources :app
+  resources :users
   post '/audio' => 'audio#create'
   get '/audio' => 'audio#index'
-  get  '/paytonleevieno' => 'application#send_current_user'
   match 'auth/:provider/callback', to: 'sessions#create', via: :get
   match '/logout', to: 'sessions#destroy', via: :delete
   root :to => "app#index"

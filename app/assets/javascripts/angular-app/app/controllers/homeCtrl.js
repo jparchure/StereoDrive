@@ -3,9 +3,8 @@
  */
 
 app.controller("homeCtrl", ['$scope', '$http',function($scope, $http){
-		$scope.currentuser={};
-    //console.log(globalAppCtx['user']);
-		$http.get('/paytonleevieno').success(function(data){
+
+		$http.get('/users/1').success(function(data){
 
 			$scope.currentuser=data;
 			
