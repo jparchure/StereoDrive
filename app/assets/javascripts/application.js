@@ -15,7 +15,6 @@
 //= require angular-app/plugins/angular.min.js
 //= require angular-app/plugins/angular-route.min.js
 //= require angular-rails-templates
-//= require angular-devise/devise
 //= require_tree ./angular-app/plugins
 //= require angular-app/app/app
 //= require_tree ./angular-app/app/controllers

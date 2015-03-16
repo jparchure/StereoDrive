@@ -27,10 +27,7 @@ app.config(['$routeProvider',
         })
     }
 ]);
-/*
-app.config(function(AuthProvider) {
-        // Configure Auth service with AuthProvider
-    });*/
+
 app.run(function(editableOptions) {
   editableOptions.theme = 'bs3'; // bootstrap3 theme. Can be also 'bs2', 'default'
 });
