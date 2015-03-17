@@ -2,14 +2,20 @@
  * Created by saasbook on 09/02/15.
  */
 
-app.controller("homeCtrl", ['$scope', '$http',function($scope, $http){
+app.controller("homeCtrl", ['$scope', '$routeParams', '$http', '$cookies', function($scope,$routeParams, $http, $cookies){
 
-
-		$http.get('/users/1').success(function(data){
-
-
+        current_user_id= $cookies['id'];
+        //console.log($routeParams);
+        if($routeParams['op']){ //If accessing others' profile, check for route params
+            route='/users/'+ $routeParams['op'];
+            console.log($routeParams['op']);
+        }  
+        else{
+        route='/users/' + current_user_id + "/";
+        console.log("If params in:" + current_user_id)
+        }
+		$http.get(route).success(function(data){
 			$scope.currentuser=data;
-			
 		});
         //If param set route= show + cookie
         //route = show
