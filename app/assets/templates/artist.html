@@ -1,0 +1,145 @@
+<div ng-controller="artistCtrl" ng-init="getData()">
+<div class="container">
+              <div id="sidebar-wrapper">
+            	<ul class="sidebar-nav">
+                <ul class="sidebar-nav">
+                <li class="sidebar-brand">
+                    <a href="#">
+                       Projects
+                    </a>
+                </li>
+                <li>
+                    <a href="#">Project 1</a>
+                </li>
+                <li>
+                    <a href="#">Project 2</a>
+                </li>
+                <li>
+                    <a href="#">Project 3</a>
+                </li>
+                <li>
+                    <a href="#">Project 4</a>
+                </li>
+                <li>
+                    <a href="#">Project 5</a>
+                </li>
+              
+            </ul>
+               
+
+
+              <li ng-repeat = "song in artist.songs" >
+                    <a href="#">{{artist.song}}</a>
+              </li>
+
+                
+
+
+            </ul>
+        </div>
+        <!--2 divs still open-->
+      <div class="row">
+      	<form editable-form name="editableForm" onaftersave="saveUser()">
+
+        <div class="roles col-xs-8 col-sm-8 col-md-8 col-lg-8 col-xs-offset-0 col-sm-offset-0 col-md-offset-0 col-lg-offset-0 toppad" >
+   
+   			
+          <div class="panel panel-info">
+            <div class="panel-heading">
+              <h3 class="panel-title">{{artist.name}}</h3>
+            </div>
+
+            <div class="panel-body">
+              <div class="row">
+                <div class="col-md-12 col-lg-12 " align="center"> <img alt="User Pic" width=100% src="{{artist.image}}" editable-text="artist.image"> </div>
+                
+         
+                <div class=" col-md-9 col-lg-12 "> 
+                 <p class="tagline"> {{artist.tagline}}</p>
+                  <table class="table table-user-information">
+                    <tbody>
+                     
+                   
+                      <tr>
+                        <td><label>Jamming Since:</label></td>
+                        <td><p editable-text="artist.origin" e-required>{{artist.origin}}</p></td>
+                      </tr>
+                   
+                         <tr>
+                             <tr>
+                        <td><label>Genre</label></td>
+                        <td><p editable-text="artist.genre" e-required>{{artist.genre}}</p></td>
+                      </tr>
+                        <tr>
+                        <td><label>Location</label></td>
+                        <td><p editable-text="artist.location" e-required>{{artist.location}}</p></td>
+                      </tr>
+                      <tr>
+                        <td><label>Page</label></td>
+                        <td><a href="{{artist.page}}" editable-text="artist.page" e-required>{{artist.page}}</a></td>
+                      </tr>
+                   
+                           
+                      </tr>
+                     
+                    </tbody>
+                  </table>
+                  
+                 
+                </div>
+              </div>
+            </div>
+             <div class="panel-footer">
+                   <div class="buttons">
+                        
+                        <a data-original-title="Broadcast Message" data-toggle="tooltip" type="button" class="btn btn-sm btn-primary"><i class="glyphicon glyphicon-plus"></i></a>
+                        <span class="pull-right">
+                          <!--button to show form-->
+                            <a data-original-title="Edit this user" data-toggle="tooltip" type="button" class="btn btn-sm btn-warning" ng-click="editableForm.$show()" ng-show="!editableForm.$visible"><i class="glyphicon glyphicon-edit"></i></a>
+                            
+
+                            <!-- buttons to submit / cancel form -->
+      <span ng-show="editableForm.$visible">
+         <button data-original-title="Accept Changes" data-toggle="tooltip" type="submit" class="btn btn-sm btn-default" ng-disabled="editableForm.$waiting"><i class="glyphicon glyphicon-thumbs-up"></i></a>
+        
+        <button data-original-title="Remove this user" data-toggle="tooltip" type="button" class="btn btn-sm btn-danger" ng-disabled="editableForm.$waiting" ng-click="editableForm.$cancel()"><i class="glyphicon glyphicon-remove"></i></a>
+      </span>
+                        </span>
+                      </div>
+                    </div>
+            
+          </div>
+        </div>
+        </form>
+            <!--Code for artist membrs-->
+               <div class="roles col-xs-8 col-sm-8 col-md-8 col-lg-8 col-xs-offset-0 col-sm-offset-0 col-md-offset-0 col-lg-offset-0 toppad" >
+   
+   
+   
+          <div class="panel panel-info">
+            <div class="panel-heading">
+              <h3 class="panel-title">Members</h3>
+            </div>
+
+            <div class="panel-body">
+                <!--Repeat the div below for multiple bands-->
+                <div class="dis-image col-md- col-lg-2 " align="center"> <img alt="User Pic" src="https://lh5.googleusercontent.com/-b0-k99FZlyE/AAAAAAAAAAI/AAAAAAAAAAA/eu7opA4byxI/photo.jpg?sz=100" class="img-thumbnail"> </div>
+
+              
+            </div>
+                 <div class="panel-footer">
+                        <a data-original-title="Broadcast Message" data-toggle="tooltip" type="button" class="btn btn-sm btn-primary"><i class="glyphicon glyphicon-plus"></i></a>
+                       
+                    </div>
+            
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+</div>
+
+
+           
+            
