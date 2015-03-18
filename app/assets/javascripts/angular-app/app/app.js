@@ -3,7 +3,7 @@
  */
 
 
-var app = angular.module("app", ['ngRoute', 'xeditable', 'templates','angularFileUpload','angularSpinner']);
+var app = angular.module("app", ['ngRoute', 'ngCookies', 'xeditable', 'templates','angularFileUpload','angularSpinner']);
 
 app.config(['$routeProvider',
     function($routeProvider) {
@@ -17,10 +17,10 @@ app.config(['$routeProvider',
             templateUrl: 'daw.html',
             controller: 'dawCtrl'
         })
-        .when('/band',{
-            title: 'band',
-            templateUrl: 'band.html',
-            controller: 'bandCtrl'
+        .when('/artist',{
+            title: 'artist',
+            templateUrl: 'artist.html',
+            controller: 'artistCtrl'
         })
         .otherwise({
             redirectTo: '/home'
