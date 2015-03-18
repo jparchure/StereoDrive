@@ -17,6 +17,11 @@ app.controller("homeCtrl", ['$scope', '$routeParams', '$http', '$cookies', funct
 		$http.get(route).success(function(data){
 			$scope.currentuser=data;
 		});
+
+
+        $http.get('arritsroute/' + current_user_id).success(function(data){
+            $scope.artisList=data;
+        });
         //If param set route= show + cookie
         //route = show
 		//console.log($scope.currentuser);
