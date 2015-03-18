@@ -17,10 +17,10 @@ app.config(['$routeProvider',
             templateUrl: 'daw.html',
             controller: 'dawCtrl'
         })
-        .when('/band',{
-            title: 'band',
-            templateUrl: 'band.html',
-            controller: 'bandCtrl'
+        .when('/artist',{
+            title: 'artist',
+            templateUrl: 'artist.html',
+            controller: 'artistCtrl'
         })
         .otherwise({
             redirectTo: '/home'
