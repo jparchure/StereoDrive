@@ -1,11 +1,12 @@
 Team7::Application.routes.draw do
   resources :app
   resources :users
+  resources :artists
   post '/audio' => 'audio#create'
   get '/audio' => 'audio#index'
   match 'auth/:provider/callback', to: 'sessions#create', via: :get
   match '/logout', to: 'sessions#destroy', via: :delete
-  match 'artist/:id', to: 'artists#list', via: :get
+  match 'artist/list/:id', to: 'artists#list', via: :get
   root :to => "app#index"
   # The priority is based upon order of creation:
   # first created -> highest priority.
