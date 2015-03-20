@@ -8,19 +8,21 @@ app.controller("homeCtrl", ['$scope', '$routeParams', '$http', '$cookies', funct
         //console.log($routeParams);
         if($routeParams['op']){ //If accessing others' profile, check for route params
             route='/users/'+ $routeParams['op'];
+            artRoute='/artist/list/' + $routeParams['op'];
             console.log($routeParams['op']);
         }  
         else{
         route='/users/' + current_user_id + "/";
+        artRoute='/artist/list/' + current_user_id + "/";
         console.log("If params in:" + current_user_id)
         }
+
 		$http.get(route).success(function(data){
 			$scope.currentuser=data;
 		});
+        $http.get(artRoute).success(function(data){
+            $scope.artistList=data;
 
-
-        $http.get('arritsroute/' + current_user_id).success(function(data){
-            $scope.artisList=data;
         });
         //If param set route= show + cookie
         //route = show
