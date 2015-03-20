@@ -19,8 +19,6 @@ class User < ActiveRecord::Base
       user.image = auth.info.image + "?type=large"
       user.token = auth.credentials.token
       user.session = SecureRandom.base64
-      hash = {:name => user.name+"'s Solo Band", :image=>user.image, :page=>user.page, :location=>user.location}
-      user.artists.create_artist!(hash)
     end
   end
 
