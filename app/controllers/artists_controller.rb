@@ -16,5 +16,6 @@ class ArtistsController < ApplicationController
       if(!@current_user.nil?)
         artist = Artist.find(id)
         render json: artist
+      end
   end
 end
