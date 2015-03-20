@@ -17,12 +17,13 @@ app.config(['$routeProvider',
             templateUrl: 'daw.html',
             controller: 'dawCtrl'
         })
-        .when('/artist',{
+        .when('/artist/:id?',{
             title: 'artist',
             templateUrl: 'artist.html',
             controller: 'artistCtrl'
         })
         .otherwise({
+
             redirectTo: '/home'
         })
     }
