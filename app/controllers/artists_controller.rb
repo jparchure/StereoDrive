@@ -11,4 +11,10 @@ class ArtistsController < ApplicationController
       redirect_to root_path
     end
   end
+  def show
+      id = params[:id]
+      if(!@current_user.nil?)
+        artist = Artist.find(id)
+        render json: artist
+  end
 end
