@@ -6,10 +6,12 @@
   <%= stylesheet_link_tag    "profile", :media => "all" %>
   <%= stylesheet_link_tag    "simple-sidebar", :media => "all" %>
   <%= javascript_include_tag "application" %>
-  <%= csrf_meta_tags %>
+  <%= stylesheet_link_tag "xeditable"%>  
+ 
+   <%= csrf_meta_tags %>
 </head>
-<body>
-<nav class='navbar-inverse navbar-static-top' role='navigation'>
+<body style = "padding-top: 50px;">
+<nav class='navbar-inverse navbar-fixed-top' role='navigation'>
     <div class='container'>
         <div class='navbar-header'>
             <button aria-controls='navbar' aria-expanded='false' class='navbar-toggle collapsed' data-target='#navbar' data-toggle='collapse' type='button'>
@@ -18,11 +20,15 @@
                 <span class='icon-bar'></span>
                 <span class='icon-bar'></span>
             </button>
-            <a class="navbar-brand" href="/home">StereoDrive</a>
+            <a class="navbar-brand" href="/app/1">StereoDrive</a>
         </div>
         <div class='navbar-collapse collapse' id='navbar'>
             <ul class='nav navbar-nav navbar-right'>
-            	<li class="navbar-link"><%= link_to "Login", '#' %></li> 
+            	<% if @current_user.nil? %>
+			<li><%= link_to "Login", '/auth/facebook', class:'navbar-link', method: 'get' %></li> 
+		<% else %>
+			<li class="navbar-link"><%= link_to "Logout", logout_path, method: 'delete' %></li> 
+		<% end %>	
 	    </ul>
         </div>
     </div>

@@ -13,6 +13,7 @@
 //= require jquery
 //= require jquery_ujs
 //= require angular-app/plugins/angular.min.js
+//= require angular-app/plugins/angular-route.min.js
 //= require angular-rails-templates
 //= require_tree ./angular-app/plugins
 //= require angular-app/app/app

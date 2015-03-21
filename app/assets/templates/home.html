@@ -1,81 +1,71 @@
-<html>
-<head>
-<link rel="stylesheet" type="text/css" href="profile.css">
-<script src="profile.js"></script>
-</head>
-<body>
+<div ng-controller="homeCtrl" ng-init="getData()">
 <div class="container">
               <div id="sidebar-wrapper">
-            <ul class="sidebar-nav">
+              <ul class="sidebar-nav">
                 <li class="sidebar-brand">
                     <a href="#">
-                        Start Bootstrap
+                       Projects
                     </a>
                 </li>
                 <li>
-                    <a href="#">Dashboard</a>
+                    <a href="#">Project 1</a>
                 </li>
                 <li>
-                    <a href="#">Shortcuts</a>
+                    <a href="#">Project 2</a>
                 </li>
                 <li>
-                    <a href="#">Overview</a>
+                    <a href="#">Project 3</a>
                 </li>
                 <li>
-                    <a href="#">Events</a>
+                    <a href="#">Project 4</a>
                 </li>
                 <li>
-                    <a href="#">About</a>
+                    <a href="#">Project 5</a>
                 </li>
-                <li>
-                    <a href="#">Services</a>
-                </li>
-                <li>
-                    <a href="#">Contact</a>
-                </li>
+              
             </ul>
         </div>
+      
       <div class="row">
+        <form editable-form name="editableForm" onaftersave="saveUser()">
 
+        <!--Code for the Profile Information-->
         <div class="roles col-xs-10 col-sm-10 col-md-4 col-lg-4 col-xs-offset-0 col-sm-offset-0 col-md-offset-0 col-lg-offset-0 toppad" >
    
    
           <div class="panel panel-info">
             <div class="panel-heading">
-              <h3 class="panel-title">John. A. Doe</h3>
+              <h3 class="panel-title"><a href="{currentuser.page}}" editable-text="currentuser.name" e-required>{{currentuser.name}}</a></h3>
             </div>
 
             <div class="panel-body">
               <div class="row">
-                <div class="col-md-12 col-lg-12 " align="center"> <img alt="User Pic" src="https://lh5.googleusercontent.com/-b0-k99FZlyE/AAAAAAAAAAI/AAAAAAAAAAA/eu7opA4byxI/photo.jpg?sz=100" class="img-circle"> </div>
+                <div class="col-md-12 col-lg-12 " align="center"> <img alt="User Pic" src="{{currentuser.image}}" class="img-circle"> </div>
                 
          
                 <div class=" col-md-9 col-lg-12 "> 
-                 <p class="tagline"> "In Heaven There's No Beer"</p>
+                 <p class="tagline" align="center" editable-text="currentuser.tagline" e-name="status"> {{currentuser.tagline|| "In Heaven there is no beer"}}</p>
                   <table class="table table-user-information">
                     <tbody>
-                      <tr>
-                        <td><label>Department:</label></td>
-                        <td>Programming</td>
-                      </tr>
+                     
                    
                       <tr>
                         <td><label>Date of Birth</label></td>
-                        <td>01/24/1988</td>
+                        <td><span editable-text="currentuser.dob">01/24/1988</span></td>
                       </tr>
                    
                          <tr>
                              <tr>
                         <td><label>Gender</label></td>
-                        <td>Male</td>
+                        <td>{{currentuser.sex}}</td>
                       </tr>
                         <tr>
                         <td><label>Location</label></td>
-                        <td>Metro Manila,Philippines</td>
+                        <td><span editable-text="currentuser.location" e-required>{{currentuser.location||"empty"}}</span></td>
                       </tr>
                       <tr>
                         <td><label>Email<label></td>
-                        <td><a href="mailto:info@support.com">info@support.com</a></td>
+                        <td><a href="mailto:{{currentuser.email}}" editable-text="currentuser.email">{{currentuser.email}}</a></td>
                       </tr>
                    
                            
@@ -87,17 +77,30 @@
                  
                 </div>
               </div>
+
             </div>
                  <div class="panel-footer">
+                   <div class="buttons">
+                        
                         <a data-original-title="Broadcast Message" data-toggle="tooltip" type="button" class="btn btn-sm btn-primary"><i class="glyphicon glyphicon-plus"></i></a>
                         <span class="pull-right">
-                            <a href="edit.html" data-original-title="Edit this user" data-toggle="tooltip" type="button" class="btn btn-sm btn-warning"><i class="glyphicon glyphicon-edit"></i></a>
-                            <a data-original-title="Remove this user" data-toggle="tooltip" type="button" class="btn btn-sm btn-danger"><i class="glyphicon glyphicon-remove"></i></a>
+                          <!--button to show form-->
+                            <a data-original-title="Edit this user" data-toggle="tooltip" type="button" class="btn btn-sm btn-warning" ng-click="editableForm.$show()" ng-show="!editableForm.$visible"><i class="glyphicon glyphicon-edit"></i></a>
+                            
+
+                            <!-- buttons to submit / cancel form -->
+      <span ng-show="editableForm.$visible">
+         <button data-original-title="Accept Changes" data-toggle="tooltip" type="submit" class="btn btn-sm btn-default" ng-disabled="editableForm.$waiting"><i class="glyphicon glyphicon-thumbs-up"></i></a>
+        
+        <button data-original-title="Remove this user" data-toggle="tooltip" type="button" class="btn btn-sm btn-danger" ng-disabled="editableForm.$waiting" ng-click="editableForm.$cancel()"><i class="glyphicon glyphicon-remove"></i></a>
+      </span>
                         </span>
+                      </div>
                     </div>
             
           </div>
         </div>
+        </form>
         <!--Code for Bands Section-->
          <div class="roles col-xs-10 col-sm-10 col-md-4 col-lg-4 col-xs-offset-0 col-sm-offset-0 col-md-offset-0 col-lg-offset-0 toppad" >
    
@@ -109,20 +112,18 @@
 
             <div class="panel-body">
                 <!--Repeat the div below for multiple bands-->
-                <div class="dis-image col-md-2 col-lg-2 " align="center"> <img alt="User Pic" src="https://lh5.googleusercontent.com/-b0-k99FZlyE/AAAAAAAAAAI/AAAAAAAAAAA/eu7opA4byxI/photo.jpg?sz=100" class="img-thumbnail"> </div>
+
+             
+                <div ng-repeat="artist in artistList" class="dis-image col-md-2 col-lg-2 " align="center"><a href="#/artist/{{artist.id}}"> <img alt="User Pic" src="{{artist.image}}" class="img-thumbnail"> </a></div>
+               
 
 
-                
-         
-                
+
               
             </div>
                  <div class="panel-footer">
                         <a data-original-title="Broadcast Message" data-toggle="tooltip" type="button" class="btn btn-sm btn-primary"><i class="glyphicon glyphicon-plus"></i></a>
-                        <span class="pull-right">
-                            <a href="edit.html" data-original-title="Edit this user" data-toggle="tooltip" type="button" class="btn btn-sm btn-warning"><i class="glyphicon glyphicon-edit"></i></a>
-                            <a data-original-title="Remove this user" data-toggle="tooltip" type="button" class="btn btn-sm btn-danger"><i class="glyphicon glyphicon-remove"></i></a>
-                        </span>
+                       
                     </div>
             
           </div>
@@ -130,5 +131,6 @@
       </div>
 
     </div>
-    </body>
-    </html>
+
+</div>
+

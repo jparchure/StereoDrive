@@ -11,7 +11,26 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150218180925) do
+ActiveRecord::Schema.define(version: 20150318221259) do
+
+  create_table "artists", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string   "name"
+    t.string   "image"
+    t.string   "page"
+    t.string   "location"
+    t.string   "genre"
+    t.string   "tagline"
+  end
+
+  create_table "artists_users", id: false, force: :cascade do |t|
+    t.integer "user_id"
+    t.integer "artist_id"
+  end
+
+  add_index "artists_users", ["artist_id"], name: "index_artists_users_on_artist_id"
+  add_index "artists_users", ["user_id"], name: "index_artists_users_on_user_id"
 
   create_table "audios", force: :cascade do |t|
     t.string   "file_name"
@@ -24,4 +43,19 @@ ActiveRecord::Schema.define(version: 20150218180925) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
+
+  create_table "users", force: :cascade do |t|
+    t.string "provider"
+    t.string "uid"
+    t.string "email"
+    t.string "name"
+    t.string "first_name"
+    t.string "image"
+    t.string "token"
+    t.string "session"
+    t.string "sex"
+    t.string "location"
+    t.string "page"
+  end
+
 end

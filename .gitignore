@@ -3,3 +3,11 @@
 **/.idea/
 tmp
 log
+
+*/.DS_Store
+.DS_Store
+.DS_Store?
+=======
+**/*.sqlite3
+**/.DS_Store
+
