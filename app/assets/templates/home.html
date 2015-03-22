@@ -43,7 +43,7 @@
                 <div class="col-md-12 col-lg-12 " align="center"> <img alt="User Pic" src="{{currentuser.image}}" class="img-circle"> </div>
                 
          
-                <div class=" col-md-9 col-lg-12 "> 
+                <div class=" col-md-12 col-lg-12 " align="center"> 
                  <p class="tagline" align="center" editable-text="currentuser.tagline" e-name="status"> {{currentuser.tagline|| "In Heaven there is no beer"}}</p>
                   <table class="table table-user-information">
                     <tbody>
@@ -51,7 +51,9 @@
                    
                       <tr>
                         <td><label>Date of Birth</label></td>
-                        <td><span editable-text="currentuser.dob">01/24/1988</span></td>
+                        <td><span editable-bsdate="currentuser.dob" e-datepicker-popup="MM-dd-yyyy">
+                        {{ (currentuser.dob | date:"MM/dd/yyyy") || 'empty' }}
+                        </span> </td>
                       </tr>
                    
                          <tr>
@@ -80,10 +82,10 @@
 
             </div>
                  <div class="panel-footer">
-                   <div class="buttons">
-                        
+                   <div class="buttons" >
                         <a data-original-title="Broadcast Message" data-toggle="tooltip" type="button" class="btn btn-sm btn-primary"><i class="glyphicon glyphicon-plus"></i></a>
-                        <span class="pull-right">
+                        
+                        <span class="pull-right" ng-show="showEditButton">
                           <!--button to show form-->
                             <a data-original-title="Edit this user" data-toggle="tooltip" type="button" class="btn btn-sm btn-warning" ng-click="editableForm.$show()" ng-show="!editableForm.$visible"><i class="glyphicon glyphicon-edit"></i></a>
                             
@@ -114,16 +116,24 @@
                 <!--Repeat the div below for multiple bands-->
 
              
-                <div ng-repeat="artist in artistList" class="dis-image col-md-2 col-lg-2 " align="center"><a href="#/artist/{{artist.id}}"> <img alt="User Pic" src="{{artist.image}}" class="img-thumbnail"> </a></div>
-               
-
-
-
-              
+                <div ng-repeat="artist in artistList" class="dis-image col-md-2 col-lg-2 " align="center"><a href="#/artist/{{artist.id}}"> <img alt="User Pic" src="{{artist.image}}" class="img-thumbnail wiggle"> </a></div>
+                 
             </div>
                  <div class="panel-footer">
-                        <a data-original-title="Broadcast Message" data-toggle="tooltip" type="button" class="btn btn-sm btn-primary"><i class="glyphicon glyphicon-plus"></i></a>
-                       
+                 <div class="buttons" ng-show="showEditButton">
+                        <a data-original-title="Broadcast Message" data-toggle="tooltip" type="button" class="btn btn-sm btn-primary" ><i class="glyphicon glyphicon-plus"></i></a>
+                     
+                  <span class="pull-right" ng-show="showEditButton">
+                          <!--button to show form-->
+                            <a data-original-title="Edit this user" data-toggle="tooltip" type="button" class="btn btn-sm btn-warning" ng-click="classyWiggle()"div ng-show="!artistEdit"><i class="glyphicon glyphicon-edit"></i></a>
+                            
+
+                            <!-- buttons to submit / cancel form -->
+      
+         <button data-original-title="Accept Changes" data-toggle="tooltip" type="submit" class="btn btn-sm btn-default" ng-click="classyWiggle()" ng-show="artistEdit"><i class="glyphicon glyphicon-thumbs-up"></i></a></button>
+        
+                        </span>
+                      </div>
                     </div>
             
           </div>

@@ -31,4 +31,7 @@ class User < ActiveRecord::Base
     hash[:name] = hash[:user_id]
     User.create!(hash)
   end
+  def self.update_user!(hash)
+    User.save!(hash)
+  end
 end
