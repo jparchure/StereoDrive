@@ -1,8 +1,8 @@
 # This file is app/controllers/users_controller.rb
 class UsersController < ApplicationController
+  skip_before_action :verify_authenticity_token, :only => [:update]
   def show
     id = params[:id]
-    puts("CURRENT USER BRO", @current_user)
     if(!@current_user.nil?)
       @user = User.find(id)
       render json: @user
@@ -13,26 +13,27 @@ class UsersController < ApplicationController
   end
 
   def update
-    #puts("Params", params)
-    #id=params[:id]
     @user = User.find(params[:id])
- 
-    puts("CU", session)
-    puts("USER", @user)
+
+    updated_user = User.clean(params)
+    puts("Before", @user.attributes.keys)
     if(@current_user!=@user)
+      #If trying to edit some one else's profile
       flash[:warning] = "You can not edit someone else's profile"
       puts("Failed someone else")
     elsif(@current_user.nil?)
+      #If trying to edit profile without logging in
       flash[:warning] = "You must login to do that!"
       puts("Un login")
     else
-      @user = User.update_user(params)
+      @user.update(updated_user)
+      #Update the user
       if(!@user)
         puts("Failed")
         flash[:warning] = "Sorry update failed"
       end
-    
     end
-    redirect_to root_path
+    puts("After", @user.attributes)
+    render :nothing => true
   end
 end

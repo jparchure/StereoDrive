@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150318221259) do
+ActiveRecord::Schema.define(version: 20150323225524) do
 
   create_table "artists", force: :cascade do |t|
     t.datetime "created_at", null: false
@@ -56,6 +56,7 @@ ActiveRecord::Schema.define(version: 20150318221259) do
     t.string "sex"
     t.string "location"
     t.string "page"
+    t.string "tagline"
   end
 
 end

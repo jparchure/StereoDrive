@@ -30,7 +30,7 @@ app.controller("homeCtrl", ['$scope', '$routeParams', '$http', '$cookies', funct
             $scope.artistList=data;
 
         });
-
+        
         $scope.saveUser= function(){
             route='/users/' + current_user_id;
             console.log(route);
