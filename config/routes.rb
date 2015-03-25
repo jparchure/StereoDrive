@@ -4,13 +4,9 @@ Team7::Application.routes.draw do
   resources :artists
   post '/audio' => 'audio#create'
   get '/audio' => 'audio#index'
-<<<<<<< HEAD
   post '/track' => 'track#create'
-  post '/clip' => 'clip#create'
+  post '/clips' => 'clips#create'
   get 'audio/:key/delete' => 'audio#delete'
-  get  '/paytonleevieno' => 'application#send_current_user'
-=======
->>>>>>> c3ccce2055b2cefbceb16eb0e427b21e241aca6c
   match 'auth/:provider/callback', to: 'sessions#create', via: :get
   match '/logout', to: 'sessions#destroy', via: :delete
   match 'artist/list/:id', to: 'artists#list', via: :get

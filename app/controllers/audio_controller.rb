@@ -50,6 +50,9 @@ class AudioController < ApplicationController
       fileName = 'ExampleProject/' << key << '.mp3'
       if(bucket.object(fileName).delete)
         Audio.where(key: key).destroy_all
+
+        # Destroy all Clips as well
+
         render :json => {"success" => true}
       else
         render :json => {"success" => false}

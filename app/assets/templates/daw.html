@@ -11,7 +11,7 @@
                     Audio Files
                 </div>
                 <div class="list-group">
-                    <a class="list-group-item btn dl-horizontal" ng-repeat="audioFile in audioFiles" ng-click="playSound(audioFile)" ng-drag="true" ng-drag-data="audioFile">
+                    <a class="list-group-item btn dl-horizontal" ng-repeat="audioFile in audioFiles" ng-click="playFile(audioFile)" ng-drag="true" ng-drag-data="audioFile">
                         <dt class="pull-left">
                             {{audioFile.file_name}}
                         </dt>
@@ -26,6 +26,7 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h1>{{"DAW"}}</h1>
+                        <button class="btn-default" ng-click="play()">Play</button>
                     </div>
                     <div>
                         <div ng-repeat="track in tracks" class="row-fluid panel-success">
@@ -35,10 +36,7 @@
                                 {{ track.name }}
                             </div>
                             <div ng-drop="true" class="track col-md-11" ng-drop-success="onSoundDrop($data,$event,track)">
-                                <canvas ng-repeat="clip in track.clips" id="{{clip.id}}" class="panel clip" width="200" height="71"></canvas>
-
-                                <br/>
-                                <div ng-repeat="clip in track.clips">{{"startPos: " + clip.startPos}}</div>
+                                <canvas ng-repeat="clip in track.clips" id="{{clip.clip_id}}" class="panel clip" width="{{clip.width}}" height="71"></canvas>
                             </div>
                         </div>
                         <button class="btn btn-default" type="button" ng-click="addTrack()">Add Track</button>

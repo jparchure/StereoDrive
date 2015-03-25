@@ -57,6 +57,49 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', funct
         usSpinnerService.spin('spinner');
     }
 
+
+    /////////////////////////////////////////////////////////
+    //  Project Functions
+    /////////////////////////////////////////////////////////
+    var playlist;
+
+    $scope.play= function(){
+      playlist = [];
+      for(var i = 0; i<$scope.tracks.length; i++){
+          var track = $scope.tracks[i];
+          for( var j=0; j<track.clips.length; j++){
+              var clip = track.clips[j];
+              playlist.push({
+                  buffer: clip.buffer,
+                  pos_in_track: clip.pos_in_track/zoomCoefficient,
+                  start: 0,
+                  end: clip.buffer.duration
+              })
+          }
+      }
+      for(var i=0; i<playlist.length;i++){
+          console.log("sound: "+1+", delay: "+playlist[i].pos_in_track);
+          var index = i;
+          setTimeout(function(index){
+              console.log(playlist);
+              console.log(index);
+              var source = audioContext.createBufferSource();
+              source.buffer = playlist[index].buffer;
+              source.connect(audioContext.destination);
+              source.start(playlist[index].pos_in_track, playlist[index].start, playlist[index].end)
+          },playlist[i].pos_in_track*1000, index);
+
+          //audioContext.decodeAudioData(playlist[i].buffer, function(buffer){
+          //
+          //        var audioSource = audioContext.createBufferSource();
+          //        audioSource.buffer = buffer;
+          //        audioSource.connect(audioContext.destination);
+          //        audioSource.start(1000, 0, buffer.length);
+          //    }
+          //);
+      }
+    };
+
     ///////////////////////////////////////////
     // Audio Functions
     //////////////////////////////////////////
@@ -94,14 +137,20 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', funct
         showSpinner();
     };
 
-    $scope.playSound = function (file) {
-        if (file && file.buffer && file.file_name) {
+    $scope.playFile = function(file){
+        if(file && file.buffer && file.file_name){
             console.log("playing sound: " + file.file_name + "\nbuffer: " + file.buffer);
-            var source = audioContext.createBufferSource();
-            source.buffer = file.buffer;
+            $scope.playSound(file.buffer);
+            return true;
+        }
+        return false;
+    };
+
+    $scope.playSound = function (buffer) {
+        var source = audioContext.createBufferSource();
+            source.buffer = buffer;
             source.connect(audioContext.destination);
             source.start();
-        }
         return false;
     };
 
@@ -164,23 +213,25 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', funct
     /////////////////////////////////////////////
     // Clip Functions
     /////////////////////////////////////////////
-
+    var zoomCoefficient = 100;
     $scope.onSoundDrop = function(data, event, track){
+
         var clip = {
-            sound: data,
-            audioKey: data.key,
-            posInTrack: 0,
+            audio_key: data.key,
+            pos_in_track: 0,
             start: 0,
             end: 0,
-            id: track.name+"-clip"+track.clips.length
+            clip_id: track.name+"-clip"+track.clips.length,
+            width: data.buffer.duration * zoomCoefficient,
+            buffer: data.buffer
         };
 
         track.clips.push(clip);
         $scope.$apply();
         createNewClip(clip, track);
         attachSlider(clip);
-        element = document.getElementById(clip.id);
-        drawWaveform(element.width,element.height,element.getContext("2d"),clip.sound.buffer)
+        element = document.getElementById(clip.clip_id);
+        drawWaveform(element.width,element.height,element.getContext("2d"),data.buffer);
         //setNewClipPosition(clip, 0);
     };
 
@@ -189,13 +240,21 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', funct
             clip: clip,
             track: track
         };
-        // $http.post('/clips' data).success(function(data){
-        // }).error(function(data){
-        // });
+        $http.post('/clips', data).success(function(data){
+            if(data.success){
+                console.log("success\n"+JSON.stringify(data));
+            }
+            else{
+                console.log("failure");
+            }
+
+        }).error(function(data){
+            console.log("error");
+        });
     }
 
     function attachSlider(clip){
-        interact('#'+clip.id)                   // target the matches of that selector
+        interact('#'+clip.clip_id)                   // target the matches of that selector
             .resizable({
                 left: true,
                 right: true,
@@ -214,15 +273,14 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', funct
                     var target = event.target;
 
                     // keep the dragged position in the posInTrack attribute
-                    x = (parseFloat(clip.posInTrack || 0) + event.dx );
+                    x = (parseFloat(clip.pos_in_track || 0) + event.dx );
                     //x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx;
                     x = x - (x%1);
                     // translate the element
                     target.style.transform = 'translate(' + x + 'px, ' + 0 + 'px)';
 
                     // update the posiion attributes
-                    clip.posInTrack = x;
-                    //$scope.tracks[0].clips[0].posInTrack = x;
+                    clip.pos_in_track = x;
                 },
                 onend: function(event) {
                     $scope.$apply();
@@ -253,8 +311,8 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', funct
     function setNewClipPosition(clip, nPosX){
         console.log("chagning clip Pos");
         var target = document.getElementById(clip.id);
-        var dx = nPosX - clip.posInTrack;
-        clip.posInTrack = nPosX;
+        var dx = nPosX - clip.pos_in_track;
+        clip.pos_in_track = nPosX;
         target.style.transform = 'translate(' + dx + 'px, ' + 0 + 'px)';
         $scope.$apply();
     }
