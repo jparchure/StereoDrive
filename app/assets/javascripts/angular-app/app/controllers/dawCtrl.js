@@ -168,20 +168,30 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', funct
     $scope.onSoundDrop = function(data, event, track){
         var clip = {
             sound: data,
-            startPos: 0,
+            audioKey: data.key,
+            posInTrack: 0,
+            start: 0,
+            end: 0,
             id: track.name+"-clip"+track.clips.length
         };
+
         track.clips.push(clip);
         $scope.$apply();
-        createNewClip(clip);
+        createNewClip(clip, track);
         attachSlider(clip);
         element = document.getElementById(clip.id);
         drawWaveform(element.width,element.height,element.getContext("2d"),clip.sound.buffer)
         //setNewClipPosition(clip, 0);
     };
 
-    function createNewClip(clip){
-        // $http.post('/tracks/'+track.key+'/clips' data).success
+    function createNewClip(clip, track){
+        var data = {
+            clip: clip,
+            track: track
+        };
+        // $http.post('/clips' data).success(function(data){
+        // }).error(function(data){
+        // });
     }
 
     function attachSlider(clip){
@@ -203,16 +213,16 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', funct
                 onmove: function (event) {
                     var target = event.target;
 
-                    // keep the dragged position in the startPos attribute
-                    x = (parseFloat(clip.startPos || 0) + event.dx );
+                    // keep the dragged position in the posInTrack attribute
+                    x = (parseFloat(clip.posInTrack || 0) + event.dx );
                     //x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx;
-
+                    x = x - (x%1);
                     // translate the element
                     target.style.transform = 'translate(' + x + 'px, ' + 0 + 'px)';
 
                     // update the posiion attributes
-                    clip.startPos = x;
-                    //$scope.tracks[0].clips[0].startPos = x;
+                    clip.posInTrack = x;
+                    //$scope.tracks[0].clips[0].posInTrack = x;
                 },
                 onend: function(event) {
                     $scope.$apply();
@@ -243,8 +253,8 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', funct
     function setNewClipPosition(clip, nPosX){
         console.log("chagning clip Pos");
         var target = document.getElementById(clip.id);
-        var dx = nPosX - clip.startPos;
-        clip.startPos = nPosX;
+        var dx = nPosX - clip.posInTrack;
+        clip.posInTrack = nPosX;
         target.style.transform = 'translate(' + dx + 'px, ' + 0 + 'px)';
         $scope.$apply();
     }

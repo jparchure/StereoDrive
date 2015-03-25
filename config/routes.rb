@@ -3,6 +3,7 @@ Team7::Application.routes.draw do
   post '/audio' => 'audio#create'
   get '/audio' => 'audio#index'
   post '/track' => 'track#create'
+  post '/clip' => 'clip#create'
   get 'audio/:key/delete' => 'audio#delete'
   get  '/paytonleevieno' => 'application#send_current_user'
   match 'auth/:provider/callback', to: 'sessions#create', via: :get

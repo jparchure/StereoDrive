@@ -34,8 +34,8 @@
                                 <br/>
                                 {{ track.name }}
                             </div>
-                            <div ng-drop="true" class="drop-box col-md-10 panel" ng-drop-success="onSoundDrop($data,$event,track)">
-                                <canvas ng-repeat="clip in track.clips" id="{{clip.id}}" class="panel pull-left" width="200" height="71"></canvas>
+                            <div ng-drop="true" class="track col-md-11" ng-drop-success="onSoundDrop($data,$event,track)">
+                                <canvas ng-repeat="clip in track.clips" id="{{clip.id}}" class="panel clip" width="200" height="71"></canvas>
 
                                 <br/>
                                 <div ng-repeat="clip in track.clips">{{"startPos: " + clip.startPos}}</div>

@@ -1,14 +1,12 @@
 class ClipsController < ApplicationController
   def create
-    if(params[:trackId] && params[:audioKey] && params[:clip])
-      trackId = params[:trackId]
-      audioKey = params[:audioKey]
+    if(params[:clip] && params[:track])
+      trackData = params[:track]
       # in future refer to Project.Track
-      track = Track.where(:trackId => trackId)
-      audio = Audio.where(:key => audioKey)
+      track = Track.where(:trackId => trackData[:id])
 
       # How to associate with audio as well?
-      track.clips.create(params[:clip])
+      Clip.create params[:clip]
       render :json => {'success' => true}
     else
       render :json => {'success' => false}
