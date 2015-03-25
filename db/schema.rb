@@ -11,11 +11,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
+<<<<<<< HEAD
 ActiveRecord::Schema.define(version: 20150306002740) do
+=======
+ActiveRecord::Schema.define(version: 20150323225524) do
+>>>>>>> c3ccce2055b2cefbceb16eb0e427b21e241aca6c
 
   create_table "artists", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string   "name"
+    t.string   "image"
+    t.string   "page"
+    t.string   "location"
+    t.string   "genre"
+    t.string   "tagline"
   end
 
   create_table "artists_users", id: false, force: :cascade do |t|
@@ -57,6 +67,7 @@ ActiveRecord::Schema.define(version: 20150306002740) do
     t.string "sex"
     t.string "location"
     t.string "page"
+    t.string "tagline"
   end
 
 end

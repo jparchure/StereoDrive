@@ -1,5 +1,5 @@
 class User < ActiveRecord::Base
-  attr_accessible :provider, :uid, :email, :name, :first_name, :image, :token, :session, :page, :sex, :location
+  attr_accessible :provider, :uid, :email, :name, :first_name, :image, :token, :session, :page, :sex, :location, :tagline
   before_save { self.email = email.downcase }
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
   validates :email, presence: true, length: { maximum: 255 },format: { with: VALID_EMAIL_REGEX }
@@ -30,5 +30,15 @@ class User < ActiveRecord::Base
     hash[:uid] = uid
     hash[:name] = hash[:user_id]
     User.create!(hash)
+  end
+
+
+  def self.clean(params)
+    params.delete("user")
+    params.delete("dob")
+    params.delete("controller")
+    params.delete("action")
+    params.delete("id")
+    return params
   end
 end

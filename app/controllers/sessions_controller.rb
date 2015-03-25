@@ -5,7 +5,12 @@ class SessionsController < ApplicationController
     user = User.omniauth(auth)
     user.update_attributes(:token => auth["credentials"]["token"])
     session[:token] = user.session
-    redirect_to app_path('success')
+    cookies[:id] = user.id
+    if(user.artists.count == 0)
+        hash = {:name => user.name+"'s Solo Band", :image=>user.image, :page=>user.page, :location=>user.location}
+    	user.artists << Artist.create!(hash)
+    end
+    redirect_to app_path(user.id)
   end
   def destroy
     session[:token] = nil 
