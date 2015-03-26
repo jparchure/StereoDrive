@@ -39,8 +39,6 @@ ActiveRecord::Schema.define(version: 20150306002740) do
   end
 
   create_table "tracks", force: :cascade do |t|
-    t.string   "track_name"
-    t.string   "key"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

@@ -137,13 +137,13 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', funct
     $scope.addTrack = function(){
         var track;
         track = {
-            number: $scope.tracks.length + 1,
-            name: ''//needs track number in there too
+            key: 0
         };
-        track.name= makeid();
 
         $http.post('/track', {track: track}).success(function(data){//data is returned from track_controller.rb#create
 
+            track.key = data.key;
+            console.log(track);
             $scope.tracks.push(track);
         }).error(function(data, status, headers, config){
             console.log(status);
@@ -154,7 +154,7 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', funct
     $scope.removeTrack = function(deleteTrack){
         var index;
         for (var i =0; i < $scope.tracks.length; i++)
-            if ($scope.tracks[i].name === deleteTrack.name) {
+            if ($scope.tracks[i].key === deleteTrack.key) {
                 index = i;
                 break;
             }
@@ -162,7 +162,7 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', funct
         $http.post('/deleteTrack', {track:deleteTrack}).success(function(data){//data is returned from track_controller.rb#create
             $scope.message = data;
             for (var i =0; i < $scope.tracks.length; i++)
-                if ($scope.tracks[i].name === deleteTrack.name) {
+                if ($scope.tracks[i].key === deleteTrack.key) {
                     $scope.tracks.splice(i,1);
                     break;
                 }
@@ -182,17 +182,4 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', funct
             alert("could not retrieve tracks");
         });
     }
-    function makeid()
-    {
-        var text = "";
-        var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-
-        for( var i=0; i < 15; i++ )
-            text += possible.charAt(Math.floor(Math.random() * possible.length));
-
-        return text;
-    }
-
-
-
 }]);

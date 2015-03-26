@@ -1,5 +1,5 @@
 class Track < ActiveRecord::Base
-  attr_accessible :track_name, :key
+  attr_accessible
   #belongs_to :project
   #has_many :clips
 end

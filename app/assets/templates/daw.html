@@ -49,13 +49,13 @@
                         <div ng-repeat="track in tracks">
                             <div class ="row">
                                 <div class="col-md-2">
-                                    Track Name: {{ track.name }}
+                                    Track#: {{ track.key }}
                                 </div>
                                 <div class="drop-box col-md-6">
                                         coolstuffffbrooooo
                                 </div>
                                 <div class="col-md-1">
-                                    <button class="btn btn-default" type="button" ng-click="removeTrack(track)">Delete {{ track.name }}</button>
+                                    <button class="btn btn-default" type="button" ng-click="removeTrack(track)">Delete Track #{{ track.key }}</button>
                                 </div>
                             </div>
                         </div>

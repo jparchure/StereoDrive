@@ -2,10 +2,9 @@ class TrackController < ApplicationController
 
   def create
 
-    track = params[:track]
+    createdTrack = Track.create()#technically will have sound data inside it
 
-    Track.create(track_name: track['name'],key: track['number'])
-    render :json => { 'success' => true}
+    render :json => { 'success' => true, 'key' =>createdTrack.id}
 
   end
 
@@ -18,8 +17,7 @@ class TrackController < ApplicationController
     #get signed urls for each audio file
     track.each{ |a|
       trackInfo = Hash.new
-      trackInfo['name'] = a.track_name
-      trackInfo['number'] = a.key
+      trackInfo['key'] = a.id
       allTrack.push(trackInfo)
     }
 
@@ -29,7 +27,7 @@ class TrackController < ApplicationController
 
   def rename
     track = params[:track]
-    track = Track.find_by!(track_name: track['name'])
+    track = Track.find_by!(id: track['key'])
     track.track_name = 'newName'
     render :json => { 'success' => true}
   end
@@ -37,8 +35,9 @@ class TrackController < ApplicationController
   def delete
     #should delete all audio in audio_controller as well
     track = params[:track]
-    track = Track.find_by!(track_name: track['name'])
+    track = Track.find_by!(id: track['key'])
     track.destroy()
-    render :json => { 'success' => true}
+
+    render :json => { 'success' => true, 'key' => track.id}
   end
 end
