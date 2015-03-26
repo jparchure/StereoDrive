@@ -29,6 +29,11 @@
                         <button class="btn-default" ng-click="play()">Play</button>
                     </div>
                     <div>
+                        <div class="row-fluid drag-marker-container">
+                            <div class="col-md-offset-1 col-md-11">
+                                <div id="drag-marker"/>
+                            </div>
+                        </div>
                         <div ng-repeat="track in tracks" class="row-fluid panel-success">
                             <div class="col-md-1">
                                 {{ track.number }}
@@ -36,10 +41,12 @@
                                 {{ track.name }}
                             </div>
                             <div ng-drop="true" class="track col-md-11" ng-drop-success="onSoundDrop($data,$event,track)">
+                                <div class="marker" left="{{markerPos + 'px'}}"/>
                                 <canvas ng-repeat="clip in track.clips" id="{{clip.clip_id}}" class="panel clip" width="{{clip.width}}" height="71"></canvas>
                             </div>
                         </div>
                         <button class="btn btn-default" type="button" ng-click="addTrack()">Add Track</button>
+                        <input type="text" ng-model="markerPos" class="form-control"/>
                     </div>
                 </div>
             </div>

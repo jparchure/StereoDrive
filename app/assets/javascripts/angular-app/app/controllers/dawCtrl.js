@@ -10,6 +10,7 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', funct
         initializeAudioTools();
         getAudio();
         listenForFileDrop();
+        initDragMarker();
     }
 
     ///////////////////////////////////////////////////////////
@@ -20,6 +21,45 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', funct
         $scope.$watch('file', function () {
             upload($scope.file);
         });
+    }
+
+    function initDragMarker(){
+        interact('#drag-marker')                   // target the matches of that selector
+            .draggable({                        // make the element fire drag events
+                max: Infinity,                     // allow drags on multiple elements
+                restrict: {
+                    restriction: "parent", // keep the drag within the parent
+                    endOnly: false,
+                    elementRect: { top: 0, left: 0, bottom: 1, right: 0.3}
+                },
+                inertia: false,
+                onmove: function (event) {
+                    var target = event.target;
+
+                    // keep the dragged position in the posInTrack attribute
+                    var x = (parseFloat($scope.markerPos || 0) + event.dx );
+                    //x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx;
+                    x = x - (x%1);
+                    // translate the element
+                    if(x<0)
+                        x = 0;
+
+                    elements = document.getElementsByClassName("marker");
+                    for(var i=0; i<elements.length; i++){
+                        elements[i].style.transform = 'translate(' + x + 'px, ' + 0 + 'px)';
+                    }
+
+                    target.style.transform = 'translate(' + x + 'px, ' + 0 + 'px)';
+
+                    // update the posiion attributes
+                    $scope.markerPos = x;
+                },
+                onend: function(event) {
+                    $scope.$apply();
+                }
+            });
+
+        interact.maxInteractions(Infinity);   // Allow multiple interactions
     }
 
     // This function will make the API call to get the audio files from our backend
@@ -39,8 +79,7 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', funct
     // This function will set up the WebAudioApi
     function initializeAudioTools() {
         try {
-            window.AudioContext = window.AudioContext || window.webkitAudioContext;
-            audioContext = new AudioContext();
+            audioContext = new (window.AudioContext || window.webkitAudioContext)();
         } catch (e) {
             alert("This browser does not support our Audio tools");
         }
@@ -63,6 +102,33 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', funct
     /////////////////////////////////////////////////////////
     var playlist;
 
+    $scope.markerPos = 0;
+
+    function animateMarker(){
+
+        if(playing && parseFloat($(".marker").css("left")) < 1000) {
+            var leftVal = "+=" + zoomCoefficient/1;
+
+            $(".marker").animate({
+                left: leftVal
+            }, 1000, "linear");
+
+            $("#drag-marker").animate({
+                left: leftVal
+            }, 1000, "linear", function () {
+                animateMarker();
+            });
+        }
+        else{
+            playing = false;
+            $(".marker").css({left:0});
+
+            $("#drag-marker").css({left:0});
+        }
+    }
+
+    var playing = false;
+
     $scope.play= function(){
       playlist = [];
       for(var i = 0; i<$scope.tracks.length; i++){
@@ -77,17 +143,18 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', funct
               })
           }
       }
-      for(var i=0; i<playlist.length;i++){
-          console.log("sound: "+1+", delay: "+playlist[i].pos_in_track);
+      playing = true;
+      for(var i=0; i<playlist.length;i++) {
+          console.log("sound: " + 1 + ", delay: " + playlist[i].pos_in_track);
           var index = i;
-          setTimeout(function(index){
+          setTimeout(function (index) {
               console.log(playlist);
               console.log(index);
               var source = audioContext.createBufferSource();
               source.buffer = playlist[index].buffer;
               source.connect(audioContext.destination);
-              source.start(playlist[index].pos_in_track, playlist[index].start, playlist[index].end)
-          },playlist[i].pos_in_track*1000, index);
+              source.start(10);//playlist[index].pos_in_track, playlist[index].start, playlist[index].end)
+          }, playlist[i].pos_in_track * 1000, index);
 
           //audioContext.decodeAudioData(playlist[i].buffer, function(buffer){
           //
@@ -98,6 +165,8 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', funct
           //    }
           //);
       }
+      animateMarker();
+    // Get the right width/time vals and ratio
     };
 
     ///////////////////////////////////////////
@@ -276,6 +345,8 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', funct
                     x = (parseFloat(clip.pos_in_track || 0) + event.dx );
                     //x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx;
                     x = x - (x%1);
+                    if(x<0)
+                        x=0;
                     // translate the element
                     target.style.transform = 'translate(' + x + 'px, ' + 0 + 'px)';
 
