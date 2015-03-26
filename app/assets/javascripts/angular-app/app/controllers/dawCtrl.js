@@ -262,6 +262,7 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', funct
         var track = {
             number: $scope.tracks.length+1,
             name: 'track'+($scope.tracks.length+1), //needs track number in there too
+            key: 0,
             clips: []
         };
         $http.post('/track', {track: track}).success(function(data){//data is returned from track_controller.rb#create
