@@ -1,6 +1,8 @@
 
 <div us-spinner="{radius:30, width:8, length: 16}" spinner-key="spinner" spinner-start-active="true"></div>
-<div>
+<div ng-file-drop ng-model="file"
+     drag-over-class="dragover" ng-multiple="true" allow-dir="true"
+     accept=".mp3,.m4a" >
     <br/>
     <div class="row-fluid">
         <div class="col-md-3">
@@ -9,60 +11,46 @@
                     Audio Files
                 </div>
                 <div class="list-group">
-                    <a class="list-group-item btn" ng-repeat="audioFile in audioFiles" ng-click="playSound(audioFile)" ng-drag="true" ng-drag-data="audioFile">
-                        <div >
+                    <a class="list-group-item btn dl-horizontal" ng-repeat="audioFile in audioFiles" ng-click="playFile(audioFile)" ng-drag="true" ng-drag-data="audioFile">
+                        <dt class="pull-left">
                             {{audioFile.file_name}}
-                        </div>
+                        </dt>
+                        <dd>
+                            <button type="button" ng-click="deleteAudio(audioFile)" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        </dd>
                     </a>
                 </div>
             </div>
         </div>
         <div class="col-md-9">
-            <div class="panel panel-default">
-            <div class="panel-heading">
-                <h1>{{"DAW"}}</h1>
-            </div>
-            Drop Audio here
-            <div ng-file-drop ng-model="file" class="drop-box"
-                 drag-over-class="dragover" ng-multiple="true" allow-dir="true"
-                 accept=".mp3,.m4a" ng-drop="true" ng-drop-success="onSoundDrop($data,$event)">
 
-                {{"Sounds in track: "+sounds}}
-                <div ng-repeat="file in files">
-                    {{file.name}}
-                </div>
-                <br/>
-                <canvas id="audioImg" class="panel" width="400" height="30"/>
-            </div>
-            <div ng-no-file-drop>File Drag/Drop is not supported for this browser</div>
-        </div>
-        </div>
-    </div>
-    <div class="row-fluid">
-        <div class="col-md-12">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title">Tracks</h3>
-                </div>
-                <div class="panel-body">
-                    <div class = "container-fluid">
-                        <div ng-repeat="track in tracks">
-                            <div class ="row">
-                                <div class="col-md-2">
-                                    Track#: {{ track.key }}
-                                </div>
-                                <div class="drop-box col-md-6">
-                                        coolstuffffbrooooo
-                                </div>
-                                <div class="col-md-1">
-                                    <button class="btn btn-default" type="button" ng-click="removeTrack(track)">Delete Track #{{ track.key }}</button>
-                                </div>
-                            </div>
-                        </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h1>{{"DAW"}}</h1>
+                        <button class="btn-default" ng-click="play()">Play</button>
                     </div>
                     <div>
+                        <div class="row-fluid drag-marker-container">
+                            <div class="col-md-offset-1 col-md-11">
+                                <div id="drag-marker"/>
+                            </div>
+                        </div>
+                        <div ng-repeat="track in tracks" class="row-fluid panel-success">
+                            <div class="col-md-1">
+                                Track {{ track.key }}
+                                <br/>
+                                <button class="btn btn-danger" type="button" ng-click="removeTrack(track)">Delete</button>
+                            </div>
+                            <div ng-drop="true" class="track col-md-11" ng-drop-success="onSoundDrop($data,$event,track)">
+                                <div class="marker" left="{{markerPos + 'px'}}"/>
+                                <canvas ng-repeat="clip in track.clips" id="{{clip.clip_id}}" class="panel clip" width="{{clip.width}}" height="71"></canvas>
+                            </div>
+
+                        </div>
                         <button class="btn btn-default" type="button" ng-click="addTrack()">Add Track</button>
+                        <input type="text" ng-model="markerPos" class="form-control"/>
                     </div>
+
                 </div>
             </div>
         </div>

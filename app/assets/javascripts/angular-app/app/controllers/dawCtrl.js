@@ -2,16 +2,65 @@
 app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', function($scope, $upload, $http, usSpinnerService) {
 
     $scope.audioFiles = [];
-
-    $scope.$watch('file', function () {
-        upload($scope.file);
-    });
-
     var audioContext;
     var numOfLoadedSounds = 0;
 
-    initializeAudioTools();
-    getAudio();
+    init();
+    function init(){
+        initializeAudioTools();
+        getAudio();
+        listenForFileDrop();
+        initDragMarker();
+    }
+
+    ///////////////////////////////////////////////////////////
+    // Initialization Functions
+    ///////////////////////////////////////////////////////////
+
+    function listenForFileDrop(){
+        $scope.$watch('file', function () {
+            upload($scope.file);
+        });
+    }
+
+    function initDragMarker(){
+        interact('#drag-marker')                   // target the matches of that selector
+            .draggable({                        // make the element fire drag events
+                max: Infinity,                     // allow drags on multiple elements
+                restrict: {
+                    restriction: "parent", // keep the drag within the parent
+                    endOnly: false,
+                    elementRect: { top: 0, left: 0, bottom: 1, right: 0.3}
+                },
+                inertia: false,
+                onmove: function (event) {
+                    var target = event.target;
+
+                    // keep the dragged position in the posInTrack attribute
+                    var x = (parseFloat($scope.markerPos || 0) + event.dx );
+                    //x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx;
+                    x = x - (x%1);
+                    // translate the element
+                    if(x<0)
+                        x = 0;
+
+                    elements = document.getElementsByClassName("marker");
+                    for(var i=0; i<elements.length; i++){
+                        elements[i].style.transform = 'translate(' + x + 'px, ' + 0 + 'px)';
+                    }
+
+                    target.style.transform = 'translate(' + x + 'px, ' + 0 + 'px)';
+
+                    // update the posiion attributes
+                    $scope.markerPos = x;
+                },
+                onend: function(event) {
+                    $scope.$apply();
+                }
+            });
+
+        interact.maxInteractions(Infinity);   // Allow multiple interactions
+    }
 
     getTrack();
 
@@ -29,6 +78,18 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', funct
         });
     }
 
+    // This function will set up the WebAudioApi
+    function initializeAudioTools() {
+        try {
+            audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        } catch (e) {
+            alert("This browser does not support our Audio tools");
+        }
+    }
+
+    /////////////////////////////////////////////////////////
+    //  Utility Functions
+    /////////////////////////////////////////////////////////
     function hideSpinner() {
         usSpinnerService.stop('spinner');
     }
@@ -37,6 +98,82 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', funct
         usSpinnerService.spin('spinner');
     }
 
+
+    /////////////////////////////////////////////////////////
+    //  Project Functions
+    /////////////////////////////////////////////////////////
+    var playlist;
+
+    $scope.markerPos = 0;
+
+    function animateMarker(){
+
+        if(playing && parseFloat($(".marker").css("left")) < 1000) {
+            var leftVal = "+=" + zoomCoefficient/1;
+
+            $(".marker").animate({
+                left: leftVal
+            }, 1000, "linear");
+
+            $("#drag-marker").animate({
+                left: leftVal
+            }, 1000, "linear", function () {
+                animateMarker();
+            });
+        }
+        else{
+            playing = false;
+            $(".marker").css({left:0});
+
+            $("#drag-marker").css({left:0});
+        }
+    }
+
+    var playing = false;
+
+    $scope.play= function(){
+      playlist = [];
+      for(var i = 0; i<$scope.tracks.length; i++){
+          var track = $scope.tracks[i];
+          for( var j=0; j<track.clips.length; j++){
+              var clip = track.clips[j];
+              playlist.push({
+                  buffer: clip.buffer,
+                  pos_in_track: clip.pos_in_track/zoomCoefficient,
+                  start: 0,
+                  end: clip.buffer.duration
+              })
+          }
+      }
+      playing = true;
+      for(var i=0; i<playlist.length;i++) {
+          console.log("sound: " + 1 + ", delay: " + playlist[i].pos_in_track);
+          var index = i;
+          setTimeout(function (index) {
+              console.log(playlist);
+              console.log(index);
+              var source = audioContext.createBufferSource();
+              source.buffer = playlist[index].buffer;
+              source.connect(audioContext.destination);
+              source.start(10);//playlist[index].pos_in_track, playlist[index].start, playlist[index].end)
+          }, playlist[i].pos_in_track * 1000, index);
+
+          //audioContext.decodeAudioData(playlist[i].buffer, function(buffer){
+          //
+          //        var audioSource = audioContext.createBufferSource();
+          //        audioSource.buffer = buffer;
+          //        audioSource.connect(audioContext.destination);
+          //        audioSource.start(1000, 0, buffer.length);
+          //    }
+          //);
+      }
+      animateMarker();
+    // Get the right width/time vals and ratio
+    };
+
+    ///////////////////////////////////////////
+    // Audio Functions
+    //////////////////////////////////////////
     function loadSound(data) {
         var url = data.audioUrl;
         var request = new XMLHttpRequest();
@@ -59,51 +196,34 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', funct
         return data;
     }
 
-    $scope.sounds = 0;
-    $scope.onSoundDrop = function(data, event){
-        $scope.sounds++;
-        element = document.getElementById("audioImg");
-        drawWaveform(element.width,element.height,element.getContext("2d"),data.buffer)
+    $scope.deleteAudio = function(audioFile){
+        $http.get('/audio/'+audioFile.key+'/delete').success(function(data){
+            hideSpinner();
+            var index = $scope.audioFiles.indexOf(audioFile);
+            $scope.audioFiles.splice(index,1);
+            console.log(data);
+        }).error(function(data){
+            hideSpinner();
+        });
+        showSpinner();
     };
 
-    function drawWaveform( width, height, context, buffer ) {
-        var data = buffer.getChannelData( 0 );
-        var step = Math.ceil( data.length / width );
-        var amp = height / 2;
-        for(var i=0; i < width; i++){
-            var min = 1.0;
-            var max = -1.0;
-            for (var j=0; j<step; j++) {
-                var datum = data[(i*step)+j];
-                if (datum < min)
-                    min = datum;
-                if (datum > max)
-                    max = datum;
-            }
-            context.fillRect(i,(1+min)*amp,1,Math.max(1,(max-min)*amp));
-        }
-    }
-
-    $scope.playSound = function (file) {
-        if (file && file.buffer && file.file_name) {
+    $scope.playFile = function(file){
+        if(file && file.buffer && file.file_name){
             console.log("playing sound: " + file.file_name + "\nbuffer: " + file.buffer);
-            var source = audioContext.createBufferSource();
-            source.buffer = file.buffer;
-            source.connect(audioContext.destination);
-            source.start();
+            $scope.playSound(file.buffer);
+            return true;
         }
         return false;
     };
 
-    // This function will set up the WebAudioApi
-    function initializeAudioTools() {
-        try {
-            window.AudioContext = window.AudioContext || window.webkitAudioContext;
-            audioContext = new AudioContext();
-        } catch (e) {
-            alert("This browser does not support our Audio tools");
-        }
-    }
+    $scope.playSound = function (buffer) {
+        var source = audioContext.createBufferSource();
+            source.buffer = buffer;
+            source.connect(audioContext.destination);
+            source.start();
+        return false;
+    };
 
     function upload(file) {
         if (file) {
@@ -129,27 +249,31 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', funct
         }
     }
 
-
+    //////////////////////////////////////////////
+    // Track Functions
     //////////////////////////////////////////////
 
-    $scope.tracks = [];
+
+    $scope.tracks = [
+
+    ];
 
     $scope.addTrack = function(){
-        var track;
-        track = {
-            key: 0
+        var track = {
+            number: $scope.tracks.length+1,
+            name: 'track'+($scope.tracks.length+1), //needs track number in there too
+            clips: []
         };
-
         $http.post('/track', {track: track}).success(function(data){//data is returned from track_controller.rb#create
 
             track.key = data.key;
+            track.name = 'track'+(track.key);
             console.log(track);
             $scope.tracks.push(track);
         }).error(function(data, status, headers, config){
             console.log(status);
             alert("could not add track");
         });
-
     };
     $scope.removeTrack = function(deleteTrack){
         var index;
@@ -160,6 +284,7 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', funct
             }
         console.log(index);
         $http.post('/deleteTrack', {track:deleteTrack}).success(function(data){//data is returned from track_controller.rb#create
+
             $scope.message = data;
             for (var i =0; i < $scope.tracks.length; i++)
                 if ($scope.tracks[i].key === deleteTrack.key) {
@@ -170,16 +295,127 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', funct
             console.log(status);
             alert("could not delete track");
         });
-
     };
-    // This function will make the API call to get the audio files from our backend
+    // This function will make the API call to get the track files from our backend
     function getTrack() {
         $http.get('/track').success(function (data) {
             for (var i = 0; i < data.length; i++) {
+                var track = {number:0, name:"", key: 0, clips: []};
+                track
                 $scope.tracks.push(data[i]);
             }
         }).error(function () {
             alert("could not retrieve tracks");
         });
+    }
+
+    /////////////////////////////////////////////
+    // Clip Functions
+    /////////////////////////////////////////////
+    var zoomCoefficient = 100;
+    $scope.onSoundDrop = function(data, event, track){
+
+        var clip = {
+            audio_key: data.key,
+            pos_in_track: 0,
+            start: 0,
+            end: 0,
+            clip_id: track.name+"-clip"+track.clips.length,
+            width: data.buffer.duration * zoomCoefficient,
+            buffer: data.buffer
+        };
+
+        track.clips.push(clip);
+        $scope.$apply();
+        createNewClip(clip, track);
+        attachSlider(clip);
+        element = document.getElementById(clip.clip_id);
+        drawWaveform(element.width,element.height,element.getContext("2d"),data.buffer);
+        //setNewClipPosition(clip, 0);
+    };
+
+
+    function createNewClip(clip, track){
+        var data = {
+            clip: clip,
+            track: track
+        };
+        $http.post('/clips', data).success(function(data){
+            if(data.success){
+                console.log("success\n"+JSON.stringify(data));
+            }
+            else{
+                console.log("failure");
+            }
+
+        }).error(function(data){
+            console.log("error");
+        });
+    }
+
+    function attachSlider(clip){
+        interact('#'+clip.clip_id)                   // target the matches of that selector
+            .resizable({
+                left: true,
+                right: true,
+                top: false,
+                bottom: false
+            })
+            .draggable({                        // make the element fire drag events
+                max: Infinity,                     // allow drags on multiple elements
+                restrict: {
+                    restriction: "parent", // keep the drag within the parent
+                    endOnly: false,
+                    elementRect: { top: 0, left: 0, bottom: 1, right: 1 }
+                },
+                inertia: false,
+                onmove: function (event) {
+                    var target = event.target;
+
+                    // keep the dragged position in the posInTrack attribute
+                    x = (parseFloat(clip.pos_in_track || 0) + event.dx );
+                    //x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx;
+                    x = x - (x%1);
+                    if(x<0)
+                        x=0;
+                    // translate the element
+                    target.style.transform = 'translate(' + x + 'px, ' + 0 + 'px)';
+
+                    // update the posiion attributes
+                    clip.pos_in_track = x;
+                },
+                onend: function(event) {
+                    $scope.$apply();
+                }
+            });
+
+        interact.maxInteractions(Infinity);   // Allow multiple interactions
+    }
+
+    function drawWaveform( width, height, context, buffer ) {
+        var data = buffer.getChannelData( 0 );
+        var step = Math.ceil( data.length / width );
+        var amp = height / 2;
+        for(var i=0; i < width; i++){
+            var min = 1.0;
+            var max = -1.0;
+            for (var j=0; j<step; j++) {
+                var datum = data[(i*step)+j];
+                if (datum < min)
+                    min = datum;
+                if (datum > max)
+                    max = datum;
+            }
+            context.fillRect(i,(1+min)*amp,1,Math.max(1,(max-min)*amp));
+        }
+    }
+
+    function setNewClipPosition(clip, nPosX){
+        console.log("chagning clip Pos");
+        var target = document.getElementById(clip.id);
+        var dx = nPosX - clip.pos_in_track;
+        clip.pos_in_track = nPosX;
+        target.style.transform = 'translate(' + dx + 'px, ' + 0 + 'px)';
+        $scope.$apply();
     }
 }]);
