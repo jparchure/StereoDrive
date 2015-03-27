@@ -2,13 +2,15 @@
 app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', function($scope, $upload, $http, usSpinnerService) {
 
     $scope.audioFiles = [];
+    $scope.zoomCoefficient = 50;
     var audioContext;
     var numOfLoadedSounds = 0;
 
     init();
     function init(){
         initializeAudioTools();
-        getAudio();
+        getAudioAndClips();
+        getTrack();
         listenForFileDrop();
         initDragMarker();
     }
@@ -62,13 +64,11 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', funct
         interact.maxInteractions(Infinity);   // Allow multiple interactions
     }
 
-    getTrack();
-
     // This function will make the API call to get the audio files from our backend
-    function getAudio() {
+    function getAudioAndClips() {
         $http.get('/audio').success(function (data) {
             for (var i = 0; i < data.length; i++) {
-                $scope.audioFiles.push(loadSound(data[i]));
+                $scope.audioFiles.push(loadSoundAndClips(data[i]));
             }
             if (data.length == 0) {
                 hideSpinner();
@@ -98,7 +98,6 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', funct
         usSpinnerService.spin('spinner');
     }
 
-
     /////////////////////////////////////////////////////////
     //  Project Functions
     /////////////////////////////////////////////////////////
@@ -107,24 +106,22 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', funct
     $scope.markerPos = 0;
 
     function animateMarker(){
-
-        if(playing && parseFloat($(".marker").css("left")) < 1000) {
-            var leftVal = "+=" + zoomCoefficient/1;
+        if(playing && parseFloat($(".marker").css("left")) < $("#drag-marker-container").width()) {
+            var leftVal = "+=" + $scope.zoomCoefficient/5;
 
             $(".marker").animate({
                 left: leftVal
-            }, 1000, "linear");
+            }, 200, "linear");
 
             $("#drag-marker").animate({
                 left: leftVal
-            }, 1000, "linear", function () {
+            }, 200, "linear", function () {
                 animateMarker();
             });
         }
         else{
             playing = false;
             $(".marker").css({left:0});
-
             $("#drag-marker").css({left:0});
         }
     }
@@ -139,7 +136,7 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', funct
               var clip = track.clips[j];
               playlist.push({
                   buffer: clip.buffer,
-                  pos_in_track: clip.pos_in_track/zoomCoefficient,
+                  when: clip.pos_in_track/$scope.zoomCoefficient,
                   start: 0,
                   end: clip.buffer.duration
               })
@@ -147,16 +144,14 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', funct
       }
       playing = true;
       for(var i=0; i<playlist.length;i++) {
-          console.log("sound: " + 1 + ", delay: " + playlist[i].pos_in_track);
+          console.log("sound: " + i + ", delay: " + playlist[i].when);
           var index = i;
           setTimeout(function (index) {
-              console.log(playlist);
-              console.log(index);
               var source = audioContext.createBufferSource();
               source.buffer = playlist[index].buffer;
               source.connect(audioContext.destination);
-              source.start(10);//playlist[index].pos_in_track, playlist[index].start, playlist[index].end)
-          }, playlist[i].pos_in_track * 1000, index);
+              source.start(2);//playlist[index].pos_in_track, playlist[index].start, playlist[index].end)
+          }, playlist[i].when * 1000, index);
 
           //audioContext.decodeAudioData(playlist[i].buffer, function(buffer){
           //
@@ -174,7 +169,7 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', funct
     ///////////////////////////////////////////
     // Audio Functions
     //////////////////////////////////////////
-    function loadSound(data) {
+    function loadSoundAndClips(data) {
         var url = data.audioUrl;
         var request = new XMLHttpRequest();
         request.open('GET', url, true);
@@ -185,6 +180,31 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', funct
                 data.buffer = buffer;
                 console.log('sound is loaded: ' + buffer);
                 numOfLoadedSounds++;
+                if(data.clips) {
+                    for (var i = 0; i < data.clips.length; i++) {
+                        var clip = data.clips[i];
+                        clip.length = buffer.duration;
+                        clip.buffer = buffer;
+
+                        var trackIndex = -1;
+                        for (var j = 0; j < $scope.tracks.length; j++) {
+                            if ($scope.tracks[j].key == clip.track_id) {
+                                trackIndex = j;
+                                j = $scope.tracks.length;
+                            }
+                        }
+                        if (trackIndex != -1) {
+                            $scope.tracks[trackIndex].clips.push(clip);
+                            $scope.$apply();
+                            attachSlider(clip);
+                            element = document.getElementById(clip.clip_id);
+                            drawWaveform(element.width, element.height, element.getContext("2d"), data.buffer);
+                            initClipPos(clip);
+                            console.log("added clip to track: " + clip.clip_id);
+                        }
+                    }
+                }
+
                 if (numOfLoadedSounds == $scope.audioFiles.length) {
                     hideSpinner();
                 }
@@ -234,7 +254,7 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', funct
                 file: file
             }).success(function (data, status, headers, config) {
                 if (data.success) {
-                    data = loadSound(data);
+                    data = loadSoundAndClips(data);
                     $scope.audioFiles.push(data);
                 } else {
                     alert(data.error);
@@ -253,10 +273,7 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', funct
     // Track Functions
     //////////////////////////////////////////////
 
-
-    $scope.tracks = [
-
-    ];
+    $scope.tracks = [];
 
     $scope.addTrack = function(){
         var track = {
@@ -301,7 +318,7 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', funct
         $http.get('/track').success(function (data) {
             for (var i = 0; i < data.length; i++) {
                 var track = {number:0, name:"", key: 0, clips: []};
-                track
+                data[i].clips = [];
                 $scope.tracks.push(data[i]);
             }
         }).error(function () {
@@ -312,16 +329,15 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', funct
     /////////////////////////////////////////////
     // Clip Functions
     /////////////////////////////////////////////
-    var zoomCoefficient = 100;
     $scope.onSoundDrop = function(data, event, track){
-
+        //console.log(event);
         var clip = {
             audio_key: data.key,
             pos_in_track: 0,
             start: 0,
             end: 0,
-            clip_id: track.name+"-clip"+track.clips.length,
-            width: data.buffer.duration * zoomCoefficient,
+            clip_id: "t"+track.key+"-clip"+track.clips.length,
+            length: data.buffer.duration,
             buffer: data.buffer
         };
 
@@ -342,7 +358,7 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', funct
         };
         $http.post('/clips', data).success(function(data){
             if(data.success){
-                console.log("success\n"+JSON.stringify(data));
+                console.log("success");
             }
             else{
                 console.log("failure");
@@ -386,10 +402,19 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', funct
                 },
                 onend: function(event) {
                     $scope.$apply();
+                    updateClipModel(clip);
                 }
             });
 
         interact.maxInteractions(Infinity);   // Allow multiple interactions
+    }
+
+    function updateClipModel(clip){
+        $http.post("/clips/"+clip.clip_id, {clip: clip}).success(function(data){
+            console.log("success: "+data.success);
+        }).error(function(){
+            console.log("error");
+        })
     }
 
     function drawWaveform( width, height, context, buffer ) {
@@ -410,9 +435,15 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', funct
         }
     }
 
+    function initClipPos(clip){
+        var target = document.getElementById(clip.clip_id);
+        target.style.transform = 'translate(' + clip.pos_in_track + 'px, ' + 0 + 'px)';
+        $scope.$apply();
+    }
+
     function setNewClipPosition(clip, nPosX){
         console.log("chagning clip Pos");
-        var target = document.getElementById(clip.id);
+        var target = document.getElementById(clip.clip_id);
         var dx = nPosX - clip.pos_in_track;
         clip.pos_in_track = nPosX;
         target.style.transform = 'translate(' + dx + 'px, ' + 0 + 'px)';

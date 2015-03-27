@@ -75,6 +75,20 @@ class AudioController < ApplicationController
       sound['file_name'] = a.file_name
       sound['key'] = a.key
       sound['audioUrl'] = create_sound_url project_name, a.key
+
+      clips = Array.new
+      a.clips.each{ |clip|
+        clipData = Hash.new
+        clipData[:audio_key] = clip.audio_key
+        clipData[:pos_in_track] = clip.pos_in_track
+        clipData[:start] = clip.start
+        clipData[:end] = clip.end
+        clipData[:clip_id] = clip.clip_id
+        clipData[:track_id] = clip.track_id
+        clips.push clipData
+      }
+      sound[:clips] = clips
+
       allAudio.push(sound)
     }
     # add them into the same reply

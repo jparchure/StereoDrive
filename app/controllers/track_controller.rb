@@ -1,11 +1,8 @@
 class TrackController < ApplicationController
 
   def create
-
     createdTrack = Track.create()#technically will have sound data inside it
-
     render :json => { 'success' => true, 'key' =>createdTrack.id}
-
   end
 
   def index
