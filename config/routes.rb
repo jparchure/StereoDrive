@@ -7,8 +7,6 @@ Team7::Application.routes.draw do
   post '/track' => 'track#create'
   get '/track' => 'track#index'
   post '/deleteTrack' => 'track#delete'
-  get  '/paytonleevieno' => 'application#send_current_user'
-
   post '/clips' => 'clips#create'
   post '/clips/:id' => 'clips#update'
   get 'audio/:key/delete' => 'audio#delete'
