@@ -1,7 +1,9 @@
 # This file is app/controllers/users_controller.rb
 class UsersController < ApplicationController
   skip_before_action :verify_authenticity_token, :only => [:update]
+
   def show
+    #Displays user data on the page
     id = params[:id]
     if(!@current_user.nil?)
       @user = User.find(id)

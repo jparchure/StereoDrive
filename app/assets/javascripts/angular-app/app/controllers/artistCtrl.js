@@ -13,6 +13,18 @@ app.controller("artistCtrl", ['$scope', '$routeParams','$http',function($scope, 
 		
 			$scope.artist=data;
 
+			$scope.saveUser= function(){
+            route='/artists/' + $routeParams['id'];
+            $http.put(route, $scope.currentuser).error(function(err) {
+                if(err.field && err.msg) {
+        // err like {field: "name", msg: "Server-side error for this username!"} 
+                $scope.editableForm.$setError(err.field, err.msg);
+                } else { 
+        // unknown error
+             $scope.editableForm.$setError('name', 'Unknown error!');
+                }
+        });
+        };
 
 
 
