@@ -2,12 +2,13 @@ require 'rails_helper'
 
 describe SessionsController do
   describe 'Logging in' do
-    it 'should update user attributes' do
-      user = double(User)
-      allow(User).to receive(:omniauth)
-      expect(user).to receive(:update_attributes)
-      get :create, provider: 'facebook'
-    end
+	before { visit root_path}
+	it "can sign in user with Twitter account" do
+	    page.should have_content("StereoDrive")
+	    facebook_hash
+	    click_link "Login"
+	    page.should have_content("Logout")
+	  end
   end
 
   describe 'Logging out' do
