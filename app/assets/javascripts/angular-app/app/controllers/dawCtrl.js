@@ -2,7 +2,7 @@
 app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', function($scope, $upload, $http, usSpinnerService) {
 
     $scope.audioFiles = [];
-    $scope.zoomCoefficient = 50;
+    $scope.zoomCoefficient = 100;
     var audioContext;
     var numOfLoadedSounds = 0;
 
@@ -107,11 +107,11 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', funct
 
     function animateMarker(){
         if(playing && parseFloat($(".marker").css("left")) < $("#drag-marker-container").width()) {
-            var leftVal = "+=" + $scope.zoomCoefficient/5;
+            var leftVal = "+=" + $scope.zoomCoefficient/1;
 
             $(".marker").animate({
                 left: leftVal
-            }, 200, "linear");
+            }, 1000, "linear");
 
             $("#drag-marker").animate({
                 left: leftVal
