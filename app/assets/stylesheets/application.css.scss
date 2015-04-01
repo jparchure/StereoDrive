@@ -5,14 +5,45 @@ body{
     background-color:#707070 ;
 }
 
-.drop-box {
-  background: #7FFF00;
-  width: 90%;
-  height: 100px;
-  text-align: center;
-  padding-top: 5px;
-  margin: 5%;
+#drag-marker-container{
+  position: relative;
+  height: 15px;
 }
+
+#drag-marker {
+  height: 15px;
+  width: 15px;
+  position: absolute;
+  background: #888888;
+  left: 0;
+}
+
+.marker{
+  height: 100%;
+  background: #888888;
+  width: 2px;
+  position: absolute;
+  z-index: 9999;
+  left: 0;
+}
+
+.track {
+  background: #7FFF00;
+  float: left;
+  height: 75px;
+  text-align: left;
+  position: relative;
+  border: 2px solid black;
+}
+
+.clip {
+  position: absolute;
+  opacity: 0.9;
+  height: 100%;
+  left: 0;
+  top: 0;
+}
+
 .dragover {
-  background: #37FDFC;
+  background: #CCCCCC;
 }
