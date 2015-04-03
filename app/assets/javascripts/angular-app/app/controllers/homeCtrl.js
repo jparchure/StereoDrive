@@ -7,8 +7,8 @@ app.controller("homeCtrl", ['$scope', '$routeParams', '$http', '$cookies', funct
         current_user_id= $cookies['id'];
         
         $scope.modalShown = false;
-  $scope.toggleModal = function() {
-    $scope.modalShown = !$scope.modalShown;
+  		$scope.toggleModal = function() {
+    	$scope.modalShown = !$scope.modalShown;
   };
 
         if($routeParams['op']){ //If accessing others' profile, check for route params
@@ -53,11 +53,40 @@ app.controller("homeCtrl", ['$scope', '$routeParams', '$http', '$cookies', funct
                  $('.wiggle').ClassyWiggle('stop');
                 }
                 else{
+
                     $('.wiggle').ClassyWiggle('start', {'degrees': [0,7.5,15,7.5,0,-7.5,-15,-7.5,0]});
                     
                 }
         };
+        $scope.artistAction= function(event){
+        	href="/artist/" + event.currentTarget.id;
+        	if($('.wiggle').ClassyWiggle('isWiggling')){
 
+        		
+        		deleteBand(event);
+        	}
+        	else{
+        		$location.url("#" + href);
+        	}
+        };
+
+        var deleteBand = function(event){
+        		console.log("Event: " + event.currenTarget.id + "CUI: " + current_user_id)
+        		if(event.currentTarget.id === current_user_id ){
+        			alert("You can not delete the solo band");
+        		}
+        		else if(confirm('Are you sure you want to delete this?')){
+        		$http.delete(href).error(function(err){
+        			if(err.field && err.msg) {
+        		// err like {field: "name", msg: "Server-side error for this username!"} 
+                $scope.editableForm.$setError(err.field, err.msg);
+                } else { 
+        		// unknown error
+             $scope.editableForm.$setError('name', 'Unknown error!');
+                }
+        		});
+        	}
+        };
 
 		
 	

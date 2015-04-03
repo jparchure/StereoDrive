@@ -116,7 +116,7 @@
                 <!--Repeat the div below for multiple bands-->
 
              
-                <div ng-repeat="artist in artistList" class="dis-image col-md-2 col-lg-2 " align="center"><a href="#/artist/{{artist.id}}"> <img alt="User Pic" src="{{artist.image}}" class="img-thumbnail wiggle"> </a></div>
+                <div ng-repeat="artist in artistList" class="dis-image col-md-2 col-lg-2 " align="center" ng-click="artistAction($event);$event.preventDefault()" id="{{artist.id}}"> <img alt="User Pic" src="{{artist.image}}" class="img-thumbnail wiggle"> </a></div>
                  
             </div>
                  <div class="panel-footer">
