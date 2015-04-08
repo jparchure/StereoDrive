@@ -166,6 +166,15 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', funct
     // Get the right width/time vals and ratio
     };
 
+    $scope.createProject = function(){
+        $http.post('/project' ).success(function(data){//data is returned from track_controller.rb#create
+
+            console.log(data)
+        }).error(function(data, status, headers, config){
+            console.log(status);
+            alert("could not create project");
+        });
+    }
     ///////////////////////////////////////////
     // Audio Functions
     //////////////////////////////////////////
