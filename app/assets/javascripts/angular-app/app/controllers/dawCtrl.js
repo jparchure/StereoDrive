@@ -351,7 +351,8 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', funct
         createNewClip(clip, track);
         attachSlider(clip);
         element = document.getElementById(clip.clip_id);
-        drawWaveform(element.width,element.height,element.getContext("2d"),data.buffer);
+        if(element)
+            drawWaveform(element.width,element.height,element.getContext("2d"),data.buffer);
         //setNewClipPosition(clip, 0);
     };
 
@@ -410,7 +411,6 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', funct
                     updateClipModel(clip);
                 }
             });
-
         interact.maxInteractions(Infinity);   // Allow multiple interactions
     }
 
