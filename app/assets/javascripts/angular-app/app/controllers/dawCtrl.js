@@ -115,7 +115,7 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', funct
 
             $("#drag-marker").animate({
                 left: leftVal
-            }, 200, "linear", function () {
+            }, 1000, "linear", function () {
                 animateMarker();
             });
         }
@@ -238,10 +238,13 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', funct
     };
 
     $scope.playSound = function (buffer) {
-        var source = audioContext.createBufferSource();
+        if(buffer) {
+            var source = audioContext.createBufferSource();
             source.buffer = buffer;
             source.connect(audioContext.destination);
             source.start();
+            return true;
+        }
         return false;
     };
 
@@ -256,6 +259,7 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', funct
                 if (data.success) {
                     data = loadSoundAndClips(data);
                     $scope.audioFiles.push(data);
+                    hideSpinner();
                 } else {
                     alert(data.error);
                     hideSpinner();
