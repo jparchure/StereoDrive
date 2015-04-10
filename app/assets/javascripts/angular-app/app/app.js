@@ -3,7 +3,7 @@
  */
 
 
-var app = angular.module("app", ['ngRoute', 'ui.bootstrap', 'ngCookies', 'xeditable', 'templates','angularFileUpload','angularSpinner']);
+var app = angular.module("app", ['ngRoute', 'ngCookies', 'xeditable', 'templates','angularFileUpload','angularSpinner','ui.bootstrap']);
 
 app.config(['$routeProvider',
     function($routeProvider) {

@@ -1,4 +1,20 @@
 <div ng-controller="homeCtrl" ng-init="getData()">
+<!--MODAL CODE-->
+<modal title="Login form" visible="showModal">
+    <form role="form">
+      <div class="form-group">
+        <label for="email">Email address</label>
+        <input type="email" class="form-control" id="email" placeholder="Enter email" />
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" class="form-control" id="password" placeholder="Password" />
+      </div>
+      <button type="submit" class="btn btn-default">Submit</button>
+    </form>
+  </modal>
+
+  
 <div class="container">
               <div id="sidebar-wrapper">
               <ul class="sidebar-nav">
@@ -121,14 +137,28 @@
             </div>
                  <div class="panel-footer">
                  <div class="buttons" ng-show="showEditButton">
-                        <a data-original-title="Broadcast Message" data-toggle="tooltip" type="button" class="btn btn-sm btn-primary" ><i class="glyphicon glyphicon-plus"></i></a>
+
+<!--MODAL-->
+                      <h1>Modal example</h1>
+  <button ng-click="toggleModal()" class="btn btn-default">Open modal</button>
+
+    
+
+                        <!--Button to add new bands-->
+                        <a type="button" class="btn btn-sm btn-primary" ng-click="showModal()"  data-target="#myModal"><i class="glyphicon glyphicon-plus"></i></a>
+
+                        <!--Create band modal-->
+                        
+                      
                      
+
                   <span class="pull-right" ng-show="showEditButton">
-                          <!--button to show form-->
+                          <!--HTML to make bands -->
                             <a data-original-title="Edit this user" data-toggle="tooltip" type="button" class="btn btn-sm btn-warning" ng-click="classyWiggle()"div ng-show="!artistEdit"><i class="glyphicon glyphicon-edit"></i></a>
                             
 
                             <!-- buttons to submit / cancel form -->
+
       
          <button data-original-title="Accept Changes" data-toggle="tooltip" type="submit" class="btn btn-sm btn-default" ng-click="classyWiggle()" ng-show="artistEdit"><i class="glyphicon glyphicon-thumbs-up"></i></a></button>
         
