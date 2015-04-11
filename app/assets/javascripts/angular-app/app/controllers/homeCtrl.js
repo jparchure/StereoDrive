@@ -2,7 +2,7 @@
  * Created by saasbook on 09/02/15.
  */
 
-app.controller("homeCtrl", ['$scope', '$routeParams', '$http', '$cookies', function($scope,$routeParams, $http, $cookies){
+app.controller("homeCtrl", ['$scope', '$routeParams', '$http', '$cookies', '$location', function($scope,$routeParams, $http, $cookies, $location){
 
         current_user_id= $cookies['id'];
        
@@ -64,7 +64,7 @@ app.controller("homeCtrl", ['$scope', '$routeParams', '$http', '$cookies', funct
         		deleteBand(event);
         	}
         	else{
-        		$location.url("#" + href);
+        		$location.url(href);
         	}
         };
         //Deleting a band
@@ -87,76 +87,15 @@ app.controller("homeCtrl", ['$scope', '$routeParams', '$http', '$cookies', funct
         };
 
 
+//Create Band
+
 
          $scope.showModal = false;
+        
         $scope.toggleModal = function(){
         $scope.showModal = !$scope.showModal;
-    };
-        //Modal for creating a band
-        /*$scope.showModal = function (size) {
+        };
 
-    var modalInstance = $modal.open({
-      templateUrl: 'myModalContent.html',
-      controller: 'ModalInstanceCtrl',
-      size: size,
-      resolve: {
-        items: function () {
-          return $scope.items;
-        }
-      }
-    });
-
-    modalInstance.result.then(function (selectedItem) {
-      $scope.selected = selectedItem;
-    }, function () {
-      $log.info('Modal dismissed at: ' + new Date());
-    });
-  };*/
 		
 	
 }]);
-//$location for angular routes
-
-
-
-app.directive('modal', function () {
-    return {
-      template: '<div class="modal fade" id = "myModal">' + 
-          '<div class="modal-dialog">' + 
-            '<div class="modal-content">' + 
-              '<div class="modal-header">' + 
-                '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>' + 
-                '<h4 class="modal-title">{{ title }}</h4>' + 
-              '</div>' + 
-              '<div class="modal-body" ng-transclude></div>' + 
-            '</div>' + 
-          '</div>' + 
-        '</div>',
-      restrict: 'E',
-      transclude: true,
-      replace:true,
-      scope:true,
-      link: function postLink(scope, element, attrs) {
-        scope.title = attrs.title;
-
-        scope.$watch(attrs.visible, function(value){
-          if(value == true)
-            $('#myModal').modal('show');
-          else
-            $('#myModal').modal('hide');
-        });
-
-        $('#myModal').on('shown.bs.modal', function(){
-          scope.$apply(function(){
-            scope.$parent[attrs.visible] = true;
-          });
-        });
-
-        $(element).on('hidden.bs.modal', function(){
-          scope.$apply(function(){
-            scope.$parent[attrs.visible] = false;
-          });
-        });
-      }
-    };
-  });

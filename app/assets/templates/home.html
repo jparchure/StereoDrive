@@ -1,18 +1,6 @@
 <div ng-controller="homeCtrl" ng-init="getData()">
 <!--MODAL CODE-->
-<modal title="Login form" visible="showModal">
-    <form role="form">
-      <div class="form-group">
-        <label for="email">Email address</label>
-        <input type="email" class="form-control" id="email" placeholder="Enter email" />
-      </div>
-      <div class="form-group">
-        <label for="password">Password</label>
-        <input type="password" class="form-control" id="password" placeholder="Password" />
-      </div>
-      <button type="submit" class="btn btn-default">Submit</button>
-    </form>
-  </modal>
+
 
   
 <div class="container">
@@ -132,20 +120,18 @@
                 <!--Repeat the div below for multiple bands-->
 
              
-                <div ng-repeat="artist in artistList" class="dis-image col-md-2 col-lg-2 " align="center" ng-click="artistAction($event);$event.preventDefault()" id="{{artist.id}}"> <img alt="User Pic" src="{{artist.image}}" class="img-thumbnail wiggle"> </a></div>
+                <div ng-repeat="artist in artistList" class="dis-image col-md-2 col-lg-2 " align="center" ng-click="artistAction($event);$event.preventDefault()" id="{{artist.id}}"> <img alt="User Pic" src="{{artist.image}}" class="img-thumbnail wiggle"></div>
                  
             </div>
                  <div class="panel-footer">
                  <div class="buttons" ng-show="showEditButton">
 
 <!--MODAL-->
-                      <h1>Modal example</h1>
-  <button ng-click="toggleModal()" class="btn btn-default">Open modal</button>
-
+                     
     
 
                         <!--Button to add new bands-->
-                        <a type="button" class="btn btn-sm btn-primary" ng-click="showModal()"  data-target="#myModal"><i class="glyphicon glyphicon-plus"></i></a>
+                        <a type="button" class="btn btn-sm btn-primary" ng-click="toggleModal()" ><i class="glyphicon glyphicon-plus"></i></a>
 
                         <!--Create band modal-->
                         
@@ -165,7 +151,80 @@
                         </span>
                       </div>
                     </div>
+                    </div>
+
+          <!--Create bands-->
+           
+   
+   
+          <div class="panel panel-info" ng-show="showModal" data-ng-controller="createArtistCtrl">
+        
+            <div class="panel-heading">
+              <h3 class="panel-title">Create a band</h3>
+            </div>
+
+            <div class="panel-body">
+              <div class="row" >
+              <form ng-submit="processForm()">
+               
+                
+                
+                <div class=" col-md-12 col-lg-12 " align="center"> 
+                 
+                  <table class="table table-user-information">
+                    <tbody>
+                      <tr>
+                      <tr>
+                        <td><label>Name</label></td>
+                        <td><input type="text" name="name" ng-model="userData.name" required/></td>
+                      </tr>
+                      <tr>
+                        <td><label>ImageURL</label></td>
+                        <td><input type="text" name="image" ng-model="userData.image" required/></td>
+                      </tr>
+                      <tr>
+                        <td><label>Tagline</label></td>
+                        <td><input type="text" name="tagline" ng-model="userData.tagline" required/></td>
+                      </tr>
+                      <tr>
+                        <td><label>Genre</label></td>
+                        <td><input type="text" name="genre" ng-model="userData.genre" required/></td>
+                      </tr>
+                      <tr>
+                        <td><label>Location</label></td>
+                        <td><input type="text" name="location" ng-model="userData.location" required/></td>
+                      </tr>
+                      <tr>
+                        <td><label>Page<label></td>
+                        <td><input type="text" name="page" ng-model="userData.page" required/></td>
+                      </tr>
+                   
+                           
+                      </tr>
+                     
+                    </tbody>
+                  </table>
+                  </form>
+                  <pre>form = {{userData}}</pre>
+                  
+                </div>
+              </div>
+
+            </div>
+                 
             
+                 <div class="panel-footer">
+                 <button data-original-title="Accept Changes" data-toggle="tooltip" type="submit" class="btn btn-sm btn-default" ng-click="processForm()"><i class="glyphicon glyphicon-thumbs-up"></i></button>
+        
+        <button data-original-title="Cancel Creation" data-toggle="tooltip" type="button" class="btn btn-sm btn-danger" ng-disabled="createBandForm.$waiting" ng-click="cancel()"><i class="glyphicon glyphicon-remove"></i></button>
+
+        <button data-original-title="Reset the form" data-toggle="tooltip" type="button" class="btn btn-sm btn-warning" ng-disabled="createBandForm.$waiting" ng-click="reset()"><i class="glyphicon glyphicon-off"></i></button>
+        
+                 </div>
+                 </div>
+          <!--Create bands end-->
+
+
           </div>
         </div>
       </div>
