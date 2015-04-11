@@ -18,15 +18,22 @@ app.controller("homeCtrl", ['$scope', '$routeParams', '$http', '$cookies', '$loc
         artRoute='/artist/list/' + current_user_id + "/";
         $scope.showEditButton = true;
         }
-
+        var getUserData=function(){
 		$http.get(route).success(function(data){
 			$scope.currentuser=data;
 		});
+        };
+
+        $scope.getArtistData = function(){
         $http.get(artRoute).success(function(data){
             $scope.artistList=data;
 
-        });
-        
+        }); 
+        };
+
+        getUserData();
+        $scope.getArtistData();
+
         $scope.saveUser= function(){
             route='/users/' + current_user_id;
             console.log(route);
@@ -40,6 +47,7 @@ app.controller("homeCtrl", ['$scope', '$routeParams', '$http', '$cookies', '$loc
                 }
         });
         };
+
         //Wiggling to delete bands
         $scope.classyWiggle=function(){
                 $scope.artistEdit=!($scope.artistEdit);

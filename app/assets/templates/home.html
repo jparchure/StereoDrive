@@ -165,7 +165,7 @@
 
             <div class="panel-body">
               <div class="row" >
-              <form ng-submit="processForm()">
+              <form name="userForm" ng-submit="processForm()" novalidate class="css-form">
                
                 
                 
@@ -180,7 +180,8 @@
                       </tr>
                       <tr>
                         <td><label>ImageURL</label></td>
-                        <td><input type="text" name="image" ng-model="userData.image" required/></td>
+                        <td><input type="url" name="image" ng-model="userData.image" required/></td>
+                        
                       </tr>
                       <tr>
                         <td><label>Tagline</label></td>
@@ -192,11 +193,13 @@
                       </tr>
                       <tr>
                         <td><label>Location</label></td>
-                        <td><input type="text" name="location" ng-model="userData.location" required/></td>
+                        <td><input type="text" name="location" ng-autocomplete="userData.location" ng-model="userData.location" required/></td>
+
                       </tr>
                       <tr>
                         <td><label>Page<label></td>
-                        <td><input type="text" name="page" ng-model="userData.page" required/></td>
+                        <td><input type="url" name="page" ng-model="userData.page" required/></td>
+                        
                       </tr>
                    
                            
@@ -216,9 +219,9 @@
                  <div class="panel-footer">
                  <button data-original-title="Accept Changes" data-toggle="tooltip" type="submit" class="btn btn-sm btn-default" ng-click="processForm()"><i class="glyphicon glyphicon-thumbs-up"></i></button>
         
-        <button data-original-title="Cancel Creation" data-toggle="tooltip" type="button" class="btn btn-sm btn-danger" ng-disabled="createBandForm.$waiting" ng-click="cancel()"><i class="glyphicon glyphicon-remove"></i></button>
+        <button data-original-title="Cancel Creation" data-toggle="tooltip" type="button" class="btn btn-sm btn-danger" ng-disabled="createBandForm.$waiting" ng-click="cancel(userForm)"><i class="glyphicon glyphicon-remove"></i></button>
 
-        <button data-original-title="Reset the form" data-toggle="tooltip" type="button" class="btn btn-sm btn-warning" ng-disabled="createBandForm.$waiting" ng-click="reset()"><i class="glyphicon glyphicon-off"></i></button>
+        <button data-original-title="Reset the form" data-toggle="tooltip" type="button" class="btn btn-sm btn-warning" ng-disabled="createBandForm.$waiting" ng-click="reset(userForm)"><i class="glyphicon glyphicon-off"></i></button>
         
                  </div>
                  </div>
