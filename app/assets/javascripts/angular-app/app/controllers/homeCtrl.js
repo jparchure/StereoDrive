@@ -18,7 +18,8 @@ app.controller("homeCtrl", ['$scope', '$routeParams', '$http', '$cookies', '$loc
         artRoute='/artist/list/' + current_user_id + "/";
         $scope.showEditButton = true;
         }
-        var getUserData=function(){
+        
+       $scope.getUserData=function(){
 		$http.get(route).success(function(data){
 			$scope.currentuser=data;
 		});
@@ -31,7 +32,7 @@ app.controller("homeCtrl", ['$scope', '$routeParams', '$http', '$cookies', '$loc
         }); 
         };
 
-        getUserData();
+        $scope.getUserData();
         $scope.getArtistData();
 
         $scope.saveUser= function(){
@@ -77,7 +78,7 @@ app.controller("homeCtrl", ['$scope', '$routeParams', '$http', '$cookies', '$loc
         };
         //Deleting a band
         var deleteBand = function(event){
-        		console.log("Event: " + event.currenTarget.id + "CUI: " + current_user_id)
+        		console.log("Event: " + event.currentTarget.id + "CUI: " + current_user_id)
         		if(event.currentTarget.id === current_user_id ){
         			alert("You can not delete the solo band");
         		}
