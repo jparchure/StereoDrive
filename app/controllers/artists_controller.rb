@@ -18,4 +18,15 @@ class ArtistsController < ApplicationController
         render json: artist
       end
   end
+  def create
+	if(!@current_user.nil?)
+          hash = {:name => user.name+"'s Solo Band", :image=>user.image, :page=>user.page, :location=>user.location}
+    	  @current_user.artists << Artist.create!(hash)
+	end
+  end
+  def destroy
+	if(!@current_user.nil?)
+	  artist = @current_user.artists.find(:id)
+	  artist.destroy
+	end
 end
