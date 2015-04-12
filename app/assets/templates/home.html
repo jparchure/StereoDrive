@@ -1,4 +1,8 @@
 <div ng-controller="homeCtrl" ng-init="getData()">
+<!--MODAL CODE-->
+
+
+  
 <div class="container">
               <div id="sidebar-wrapper">
               <ul class="sidebar-nav">
@@ -116,26 +120,114 @@
                 <!--Repeat the div below for multiple bands-->
 
              
-                <div ng-repeat="artist in artistList" class="dis-image col-md-2 col-lg-2 " align="center"><a href="#/artist/{{artist.id}}"> <img alt="User Pic" src="{{artist.image}}" class="img-thumbnail wiggle"> </a></div>
+                <div ng-repeat="artist in artistList" class="dis-image col-md-2 col-lg-2 " align="center" ng-click="artistAction($event);$event.preventDefault()" id="{{artist.id}}"> <img alt="User Pic" src="{{artist.image}}" class="img-thumbnail wiggle"></div>
                  
             </div>
                  <div class="panel-footer">
                  <div class="buttons" ng-show="showEditButton">
-                        <a data-original-title="Broadcast Message" data-toggle="tooltip" type="button" class="btn btn-sm btn-primary" ><i class="glyphicon glyphicon-plus"></i></a>
+
+<!--MODAL-->
                      
+    
+
+                        <!--Button to add new bands-->
+                        <a type="button" class="btn btn-sm btn-primary" ng-click="toggleModal()" ><i class="glyphicon glyphicon-plus"></i></a>
+
+                        <!--Create band modal-->
+                        
+                      
+                     
+
                   <span class="pull-right" ng-show="showEditButton">
-                          <!--button to show form-->
+                          <!--HTML to make bands -->
                             <a data-original-title="Edit this user" data-toggle="tooltip" type="button" class="btn btn-sm btn-warning" ng-click="classyWiggle()"div ng-show="!artistEdit"><i class="glyphicon glyphicon-edit"></i></a>
                             
 
                             <!-- buttons to submit / cancel form -->
+
       
          <button data-original-title="Accept Changes" data-toggle="tooltip" type="submit" class="btn btn-sm btn-default" ng-click="classyWiggle()" ng-show="artistEdit"><i class="glyphicon glyphicon-thumbs-up"></i></a></button>
         
                         </span>
                       </div>
                     </div>
+                    </div>
+
+          <!--Create bands-->
+           
+   
+   
+          <div class="panel panel-info" ng-show="showModal" data-ng-controller="createArtistCtrl">
+        
+            <div class="panel-heading">
+              <h3 class="panel-title">Create a band</h3>
+            </div>
+
+            <div class="panel-body">
+              <div class="row" >
+              <form name="userForm" ng-submit="processForm()" novalidate class="css-form">
+               
+                
+                
+                <div class=" col-md-12 col-lg-12 " align="center"> 
+                 
+                  <table class="table table-user-information">
+                    <tbody>
+                      <tr>
+                      <tr>
+                        <td><label>Name</label></td>
+                        <td><input type="text" name="name" ng-model="userData.name" required/></td>
+                      </tr>
+                      <tr>
+                        <td><label>ImageURL</label></td>
+                        <td><input type="url" name="image" ng-model="userData.image" required/></td>
+                        
+                      </tr>
+                      <tr>
+                        <td><label>Tagline</label></td>
+                        <td><input type="text" name="tagline" ng-model="userData.tagline" required/></td>
+                      </tr>
+                      <tr>
+                        <td><label>Genre</label></td>
+                        <td><input type="text" name="genre" ng-model="userData.genre" required/></td>
+                      </tr>
+                      <tr>
+                        <td><label>Location</label></td>
+                        <td><input type="text" name="location" ng-autocomplete="userData.location" ng-model="userData.location" required/></td>
+
+                      </tr>
+                      <tr>
+                        <td><label>Page<label></td>
+                        <td><input type="url" name="page" ng-model="userData.page" required/></td>
+                        
+                      </tr>
+                   
+                           
+                      </tr>
+                     
+                    </tbody>
+                  </table>
+                  </form>
+                  <pre>form = {{userData}}</pre>
+                  
+                </div>
+              </div>
+
+            </div>
+                 
             
+                 <div class="panel-footer">
+                 <button data-original-title="Accept Changes" data-toggle="tooltip" type="submit" class="btn btn-sm btn-default" ng-click="processForm()"><i class="glyphicon glyphicon-thumbs-up"></i></button>
+        
+        <button data-original-title="Cancel Creation" data-toggle="tooltip" type="button" class="btn btn-sm btn-danger" ng-disabled="createBandForm.$waiting" ng-click="cancel(userForm)"><i class="glyphicon glyphicon-remove"></i></button>
+
+        <button data-original-title="Reset the form" data-toggle="tooltip" type="button" class="btn btn-sm btn-warning" ng-disabled="createBandForm.$waiting" ng-click="reset(userForm)"><i class="glyphicon glyphicon-off"></i></button>
+        
+                 </div>
+                 </div>
+          <!--Create bands end-->
+
+
           </div>
         </div>
       </div>

@@ -39,3 +39,8 @@
 .toppad
 {margin-top:20px;
 }
+
+.css-form input.ng-invalid.ng-touched {
+    background-color: #DC143C;
+    color: white;
+  }
