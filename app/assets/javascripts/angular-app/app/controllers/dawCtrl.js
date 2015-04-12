@@ -238,10 +238,13 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', funct
     };
 
     $scope.playSound = function (buffer) {
-        var source = audioContext.createBufferSource();
+        if(buffer) {
+            var source = audioContext.createBufferSource();
             source.buffer = buffer;
             source.connect(audioContext.destination);
             source.start();
+            return true;
+        }
         return false;
     };
 
