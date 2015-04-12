@@ -4,6 +4,12 @@ Team7::Application.routes.draw do
   resources :artists
   post '/audio' => 'audio#create'
   get '/audio' => 'audio#index'
+  post '/track' => 'track#create'
+  get '/track' => 'track#index'
+  post '/deleteTrack' => 'track#delete'
+  post '/clips' => 'clips#create'
+  post '/clips/:id' => 'clips#update'
+  get 'audio/:key/delete' => 'audio#delete'
   match 'auth/:provider/callback', to: 'sessions#create', via: :get
   match '/logout', to: 'sessions#destroy', via: :delete
   match 'artist/list/:id', to: 'artists#list', via: :get

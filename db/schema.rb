@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150323225524) do
+ActiveRecord::Schema.define(version: 20150326213210) do
 
   create_table "artists", force: :cascade do |t|
     t.datetime "created_at", null: false
@@ -40,6 +40,23 @@ ActiveRecord::Schema.define(version: 20150323225524) do
   end
 
   create_table "clips", force: :cascade do |t|
+    t.integer  "pos_in_track"
+    t.integer  "start"
+    t.integer  "end"
+    t.string   "clip_id"
+    t.string   "audio_key"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+    t.integer  "track_id"
+    t.integer  "audio_id"
+  end
+
+  create_table "projects", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "tracks", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer  "track_id"

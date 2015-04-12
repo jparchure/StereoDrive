@@ -21,6 +21,7 @@ end
 
 group :developement, :test do
   gem 'rspec-rails'
+  gem 'capybara'
 end
 # Gems used only for assets and not required
 # in production environments by default.

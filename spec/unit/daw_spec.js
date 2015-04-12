@@ -13,6 +13,7 @@ describe('Unit: dawCtrl', function() {
         // use to define backend calls
         httpBackend = $injector.get('$httpBackend');
         httpBackend.when('GET', '/audio').respond([]);
+        httpBackend.when('GET', '/track').respond([]);
 
         ctrl = $injector.get('$controller')('dawCtrl', {
             $scope: scope,
@@ -23,6 +24,7 @@ describe('Unit: dawCtrl', function() {
 
     it('should only play valid sounds',
         function () {
+
             expect(scope.playSound(null)).toBeFalsy();
         }
     );
@@ -42,6 +44,7 @@ describe('Unit: dawCtrl', function() {
         var testurl = "/test";
         httpBackend.when('GET', '/audio').respond([{ url:testurl}]);
         httpBackend.when('GET', testurl).respond({success: true});
+        httpBackend.when('GET', '/track').respond([{success: true, id: '1'}]);
         spinner.stop = jasmine.createSpy();
         httpBackend.flush();
         expect(scope.audioFiles.length > 0);
@@ -50,5 +53,11 @@ describe('Unit: dawCtrl', function() {
 
     it('should fetch audio when page is loaded', function(){
         httpBackend.expect('GET', '/audio');
+    });
+
+    describe('Clips', function(){
+       it('should expect true to be true', function(){
+           expect(true).toBeTruthy();
+       });
     });
 });
