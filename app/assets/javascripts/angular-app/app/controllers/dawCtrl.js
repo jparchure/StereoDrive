@@ -8,6 +8,7 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', funct
 
     init();
     function init(){
+        getAllProjects(1);
         initializeAudioTools();
         getAudioAndClips();
         getTrack();
@@ -169,11 +170,22 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', funct
     $scope.createProject = function(){
         $http.post('/project' ).success(function(data){//data is returned from track_controller.rb#create
 
-            console.log(data)
+            console.log(data);
         }).error(function(data, status, headers, config){
             console.log(status);
             alert("could not create project");
         });
+    }
+
+    function getAllProjects(id){
+
+        $http.get('/project/'+id).success(function(data){
+            console.log(data);
+        }).error(function(data,status,headers,config){
+
+            alert("error. could not fetch projects");
+        })
+
     }
     ///////////////////////////////////////////
     // Audio Functions

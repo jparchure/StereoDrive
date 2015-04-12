@@ -3,13 +3,36 @@ class ProjectController < ApplicationController
     createdProject = Project.create()
 
     render :json => { 'success' => true, 'key' =>createdProject.id}
+
   end
 
   def show
-     project = Project.find_by!(id: (params[:id] ) )
+    project = Project.find_by!(id: (params[:id] ) )
 
-    render :json => { 'success' => true, 'key'  => project.id}
+
+    allTrack  = Array.new
+
+    #get signed urls for each audio file
+    project.tracks.each{ |a|
+      trackInfo = Hash.new
+      trackInfo['project'] = a.project_id
+      trackInfo['key'] = a.id
+      allTrack.push(trackInfo)
+    }
+
+
+    render :json => { 'success' => true, 'project'  => project, 'tracks' => allTrack}
   end
+
+  def getTracks
+
+
+  end
+
+  def getAudio
+
+  end
+
 
   def delete
     project = params[:project]

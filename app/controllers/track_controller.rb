@@ -1,19 +1,30 @@
 class TrackController < ApplicationController
 
   def create
-    createdTrack = Track.create()#technically will have sound data inside it
-    render :json => { 'success' => true, 'key' =>createdTrack.id}
+
+    project = Project.find_by id: 1
+
+    createdTrack = project.tracks.create!
+
+    render :json => { 'success' => true, 'key' =>createdTrack.id, 'project_id' => createdTrack.project_id}
   end
 
   def index
     # This method will return signed URLs to each sound in the project
     allTrack  = Array.new
-    # Get info from db
-    track = Track.all
+
+
+    project = Project.find_by id: 1
+
+
+    #track = Track.where("project_id" = project_id)
+    #Should do get track based on project number
+
 
     #get signed urls for each audio file
-    track.each{ |a|
+    project.tracks.each{ |a|
       trackInfo = Hash.new
+      trackInfo['project'] = a.project_id
       trackInfo['key'] = a.id
       allTrack.push(trackInfo)
     }
