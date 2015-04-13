@@ -38,26 +38,13 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', funct
                 onmove: function (event) {
                     var target = event.target;
 
-                    // keep the dragged position in the posInTrack attribute
-                    var x = (parseFloat($scope.markerPos || 0) + event.dx );
-                    //x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx;
-                    x = x - (x%1);
-                    // translate the element
-                    if(x<0)
-                        x = 0;
-
-                    elements = document.getElementsByClassName("marker");
-                    for(var i=0; i<elements.length; i++){
-                        elements[i].style.transform = 'translate(' + x + 'px, ' + 0 + 'px)';
-                    }
-
-                    target.style.transform = 'translate(' + x + 'px, ' + 0 + 'px)';
-
-                    // update the posiion attributes
-                    $scope.markerPos = x;
+                    var transform = "+=" + (event.dx - (event.dx%1));
+                    $(".marker").css({left: transform});
+                    $("#drag-marker").css({left: transform});
                 },
                 onend: function(event) {
                     $scope.$apply();
+                    console.log("track width: "+$(".track").width()+"\nmarker-container left: "+$("#drag-marker").css("left")+"\nwidth: "+$("#drag-marker-container").width());
                 }
             });
 
@@ -67,6 +54,7 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', funct
     // This function will make the API call to get the audio files from our backend
     function getAudioAndClips() {
         $http.get('/audio').success(function (data) {
+            console.log(data);
             for (var i = 0; i < data.length; i++) {
                 $scope.audioFiles.push(loadSoundAndClips(data[i]));
             }
@@ -103,41 +91,79 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', funct
     /////////////////////////////////////////////////////////
     var playlist;
 
-    $scope.markerPos = 0;
-
     function animateMarker(){
-        if(playing && parseFloat($(".marker").css("left")) < $("#drag-marker-container").width()) {
-            var leftVal = "+=" + $scope.zoomCoefficient/1;
-
+        if(playing && parseFloat($(".marker").css("left")) < ($("#drag-marker-container").width()+25)) {
+            //var leftVal = "+=" + $scope.zoomCoefficient/0.2;
+            var distance = ($("#drag-marker-container").width() - parseFloat($(".marker").css("left"))) +25;
+            var time = distance/$scope.zoomCoefficient;
+            var position = "+=" + distance;
             $(".marker").animate({
-                left: leftVal
-            }, 1000, "linear");
+                left: position
+            }, time*1000, "linear");
 
             $("#drag-marker").animate({
-                left: leftVal
-            }, 1000, "linear", function () {
-                animateMarker();
+                left: position
+            }, time*1000, "linear", function(){
+                $(".marker").css({left: 0});
+                $("#drag-marker").css({left: 0});
             });
         }
         else{
             playing = false;
-            $(".marker").css({left:0});
-            $("#drag-marker").css({left:0});
+
+            if (parseFloat($(".marker").css("left")) >= $("#drag-marker-container").width()) {
+                $(".marker").css({left: 0});
+                $("#drag-marker").css({left: 0});
+            }
         }
     }
 
     var playing = false;
 
+    $scope.stop= function(){
+        for(var i=0; i<playlist.length; i++){
+            try {
+                playlist[i].source.stop();
+            }catch(e) {
+                clearTimeout(playlist[i].timeout);
+            }
+        }
+        playing = false;
+        $(".marker").stop(true);
+        $("#drag-marker").stop(true);
+        $(".marker").css({left: 0});
+        $("#drag-marker").css({left: 0});
+        console.log("Stop Clicked");
+    };
+
+    $scope.pause = function(){
+        for(var i=0; i<playlist.length; i++){
+            try {
+                playlist[i].source.stop();
+            }catch(e) {
+                clearTimeout(playlist[i].timeout);
+            }
+        }
+        playing = false;
+        $(".marker").stop(true);
+        $("#drag-marker").stop(true);
+    };
+
     $scope.play= function(){
       playlist = [];
+      var markerPos = parseFloat($("#drag-marker").css("left"));
       for(var i = 0; i<$scope.tracks.length; i++){
           var track = $scope.tracks[i];
           for( var j=0; j<track.clips.length; j++){
               var clip = track.clips[j];
+              var start = (markerPos - clip.pos_in_track)/$scope.zoomCoefficient;
+              if(start<0){
+                  start = 0;
+              }
               playlist.push({
                   buffer: clip.buffer,
-                  when: clip.pos_in_track/$scope.zoomCoefficient,
-                  start: 0,
+                  when: (clip.pos_in_track - markerPos)/$scope.zoomCoefficient,
+                  start: start,
                   end: clip.buffer.duration
               })
           }
@@ -146,11 +172,12 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', funct
       for(var i=0; i<playlist.length;i++) {
           console.log("sound: " + i + ", delay: " + playlist[i].when);
           var index = i;
-          setTimeout(function (index) {
-              var source = audioContext.createBufferSource();
-              source.buffer = playlist[index].buffer;
-              source.connect(audioContext.destination);
-              source.start(2);//playlist[index].pos_in_track, playlist[index].start, playlist[index].end)
+          playlist[i].source =  audioContext.createBufferSource();
+          playlist[i].source.buffer = playlist[i].buffer;
+          playlist[i].source.connect(audioContext.destination);
+
+          playlist[i].timeout = setTimeout(function (index) {
+              playlist[index].source.start(0,playlist[index].start);//playlist[index].pos_in_track, playlist[index].start, playlist[index].end)
           }, playlist[i].when * 1000, index);
 
           //audioContext.decodeAudioData(playlist[i].buffer, function(buffer){
@@ -318,6 +345,7 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', funct
             alert("could not delete track");
         });
     };
+
     // This function will make the API call to get the track files from our backend
     function getTrack() {
         $http.get('/track').success(function (data) {
