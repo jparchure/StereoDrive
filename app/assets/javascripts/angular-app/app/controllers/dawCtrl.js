@@ -11,7 +11,7 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', funct
         getAllProjects(1);
         initializeAudioTools();
         getAudioAndClips();
-        getTrack();
+        //getTrack();
         listenForFileDrop();
         initDragMarker();
     }
@@ -176,11 +176,18 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', funct
             alert("could not create project");
         });
     }
-
     function getAllProjects(id){
-
+        console.log("alskdjf");
         $http.get('/project/'+id).success(function(data){
+
+            for (var i = 0; i < data.tracks.length; i++) {
+                //var track = {number:0, name:"", key: 0, clips: []};
+                data.tracks[i].clips = [];
+                $scope.tracks.push(data.tracks[i]);
+            }
             console.log(data);
+
+
         }).error(function(data,status,headers,config){
 
             alert("error. could not fetch projects");
