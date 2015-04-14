@@ -170,7 +170,6 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', funct
       }
       playing = true;
       for(var i=0; i<playlist.length;i++) {
-          console.log("sound: " + i + ", delay: " + playlist[i].when);
           var index = i;
           playlist[i].source =  audioContext.createBufferSource();
           playlist[i].source.buffer = playlist[i].buffer;
@@ -248,7 +247,6 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', funct
             hideSpinner();
             var index = $scope.audioFiles.indexOf(audioFile);
             $scope.audioFiles.splice(index,1);
-            console.log(data);
         }).error(function(data){
             hideSpinner();
         });
@@ -257,7 +255,6 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', funct
 
     $scope.playFile = function(file){
         if(file && file.buffer && file.file_name){
-            console.log("playing sound: " + file.file_name + "\nbuffer: " + file.buffer);
             $scope.playSound(file.buffer);
             return true;
         }
@@ -317,21 +314,20 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', funct
 
             track.key = data.key;
             track.name = 'track'+(track.key);
-            console.log(track);
             $scope.tracks.push(track);
         }).error(function(data, status, headers, config){
             console.log(status);
             alert("could not add track");
         });
     };
-    $scope.removeTrack = function(deleteTrack){
+    $scope.removeTrack = function(deleteTrack) {
         var index;
-        for (var i =0; i < $scope.tracks.length; i++)
+        for (var i = 0; i < $scope.tracks.length; i++){
             if ($scope.tracks[i].key === deleteTrack.key) {
                 index = i;
                 break;
             }
-        console.log(index);
+        }
         $http.post('/deleteTrack', {track:deleteTrack}).success(function(data){//data is returned from track_controller.rb#create
 
             $scope.message = data;
@@ -363,7 +359,7 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', funct
     // Clip Functions
     /////////////////////////////////////////////
     $scope.onSoundDrop = function(data, event, track){
-        //console.log(event);
+
         var clip = {
             audio_key: data.key,
             pos_in_track: 0,
@@ -392,7 +388,7 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', funct
         };
         $http.post('/clips', data).success(function(data){
             if(data.success){
-                console.log("success");
+                console.log("created clip");
             }
             else{
                 console.log("failure");
@@ -444,7 +440,9 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', funct
 
     function updateClipModel(clip){
         $http.post("/clips/"+clip.clip_id, {clip: clip}).success(function(data){
-            console.log("success: "+data.success);
+            if(data.success) {
+                console.log("clip data updated");
+            }
         }).error(function(){
             console.log("error");
         })
@@ -475,7 +473,7 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', funct
     }
 
     function setNewClipPosition(clip, nPosX){
-        console.log("chagning clip Pos");
+        console.log("changing clip Pos");
         var target = document.getElementById(clip.clip_id);
         var dx = nPosX - clip.pos_in_track;
         clip.pos_in_track = nPosX;

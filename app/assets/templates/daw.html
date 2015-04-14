@@ -26,9 +26,21 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h1>{{"DAW"}}</h1>
-                        <button class="btn btn-default" ng-click="play()">Play</button>
-                        <button class="btn btn-default" ng-click="stop()">Stop</button>
-                        <button class="btn btn-default" ng-click="pause()">Pause</button>
+                        <div class="btn-group" role="group">
+                            <button class="btn btn-default" ng-click="play()">
+                                <span class="glyphicon glyphicon-play"></span>
+                            </button>
+                            <button class="btn btn-default" ng-click="pause()">
+                                <span class="glyphicon glyphicon-pause"></span>
+                            </button>
+                            <button class="btn btn-default" ng-click="stop()">
+                                <span class="glyphicon glyphicon-stop"></span>
+                            </button>
+                        </div>
+
+                        <div class="timeLabel">
+
+                        </div>
                     </div>
                     <div>
                         <div class="row-fluid">
