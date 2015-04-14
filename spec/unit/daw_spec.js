@@ -13,7 +13,7 @@ describe('Unit: dawCtrl', function() {
         // use to define backend calls
         httpBackend = $injector.get('$httpBackend');
         httpBackend.when('GET', '/audio').respond([]);
-        httpBackend.when('GET', '/track').respond([]);
+        httpBackend.when('GET', '/track').respond([{ key: '1'}]);
 
         ctrl = $injector.get('$controller')('dawCtrl', {
             $scope: scope,
@@ -21,43 +21,52 @@ describe('Unit: dawCtrl', function() {
             usSpinnerService: spinner
         });
     }));
+    describe('Audio', function(){
+        it('should only play valid sounds',
+            function () {
+                expect(scope.playSound(null)).toBeFalsy();
+            }
+        );
 
-    it('should only play valid sounds',
-        function () {
+        it('should upload file when a file is added', function () {
+            httpBackend.expect('POST', '/audio').respond('{"success":"true"}');
+            scope.file = {};
+        });
 
-            expect(scope.playSound(null)).toBeFalsy();
-        }
-    );
+        it('should hide the spinner if there are no audio files to be downloaded', function () {
+            spinner.stop = jasmine.createSpy();
+            httpBackend.flush();
+            expect(spinner.stop).toHaveBeenCalled();
+        });
 
-    it('should upload file when a file is added', function(){
-        httpBackend.expect('POST', '/audio').respond('{"success":"true"}');
-        scope.file = {};
+        it('should hide the spinner once the audio files are downloaded', function () {
+            var testurl = "/test";
+            httpBackend.when('GET', '/audio').respond([{url: testurl}]);
+            httpBackend.when('GET', testurl).respond({success: true});
+            httpBackend.when('GET', '/track').respond([{success: true, id: '1'}]);
+            spinner.stop = jasmine.createSpy();
+            httpBackend.flush();
+            expect(scope.audioFiles.length > 0);
+            expect(spinner.stop).toHaveBeenCalled();
+        });
+
+        it('should fetch audio when page is loaded', function () {
+            httpBackend.expect('GET', '/audio');
+        });
     });
-
-    it('should hide the spinner if there are no audio files to be downloaded', function(){
-        spinner.stop = jasmine.createSpy();
-        httpBackend.flush();
-        expect(spinner.stop).toHaveBeenCalled();
-    });
-
-    it('should hide the spinner once the audio files are downloaded', function(){
-        var testurl = "/test";
-        httpBackend.when('GET', '/audio').respond([{ url:testurl}]);
-        httpBackend.when('GET', testurl).respond({success: true});
-        httpBackend.when('GET', '/track').respond([{success: true, id: '1'}]);
-        spinner.stop = jasmine.createSpy();
-        httpBackend.flush();
-        expect(scope.audioFiles.length > 0);
-        expect(spinner.stop).toHaveBeenCalled();
-    });
-
-    it('should fetch audio when page is loaded', function(){
-        httpBackend.expect('GET', '/audio');
-    });
-
     describe('Clips', function(){
-       it('should expect true to be true', function(){
-           expect(true).toBeTruthy();
+       it('should be able to add clips', function(){
+           httpBackend.flush();
+           scope.$apply();
+
+           clip = {
+               key: "key",
+               buffer: {duration: 100},
+               clip_id: "test",
+               length: 100
+           };
+           scope.onSoundDrop(clip,{}, scope.tracks[0]);
+           httpBackend.expect('POST', '/clips');
        });
     });
 });
