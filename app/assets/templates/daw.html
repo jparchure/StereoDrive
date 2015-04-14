@@ -36,6 +36,13 @@
                             <button class="btn btn-default" ng-click="stop()">
                                 <span class="glyphicon glyphicon-stop"></span>
                             </button>
+
+                            <input class="form-control" type="text" ng-model="firebaseData"/>
+                            <button ng-click="setNewFirebaseData()">set</button>
+                            <div ng-repeat="message in messages">
+                                <h6>{{message.from}}</h6>
+                                {{message.body}}
+                            </div>
                         </div>
 
                         <div class="timeLabel">

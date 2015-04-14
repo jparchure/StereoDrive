@@ -2,7 +2,7 @@
  * Created by saasbook on 09/02/15.
  */
 
-var app = angular.module("app", ['ngRoute', 'ui.bootstrap', 'ngCookies', 'xeditable', 'templates','angularFileUpload','angularSpinner', 'ngDraggable']);
+var app = angular.module("app", ['ngRoute', 'ui.bootstrap', 'ngCookies', 'xeditable', 'templates','angularFileUpload','angularSpinner', 'ngDraggable','firebase']);
 
 app.config(['$routeProvider',
     function($routeProvider) {

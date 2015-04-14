@@ -1,5 +1,5 @@
 
-app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', function($scope, $upload, $http, usSpinnerService) {
+app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', '$firebaseArray', '$firebaseObject', function($scope, $upload, $http, usSpinnerService, $firebaseArray, $firebaseObject) {
 
     $scope.audioFiles = [];
     $scope.zoomCoefficient = 100;
@@ -13,11 +13,19 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', funct
         getTrack();
         listenForFileDrop();
         initDragMarker();
+        setUpFirebase();
     }
 
     ///////////////////////////////////////////////////////////
     // Initialization Functions
     ///////////////////////////////////////////////////////////
+    function setUpFirebase(){
+        var ref = new Firebase("https://gxguou43ikv.firebaseio-demo.com/");
+        $scope.messages = $firebaseArray(ref);
+        ref2  = new Firebase("https://flickering-fire-6049.firebaseio.com/");
+        $scope.firebaseObj = $firebaseObject(ref2);
+        setTimeout(function(){$scope.firebaseObj.liar = $scope.tracks;$scope.firebaseObj.$save();},5000);
+    }
 
     function listenForFileDrop(){
         $scope.$watch('file', function () {
@@ -346,7 +354,6 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', funct
     function getTrack() {
         $http.get('/track').success(function (data) {
             for (var i = 0; i < data.length; i++) {
-                var track = {number:0, name:"", key: 0, clips: []};
                 data[i].clips = [];
                 $scope.tracks.push(data[i]);
             }
@@ -394,7 +401,7 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', funct
                 console.log("failure");
             }
 
-        }).error(function(data){
+        }).error(function(){
             console.log("error");
         });
     }
@@ -419,7 +426,7 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', funct
                     var target = event.target;
 
                     // keep the dragged position in the posInTrack attribute
-                    x = (parseFloat(clip.pos_in_track || 0) + event.dx );
+                    var x = (parseFloat(clip.pos_in_track || 0) + event.dx );
                     //x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx;
                     x = x - (x%1);
                     if(x<0)
@@ -427,10 +434,10 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', funct
                     // translate the element
                     target.style.transform = 'translate(' + x + 'px, ' + 0 + 'px)';
 
-                    // update the posiion attributes
+                    // update the position attributes
                     clip.pos_in_track = x;
                 },
-                onend: function(event) {
+                onend: function() {
                     $scope.$apply();
                     updateClipModel(clip);
                 }
@@ -480,4 +487,11 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', funct
         target.style.transform = 'translate(' + dx + 'px, ' + 0 + 'px)';
         $scope.$apply();
     }
+
+    /////////////////////////////////////////////
+    // Firebase Functions
+    /////////////////////////////////////////////
+    $scope.setNewFirebaseData = function(){
+        $scope.messages.$add({ from: "me", body: $scope.firebaseData });
+    };
 }]);
