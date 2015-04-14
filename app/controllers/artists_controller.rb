@@ -1,7 +1,6 @@
 # This file is app/controllers/artists_controller.rb
 class ArtistsController < ApplicationController
-  skip_before_action :verify_authenticity_token, :only => [:update]
-
+  skip_before_action :verify_authenticity_token
   def list 
     id = params[:id]
     if(!@current_user.nil?)
@@ -22,7 +21,7 @@ class ArtistsController < ApplicationController
         render json: artist
       end
   end
-<<<<<<< HEAD
+
 
   def members
       id = params[:id]
@@ -55,17 +54,23 @@ class ArtistsController < ApplicationController
     end
     render :nothing => true
   end
-=======
+
   def create
 	if(!@current_user.nil?)
-          hash = {:name => user.name+"'s Solo Band", :image=>user.image, :page=>user.page, :location=>user.location}
+          puts(params)
+          artist = params
+          hash = {:name => params["name"], :image=>params["image"], :page=>params["page"], :location=>params["location"]}
     	  @current_user.artists << Artist.create!(hash)
 	end
+  render :nothing=>true
   end
   def destroy
 	if(!@current_user.nil?)
-	  artist = @current_user.artists.find(:id)
+    puts(params)
+	  artist = @current_user.artists.find(params["id"])
 	  artist.destroy
 	end
->>>>>>> 3af9607cf1f431d745f02e31ac3af301c5dabaea
+  render :nothing=>true
+ end
+
 end

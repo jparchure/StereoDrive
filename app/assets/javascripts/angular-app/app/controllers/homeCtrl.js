@@ -66,31 +66,28 @@ app.controller("homeCtrl", ['$scope', '$routeParams', '$http', '$cookies', '$loc
 
 
         $scope.artistAction= function(event){
-        	href="/artist/" + event.currentTarget.id;
+        	href="/artists/" + event.currentTarget.id;
         	if($('.wiggle').ClassyWiggle('isWiggling')){
 
         		
         		deleteBand(event);
         	}
         	else{
+                console.log("HEY WHAT THE HELL DO YOU WANT");
         		$location.url(href);
         	}
         };
         //Deleting a band
         var deleteBand = function(event){
+                console.log(href);
         		console.log("Event: " + event.currentTarget.id + "CUI: " + current_user_id)
         		if(event.currentTarget.id === current_user_id ){
         			alert("You can not delete the solo band");
         		}
         		else if(confirm('Are you sure you want to delete this?')){
         		$http.delete(href).error(function(err){
-        			if(err.field && err.msg) {
-        		// err like {field: "name", msg: "Server-side error for this username!"} 
-                $scope.editableForm.$setError(err.field, err.msg);
-                } else { 
-        		// unknown error
-             $scope.editableForm.$setError('name', 'Unknown error!');
-                }
+        			console.log(err);
+                
         		});
         	}
         };
