@@ -21,7 +21,10 @@ class ArtistsController < ApplicationController
         render json: artist
       end
   end
+<<<<<<< HEAD
+=======
 
+>>>>>>> Jay
 
   def members
       id = params[:id]
@@ -31,6 +34,7 @@ class ArtistsController < ApplicationController
         render json: artist.users
       end
   end
+
   def update
     puts(params)
     @artist = Artist.find(params[:id])
@@ -72,5 +76,6 @@ class ArtistsController < ApplicationController
 	end
   render :nothing=>true
  end
+
 
 end

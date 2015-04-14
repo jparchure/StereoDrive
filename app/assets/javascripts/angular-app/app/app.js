@@ -6,6 +6,7 @@
 
 var app = angular.module("app", ['ngRoute', 'ngCookies', 'xeditable', 'templates','angularFileUpload','angularSpinner','ui.bootstrap', 'ngAutocomplete']);
 
+
 app.config(['$routeProvider',
     function($routeProvider) {
         $routeProvider.when('/home/:op?', {
