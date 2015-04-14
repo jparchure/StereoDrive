@@ -30,6 +30,8 @@
                     <div class="panel-heading">
                         <h1>{{"DAW"}}</h1>
                         <button class="btn btn-default" ng-click="play()">Play</button>
+                        <button class="btn btn-default" ng-click="stop()">Stop</button>
+                        <button class="btn btn-default" ng-click="pause()">Pause</button>
                     </div>
                     <div>
                         <div class="row-fluid">
@@ -44,7 +46,7 @@
                                 <button class="btn btn-danger" type="button" ng-click="removeTrack(track)">Delete</button>
                             </div>
                             <div ng-drop="true" class="track col-md-11" ng-drop-success="onSoundDrop($data,$event,track)">
-                                <div class="marker" left="{{markerPos + 'px'}}"/>
+                                <div class="marker"/>
                                 <canvas ng-repeat="clip in track.clips" id="{{clip.clip_id}}" class="panel clip" width="{{zoomCoefficient * clip.length}}" height="71"></canvas>
                             </div>
 
