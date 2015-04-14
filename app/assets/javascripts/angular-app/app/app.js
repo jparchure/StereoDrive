@@ -3,6 +3,7 @@
  */
 
 
+
 var app = angular.module("app", ['ngRoute', 'ngCookies', 'xeditable', 'templates','angularFileUpload','angularSpinner','ui.bootstrap', 'ngAutocomplete']);
 
 
