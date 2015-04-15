@@ -3,13 +3,15 @@
  */
 
 	
-app.controller("artistCtrl", ['$scope', '$routeParams','$cookies','$http',function($scope,  $cookies,$routeParams, $http){
+app.controller("artistCtrl", ['$scope', '$routeParams','$cookies','$http',function($scope, $routeParams,$cookies, $http){
 		
 		$scope.currentuser_id= $cookies['id'];
+
+		console.log("THE DATA IS:" + $routeParams['id'] );
+
 		$scope.getArtistdata = function(){
 		$http.get('/artists/' + $routeParams['id']).success(function(data){
 			$scope.artist=data;
-
 		});
 		};
 

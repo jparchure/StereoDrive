@@ -52,24 +52,22 @@ app.controller("homeCtrl", ['$scope', '$routeParams', '$http', '$cookies', '$loc
         //Wiggling to delete bands
         $scope.classyWiggle=function(){
                 $scope.artistEdit=!($scope.artistEdit);
-            
-                if($('.wiggle').ClassyWiggle('isWiggling')){
-                  
+
+                /*if($('.wiggle').ClassyWiggle('isWiggling')){
+                 $scope.artistEdit=false;
                  $('.wiggle').ClassyWiggle('stop');
                 }
                 else{
-
+                    $scope.artistEdit=true;
                     $('.wiggle').ClassyWiggle('start', {'degrees': [0,7.5,15,7.5,0,-7.5,-15,-7.5,0]});
-                    
-                }
+                }*/
         };
 
 
         $scope.artistAction= function(event){
-        	href="/artists/" + event.currentTarget.id;
-        	if($('.wiggle').ClassyWiggle('isWiggling')){
+        	href="/artist/" + event.currentTarget.id;
+        	if($scope.artistEdit){
 
-        		
         		deleteBand(event);
         	}
         	else{
@@ -79,9 +77,7 @@ app.controller("homeCtrl", ['$scope', '$routeParams', '$http', '$cookies', '$loc
         };
         //Deleting a band
         var deleteBand = function(event){
-                console.log(href);
-        		console.log("Event: " + event.currentTarget.id + "CUI: " + current_user_id)
-        		if(event.currentTarget.id === current_user_id ){
+                if(event.currentTarget.id === current_user_id ){
         			alert("You can not delete the solo band");
         		}
         		else if(confirm('Are you sure you want to delete this?')){
@@ -89,7 +85,9 @@ app.controller("homeCtrl", ['$scope', '$routeParams', '$http', '$cookies', '$loc
         			console.log(err);
                 
         		});
+                $scope.getArtistData();
         	}
+
         };
 
 

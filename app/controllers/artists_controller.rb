@@ -21,10 +21,7 @@ class ArtistsController < ApplicationController
         render json: artist
       end
   end
-<<<<<<< HEAD
-=======
 
->>>>>>> Jay
 
   def members
       id = params[:id]
