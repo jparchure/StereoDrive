@@ -34,5 +34,8 @@ describe UsersController do
           parsed_body = JSON.parse(response.body)
           parsed_body["name"].should === user.name
     end
+
+    it "should delete bands if clicked on" do
+    end
 	end
 end
