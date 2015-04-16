@@ -15,6 +15,20 @@ class TrackController < ApplicationController
     track.each{ |a|
       trackInfo = Hash.new
       trackInfo['key'] = a.id
+
+      clips = Array.new
+      a.clips.each{ |clip|
+        clipData = Hash.new
+        clipData[:audio_key] = clip.audio_key
+        clipData[:pos_in_track] = clip.pos_in_track
+        clipData[:start] = clip.start
+        clipData[:end] = clip.end
+        clipData[:clip_id] = clip.clip_id
+        clipData[:track_id] = clip.track_id
+        clips.push clipData
+      }
+
+      trackInfo[:clips] = clips
       allTrack.push(trackInfo)
     }
 

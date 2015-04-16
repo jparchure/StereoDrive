@@ -1,5 +1,5 @@
 
-app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', '$firebaseArray', '$firebaseObject', function($scope, $upload, $http, usSpinnerService, $firebaseArray, $firebaseObject) {
+app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', '$firebaseArray', '$firebaseObject', '$timeout', function($scope, $upload, $http, usSpinnerService, $firebaseArray, $firebaseObject, $timeout) {
 
     $scope.audioFiles = [];
     $scope.zoomCoefficient = 100;
@@ -361,6 +361,46 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', '$fir
             alert("could not retrieve tracks");
         });
     }
+
+    $scope.refreshTracks = function(){
+
+        $http.get('/track').success(function (data) {
+            $scope.tracks = [];
+
+            for (var i = 0; i < data.length; i++) {
+                $scope.tracks.push(data[i]);
+                for (var j = 0; j < data[i].clips.length; j++) {
+
+                    var buffer = null;
+                    for(var k=0; k<$scope.audioFiles.length;k++){
+                        if($scope.audioFiles[k].key == data[i].clips[j].audio_key){
+                            buffer = $scope.audioFiles[k].buffer
+                        }
+                    }
+
+                    var clip = data[i].clips[j];
+                    clip.length = buffer.duration;
+                    clip.buffer = buffer;
+                }
+            }
+            $timeout(function(){
+                for(var i =0; i<$scope.tracks.length;i++) {
+                    var track = $scope.tracks[i];
+                    for (var j = 0; j < track.clips.length; j++) {
+                        var clip = track.clips[j];
+                        attachSlider(clip);
+                        element = document.getElementById(clip.clip_id);
+                        drawWaveform(element.width, element.height, element.getContext("2d"), clip.buffer);
+                        initClipPos(clip);
+                        console.log("added clip to track: " + clip.clip_id);
+                    }
+                }
+            });
+
+        }).error(function () {
+            alert("could not retrieve tracks");
+        });
+    };
 
     /////////////////////////////////////////////
     // Clip Functions
