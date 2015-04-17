@@ -71,7 +71,6 @@ app.controller("homeCtrl", ['$scope', '$routeParams', '$http', '$cookies', '$loc
         		deleteBand(event);
         	}
         	else{
-                console.log("HEY WHAT THE HELL DO YOU WANT");
         		$location.url(href);
         	}
         };
