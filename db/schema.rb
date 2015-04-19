@@ -57,6 +57,7 @@ ActiveRecord::Schema.define(version: 20150409210148) do
   end
 
   create_table "tracks", force: :cascade do |t|
+    t.integer  "project_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer  "project_id"

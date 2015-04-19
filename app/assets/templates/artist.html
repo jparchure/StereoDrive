@@ -55,14 +55,14 @@
                 
          
                 <div class=" col-md-9 col-lg-12 "> 
-                 <p class="tagline"> {{artist.tagline}}</p>
+                 <p class="tagline" editable-text="artist.tagline"> {{artist.tagline}}</p>
                   <table class="table table-user-information">
                     <tbody>
                      
                    
                       <tr>
                         <td><label>Jamming Since:</label></td>
-                        <td><p editable-text="artist.origin" e-required>{{artist.created_at}}</p></td>
+                        <td><p>{{artist.created_at}}</p></td>
                       </tr>
                    
                          <tr>
@@ -100,7 +100,7 @@
 
                             <!-- buttons to submit / cancel form -->
       <span ng-show="editableForm.$visible">
-         <button data-original-title="Accept Changes" data-toggle="tooltip" type="submit" class="btn btn-sm btn-default" ng-disabled="editableForm.$waiting"><i class="glyphicon glyphicon-thumbs-up"></i></a>
+         <button data-original-title="Accept Changes" data-toggle="tooltip" type="submit" class="btn btn-sm btn-default" ng-click = saveUser() ng-disabled="editableForm.$waiting"><i class="glyphicon glyphicon-thumbs-up"></i></a>
         
         <button data-original-title="Remove this user" data-toggle="tooltip" type="button" class="btn btn-sm btn-danger" ng-disabled="editableForm.$waiting" ng-click="editableForm.$cancel()"><i class="glyphicon glyphicon-remove"></i></a>
       </span>
@@ -123,8 +123,8 @@
 
             <div class="panel-body">
                 <!--Repeat the div below for multiple bands-->
-                <div class="dis-image col-md- col-lg-2 " align="center"> <img alt="User Pic" src="https://lh5.googleusercontent.com/-b0-k99FZlyE/AAAAAAAAAAI/AAAAAAAAAAA/eu7opA4byxI/photo.jpg?sz=100" class="img-thumbnail"> </div>
-
+                <!--<div class="dis-image col-md- col-lg-2 " align="center"> <img alt="User Pic" src="https://lh5.googleusercontent.com/-b0-k99FZlyE/AAAAAAAAAAI/AAAAAAAAAAA/eu7opA4byxI/photo.jpg?sz=100" class="img-thumbnail"> </div>!-->
+                <div ng-repeat="member in memberlist" class="dis-image col-md-2 col-lg-2 " align="center"><a href="#/users/{{member.id}}"> <img alt="User Pic" src="{{member.image}}" class="img-thumbnail wiggle"> </a></div>
               
             </div>
                  <div class="panel-footer">

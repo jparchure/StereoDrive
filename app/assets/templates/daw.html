@@ -43,7 +43,7 @@
                             <div class="col-md-1">
                                 Track {{ track.key }}
                                 <br/>
-                                <button class="btn btn-danger" type="button" ng-click="removeTrack(track)">Delete</button>
+                                <button class="btn btn-danger" type="button" id="deleteTrack" ng-click="removeTrack(track)">Delete</button>
                             </div>
                             <div ng-drop="true" class="track col-md-11" ng-drop-success="onSoundDrop($data,$event,track)">
                                 <div class="marker"/>
@@ -51,7 +51,7 @@
                             </div>
 
                         </div>
-                        <button class="btn btn-default" type="button" ng-click="addTrack()">Add Track</button>
+                        <button class="btn btn-default" id="addTrack" type="button" ng-click="addTrack()">Add Track</button>
                     </div>
                 </div>
         </div>

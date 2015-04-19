@@ -13,8 +13,10 @@ Team7::Application.routes.draw do
   match 'auth/:provider/callback', to: 'sessions#create', via: :get
   match '/logout', to: 'sessions#destroy', via: :delete
   match 'artist/list/:id', to: 'artists#list', via: :get
+
   get '/project/:id' => 'project#show'
   post '/project' => 'project#create'
+  match 'artist/member/:id', to: 'artists#members', via: :get
 
   root :to => "app#index"
   # The priority is based upon order of creation:
