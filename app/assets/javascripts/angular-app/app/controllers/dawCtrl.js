@@ -8,7 +8,7 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', funct
 
     init();
     function init(){
-        getAllProjects(1);
+        getProject(1);
         initializeAudioTools();
         getAudioAndClips();
         //getTrack();
@@ -203,8 +203,7 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', funct
             alert("could not create project");
         });
     }
-    function getAllProjects(id){
-        console.log("alskdjf");
+    function getProject(id){
         $http.get('/project/'+id).success(function(data){
 
             for (var i = 0; i < data.tracks.length; i++) {

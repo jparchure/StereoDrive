@@ -16,6 +16,7 @@ Team7::Application.routes.draw do
 
   get '/project/:id' => 'project#show'
   post '/project' => 'project#create'
+  get '/project' => 'project#index'
   match 'artist/member/:id', to: 'artists#members', via: :get
 
   root :to => "app#index"
