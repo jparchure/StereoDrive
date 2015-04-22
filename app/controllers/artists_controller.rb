@@ -33,7 +33,7 @@ class ArtistsController < ApplicationController
   end
   def add_member
      if(!@current_user.nil?)
-     	member = Users.find(params[:user_id])
+     	member = Users.find_by_name(params[:name])
      	band = @current_user.artists.find(params[:artist_id])
 	if(!band.nil?)
 		band.users << member
