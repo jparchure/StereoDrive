@@ -45,7 +45,8 @@ class ArtistsController < ApplicationController
      end
      else
 	flash[:warning] = "You must be logged in to do that!"
-	redirect_to root_path 
+	redirect_to root_path
+     end 
   end
   def update
     puts(params)
