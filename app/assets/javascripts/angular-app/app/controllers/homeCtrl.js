@@ -22,6 +22,7 @@ app.controller("homeCtrl", ['$scope', '$routeParams', '$http', '$cookies', '$loc
        $scope.getUserData=function(){
 		$http.get(route).success(function(data){
 			$scope.currentuser=data;
+            console.log($scope.currentuser);
 		});
         };
 

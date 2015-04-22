@@ -36,6 +36,12 @@ app.controller("artistCtrl", ['$scope', '$routeParams','$cookies','$http',functi
                 }
         });
         }; //Save user ends here
+
+        $scope.addUsers = false;
+        
+        $scope.toggleAddUsers = function(){
+        $scope.addUsers= !$scope.addUsers;
+        };
 	
 }]);
 //$location for angular routes

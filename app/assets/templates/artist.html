@@ -100,9 +100,9 @@
 
                             <!-- buttons to submit / cancel form -->
       <span ng-show="editableForm.$visible">
-         <button data-original-title="Accept Changes" data-toggle="tooltip" type="submit" class="btn btn-sm btn-default" ng-click = saveUser() ng-disabled="editableForm.$waiting"><i class="glyphicon glyphicon-thumbs-up"></i></a>
+         <button data-original-title="Accept Changes" data-toggle="tooltip" type="submit" class="btn btn-sm btn-default" ng-click = saveUser() ng-disabled="editableForm.$waiting"><i class="glyphicon glyphicon-thumbs-up"></i>
         
-        <button data-original-title="Remove this user" data-toggle="tooltip" type="button" class="btn btn-sm btn-danger" ng-disabled="editableForm.$waiting" ng-click="editableForm.$cancel()"><i class="glyphicon glyphicon-remove"></i></a>
+        <button data-original-title="Remove this user" data-toggle="tooltip" type="button" class="btn btn-sm btn-danger" ng-disabled="editableForm.$waiting" ng-click="editableForm.$cancel()"><i class="glyphicon glyphicon-remove"></i>
       </span>
                         </span>
                       </div>
@@ -128,10 +128,31 @@
               
             </div>
                  <div class="panel-footer">
-                        <a data-original-title="Broadcast Message" data-toggle="tooltip" type="button" class="btn btn-sm btn-primary"><i class="glyphicon glyphicon-plus"></i></a>
+                        <a data-original-title="Broadcast Message" data-toggle="tooltip" type="button" class="btn btn-sm btn-primary" ng-click="toggleAddUsers()"><i class="glyphicon glyphicon-plus"></i></a>
                        
                     </div>
             
+          </div>
+
+          <div class="panel panel-info" ng-controller="searchUserToAddCtrl" ng-show="addUsers">
+            <div class="panel-heading">
+              <h3 class="panel-title">Members</h3>
+            </div>
+            <form name="searchUsers">
+            <div class="panel-body">
+            <input type="text" ng-model="userToBeAdded.name" required>
+
+                <!--Repeat the div below for multiple bands-->
+                <!--<div class="dis-image col-md- col-lg-2 " align="center"> <img alt="User Pic" src="https://lh5.googleusercontent.com/-b0-k99FZlyE/AAAAAAAAAAI/AAAAAAAAAAA/eu7opA4byxI/photo.jpg?sz=100" class="img-thumbnail"> </div>!
+                <div ng-repeat="member in memberlist" class="dis-image col-md-2 col-lg-2 " align="center"><a href="#/users/{{member.id}}"> <img alt="User Pic" src="{{member.image}}" class="img-thumbnail wiggle"> </a></div>-->
+            
+            </div>
+
+                 <div class="panel-footer">
+           
+                       	<button data-original-title="Accept Changes" data-toggle="tooltip" type="submit" class="btn btn-sm btn-default" ng-click = "lookUpUser(searchUsers)"><i class="glyphicon glyphicon-thumbs-up"></i>
+                    </div>
+           </form>
           </div>
         </div>
       </div>
