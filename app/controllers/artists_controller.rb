@@ -37,12 +37,10 @@ class ArtistsController < ApplicationController
      	band = @current_user.artists.find(params[:artist_id])
 	if(!band.nil?)
 		band.users << member
-	end
 	else
 		flash[:warning] = "You are not a part of this Artist"
 	end
 	render :nothing => true
-     end
      else
 	flash[:warning] = "You must be logged in to do that!"
 	redirect_to root_path
