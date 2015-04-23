@@ -31,7 +31,23 @@ class ArtistsController < ApplicationController
         render json: artist.users
       end
   end
+  def add_member
+     if(!@current_user.nil?)
 
+     	member = User.find_by_name(params[:name])
+
+     	band = @current_user.artists.find(params[:artist_id])
+	if(!band.nil?)
+		band.users << member
+	else
+		flash[:warning] = "You are not a part of this Artist"
+	end
+	render :nothing => true
+     else
+	flash[:warning] = "You must be logged in to do that!"
+	redirect_to root_path
+     end 
+  end
   def update
     puts(params)
     @artist = Artist.find(params[:id])
