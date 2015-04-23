@@ -6,7 +6,6 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', '$fir
     var audioContext;
     var numOfLoadedSounds = 0;
 
-    init();
     function init(){
         initializeAudioTools();
         getAudioAndClips();
@@ -19,12 +18,52 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', '$fir
     ///////////////////////////////////////////////////////////
     // Initialization Functions
     ///////////////////////////////////////////////////////////
+    var trackState;
+    var audioState;
+
     function setUpFirebase(){
         var ref = new Firebase("https://gxguou43ikv.firebaseio-demo.com/");
         $scope.messages = $firebaseArray(ref);
-        ref2  = new Firebase("https://flickering-fire-6049.firebaseio.com/");
+        ref2  = new Firebase("https://flickering-fire-6049.firebaseio.com/1/");
         $scope.firebaseObj = $firebaseObject(ref2);
-        setTimeout(function(){$scope.firebaseObj.liar = $scope.tracks;$scope.firebaseObj.$save();},5000);
+
+        trackState = $scope.firebaseObj.trackUpdates;
+        audioState = $scope.firebaseObj.audioUpdates;
+
+        $timeout(function(){
+            $scope.$watch('firebaseObj.trackUpdates', function(){
+                console.log("detected Change");
+                handleFirebaseUpdate();
+            });
+
+            $scope.$watch('firebaseObj.audioUpdates', function(){
+                console.log("detected Change");
+                handleFirebaseUpdate();
+            });
+        });
+    }
+
+    function handleFirebaseUpdate(){
+        if( trackState != $scope.firebaseObj.trackUpdates)
+            $scope.refreshTracks();
+
+        if( audioState != $scope.firebaseObj.audioUpdates)
+            $scope.refreshAudio();
+
+        trackState = $scope.firebaseObj.trackUpdates;
+        audioState = $scope.firebaseObj.audioUpdates;
+    }
+
+    // This function will make the API call to get the track files from our backend
+    function getTrack() {
+        $http.get('/track').success(function (data) {
+            for (var i = 0; i < data.length; i++) {
+                data[i].clips = [];
+                $scope.tracks.push(data[i]);
+            }
+        }).error(function () {
+            alert("could not retrieve tracks");
+        });
     }
 
     function listenForFileDrop(){
@@ -203,6 +242,42 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', '$fir
     ///////////////////////////////////////////
     // Audio Functions
     //////////////////////////////////////////
+
+    $scope.refreshAudio = function() {
+        console.log("refreshing Audio");
+        $http.get('/audio').success(function (data) {
+            for(var i = 0; i<data.length;i++){
+                var index = -1;
+                for(var j=0; j<$scope.audioFiles.length; j++){
+                    if($scope.audioFiles[j].key == data[i].key){
+                        index = j;
+                    }
+                }
+                if(index == -1){
+                    console.log("new audio found. downloading...");
+                    $scope.audioFiles.push(loadSoundAndClips(data[i]));
+                }
+            }
+
+            for(var i = 0; i<$scope.audioFiles.length;i++) {
+                var audioDeleted = true;
+                for (var j = 0; j < data.length; j++) {
+                    if ($scope.audioFiles[i].key == data[j].key) {
+                        audioDeleted = false;
+                    }
+                }
+                if (audioDeleted){
+                    $scope.audioFiles.splice(i, 1);
+                    i--;
+                }else{
+                    console.log("audio File found");
+                }
+            }
+        }).error(function () {
+            alert("could not refresh audio");
+        });
+    };
+
     function loadSoundAndClips(data) {
         var url = data.audioUrl;
         var request = new XMLHttpRequest();
@@ -228,13 +303,16 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', '$fir
                             }
                         }
                         if (trackIndex != -1) {
-                            $scope.tracks[trackIndex].clips.push(clip);
-                            $scope.$apply();
-                            attachSlider(clip);
-                            element = document.getElementById(clip.clip_id);
-                            drawWaveform(element.width, element.height, element.getContext("2d"), data.buffer);
-                            initClipPos(clip);
-                            console.log("added clip to track: " + clip.clip_id);
+                            // If track does not already contain the clip
+                            if( $scope.tracks[trackIndex].clips.indexOf(clip) == -1 ) {
+                                $scope.tracks[trackIndex].clips.push(clip);
+                                $scope.$apply();
+                                attachSlider(clip);
+                                element = document.getElementById(clip.clip_id);
+                                drawWaveform(element.width, element.height, element.getContext("2d"), data.buffer);
+                                initClipPos(clip);
+                                console.log("added clip to track: " + clip.clip_id);
+                            }
                         }
                     }
                 }
@@ -255,6 +333,10 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', '$fir
             hideSpinner();
             var index = $scope.audioFiles.indexOf(audioFile);
             $scope.audioFiles.splice(index,1);
+
+            audioState++;
+            $scope.firebaseObj.audioUpdates = $scope.firebaseObj.audioUpdates+1;
+            $scope.firebaseObj.$save();
         }).error(function(data){
             hideSpinner();
         });
@@ -291,6 +373,10 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', '$fir
                 if (data.success) {
                     data = loadSoundAndClips(data);
                     $scope.audioFiles.push(data);
+
+                    audioState++;
+                    $scope.firebaseObj.audioUpdates = $scope.firebaseObj.audioUpdates+1;
+                    $scope.firebaseObj.$save();
                     hideSpinner();
                 } else {
                     alert(data.error);
@@ -323,6 +409,10 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', '$fir
             track.key = data.key;
             track.name = 'track'+(track.key);
             $scope.tracks.push(track);
+
+            trackState++;
+            $scope.firebaseObj.trackUpdates =$scope.firebaseObj.trackUpdates+1;
+            $scope.firebaseObj.$save();
         }).error(function(data, status, headers, config){
             console.log(status);
             alert("could not add track");
@@ -344,23 +434,15 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', '$fir
                     $scope.tracks.splice(i,1);
                     break;
                 }
+
+            trackState++;
+            $scope.firebaseObj.trackUpdates =$scope.firebaseObj.trackUpdates+1;
+            $scope.firebaseObj.$save();
         }).error(function(data, status, headers, config){
             console.log(status);
             alert("could not delete track");
         });
     };
-
-    // This function will make the API call to get the track files from our backend
-    function getTrack() {
-        $http.get('/track').success(function (data) {
-            for (var i = 0; i < data.length; i++) {
-                data[i].clips = [];
-                $scope.tracks.push(data[i]);
-            }
-        }).error(function () {
-            alert("could not retrieve tracks");
-        });
-    }
 
     $scope.refreshTracks = function(){
 
@@ -377,10 +459,14 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', '$fir
                             buffer = $scope.audioFiles[k].buffer
                         }
                     }
-
-                    var clip = data[i].clips[j];
-                    clip.length = buffer.duration;
-                    clip.buffer = buffer;
+                    if(buffer) {
+                        var clip = data[i].clips[j];
+                        clip.length = buffer.duration;
+                        clip.buffer = buffer;
+                    }else{
+                        //remove clip from tracks
+                        data[i].clips.splice(j,1);
+                    }
                 }
             }
             $timeout(function(){
@@ -422,11 +508,11 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', '$fir
         createNewClip(clip, track);
         attachSlider(clip);
         element = document.getElementById(clip.clip_id);
+
         if(element)
             drawWaveform(element.width,element.height,element.getContext("2d"),data.buffer);
         //setNewClipPosition(clip, 0);
     };
-
 
     function createNewClip(clip, track){
         var data = {
@@ -436,6 +522,11 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', '$fir
         $http.post('/clips', data).success(function(data){
             if(data.success){
                 console.log("created clip");
+
+                trackState++;
+                $scope.firebaseObj.trackUpdates = $scope.firebaseObj.trackUpdates+1;
+                $scope.firebaseObj.$save();
+
             }
             else{
                 console.log("failure");
@@ -480,6 +571,10 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', '$fir
                 onend: function() {
                     $scope.$apply();
                     updateClipModel(clip);
+
+                    trackState++;
+                    $scope.firebaseObj.trackUpdates = $scope.firebaseObj.trackUpdates+1;
+                    $scope.firebaseObj.$save();
                 }
             });
         interact.maxInteractions(Infinity);   // Allow multiple interactions
@@ -534,4 +629,7 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', '$fir
     $scope.setNewFirebaseData = function(){
         $scope.messages.$add({ from: "me", body: $scope.firebaseData });
     };
+
+
+    init();
 }]);
