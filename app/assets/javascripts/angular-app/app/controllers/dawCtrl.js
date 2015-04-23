@@ -216,7 +216,7 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', funct
 
         }).error(function(data,status,headers,config){
 
-            alert("error. could not fetch projects");
+            alert("error. could not fetch projectssss");
         })
 
     }

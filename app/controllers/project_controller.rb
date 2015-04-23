@@ -11,6 +11,7 @@ class ProjectController < ApplicationController
     project = Project.all
 
     render :json => {'success'=> true, 'projects' => project}
+
   end
   def show
     project = Project.find_by!(id: (params[:id] ) )
