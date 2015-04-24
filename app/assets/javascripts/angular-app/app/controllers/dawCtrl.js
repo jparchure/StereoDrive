@@ -10,7 +10,7 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', funct
     function init(){
         getProject(1);
         initializeAudioTools();
-        getAudioAndClips();
+        //getAudioAndClips();
         //getTrack();
         listenForFileDrop();
         initDragMarker();
@@ -210,6 +210,12 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', funct
                 //var track = {number:0, name:"", key: 0, clips: []};
                 data.tracks[i].clips = [];
                 $scope.tracks.push(data.tracks[i]);
+            }
+            for (var i = 0; i < data.audio.length; i++) {
+                $scope.audioFiles.push(loadSoundAndClips(data.audio[i]));
+            }
+            if (data.length == 0) {
+                hideSpinner();
             }
             console.log(data);
 
