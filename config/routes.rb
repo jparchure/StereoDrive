@@ -1,13 +1,9 @@
 Team7::Application.routes.draw do
-<<<<<<< HEAD
-  get 'bandhome_pages/bandhomepage'
 
-  root :to => "app#index"
-=======
   resources :app
   resources :users
   resources :artists
->>>>>>> 0a0d590a392c10596b844f3a019f25e1f8c9e43c
+ 
   post '/audio' => 'audio#create'
   get '/audio' => 'audio#index'
   match 'auth/:provider/callback', to: 'sessions#create', via: :get
