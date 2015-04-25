@@ -21,7 +21,7 @@ app.controller("artistCtrl", ['$scope', '$routeParams','$cookies','$http',functi
 				$scope.traversedartists = [];
 				console.log(allartists);
 				for(var i = 0; i<allartists.length; i++){
-					if (allartists[0].name.toLowerCase().indexOf($routeParams['substring'].toLowerCase()) >= 0) {
+					if (allartists[i].name.toLowerCase().indexOf($routeParams['substring'].toLowerCase()) >= 0) {
 						$scope.traversedartists.push(allartists[i]);
 					};
 				}
