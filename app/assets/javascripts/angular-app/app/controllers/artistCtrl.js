@@ -5,7 +5,7 @@
 	
 app.controller("artistCtrl", ['$scope', '$routeParams','$cookies','$http', '$timeout', '$location', function($scope, $routeParams,$cookies, $http, $timeout, $location){
 		
-		$scope.currentuser_id= $cookies['id'];
+		currentuser_id= $cookies['id'];
 		//var memberList =[];
 		$scope.showEditButton=false;
 		//$scope.memberlist=[];
@@ -68,7 +68,7 @@ app.controller("artistCtrl", ['$scope', '$routeParams','$cookies','$http', '$tim
         };
         //Deleting a band
         var deleteArtist = function(event){
-                if(event.currentTarget.id === $scope.currentuser_id ){
+                if(event.currentTarget.id === currentuser_id ){
         			alert("You can not delete yourself from the solo band");
         		}
         		else if(confirm('Are you sure you want to delete this?')){
@@ -84,7 +84,7 @@ app.controller("artistCtrl", ['$scope', '$routeParams','$cookies','$http', '$tim
 		
 		var showEditButton=function(){
 			for(i=0;i<$scope.memberlist.length;i++){
-				if($scope.memberlist[i].id == $scope.currentuser_id){
+				if($scope.memberlist[i].id == currentuser_id){
 					$scope.showEditButton=true;
 				}
 			}
