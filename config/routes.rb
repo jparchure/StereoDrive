@@ -1,7 +1,9 @@
 Team7::Application.routes.draw do
+
   resources :app
   resources :users
   resources :artists
+ 
   post '/audio' => 'audio#create'
   get '/audio' => 'audio#index'
   post '/track' => 'track#create'
