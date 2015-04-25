@@ -15,6 +15,20 @@ app.controller("artistCtrl", ['$scope', '$routeParams','$cookies','$http',functi
 		});
 		};
 
+		$scope.searchArtist = function(){
+			$http.get('/search/' + $routeParams['substring']).success(function(data){
+				var allartists = data;
+				$scope.traversedartists = [];
+				console.log(allartists);
+				for(var i = 0; i<allartists.length; i++){
+					if (allartists[0].name.toLowerCase().indexOf($routeParams['substring'].toLowerCase()) >= 0) {
+						$scope.traversedartists.push(allartists[i]);
+					};
+				}
+				$scope.searchedartists = $scope.traversedartists;
+			});
+		};
+
 		$scope.getMemberdata = function(){
 		$http.get('/artist/member/' + $routeParams['id']).success(function(data){
 			$scope.memberlist=data;
@@ -23,6 +37,7 @@ app.controller("artistCtrl", ['$scope', '$routeParams','$cookies','$http',functi
 		
 		$scope.getArtistdata();
 		$scope.getMemberdata();
+		$scope.searchArtist();
 
 		$scope.saveUser= function(){
             route='/artists/' + $routeParams['id'];

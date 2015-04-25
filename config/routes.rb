@@ -19,6 +19,7 @@ Team7::Application.routes.draw do
   post '/project' => 'project#create'
   get '/project' => 'project#index'
   match 'artist/member/:id', to: 'artists#members', via: :get
+  match 'search/:substring', to: 'artists#listall', via: :get 
 
   root :to => "app#index"
   # The priority is based upon order of creation:

@@ -1,6 +1,11 @@
 # This file is app/controllers/artists_controller.rb
 class ArtistsController < ApplicationController
   skip_before_action :verify_authenticity_token
+
+  def listall    
+    render json: Artist.all
+  end
+
   def list 
     id = params[:id]
     if(!@current_user.nil?)
