@@ -1,0 +1,72 @@
+<div ng-controller="artistCtrl" ng-init="getData()">
+<div class="container">
+              
+        <!--2 divs still open-->
+      <div class="row">
+        <form editable-form name="editableForm" onaftersave="saveUser()">
+
+        <div class="roles col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xs-offset-0 col-sm-offset-0 col-md-offset-0 col-lg-offset-0 toppad" >
+   
+        
+          <div class="panel panel-info">
+            <div class="panel-heading">
+              <h3 class="panel-title">{{searchedartists.length}} Results Found</h3>
+            </div>
+
+            <div class="panel-body">
+              <div class="row">
+
+                <ul style="list-style: none">
+                  <li ng-repeat = "artist in searchedartists" >
+                   <div class="panel panel-info">
+            <div class="panel-heading">
+              <h3 class="panel-title">{{artist.name}}</h3>
+            </div>
+
+            <div class="panel-body">
+                <!--Repeat the div below for multiple bands-->
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xs-offset-0 col-sm-offset-0 col-md-offset-0 col-lg-offset-0">
+                <div class="dis-image col-md-2 col-lg-2 " align="center"> 
+                  <img alt="User Pic" src={{artist.image}} class="img-thumbnail"> 
+                </div>
+                <div class="col-md-4 col-lg-4" style="color: #7ec0ee"> 
+                  <h4>Page: {{artist.page}}</h4>
+                  <h4>Location: {{artist.location}}</h4>
+                  <h4>Genre: {{artist.genre}}</h4>
+                  <h4>Tagline: {{artist.tagline}}</h4>
+                </div>
+
+                </div>  
+              
+            </div>
+                 <div class="panel-footer">
+                        <a data-original-title="Broadcast Message" data-toggle="tooltip" type="button" class="btn btn-sm btn-primary"><i class="glyphicon glyphicon-plus"></i></a>
+                       
+                    </div>
+            
+          </div>
+              </li>
+                </ul>
+         
+                
+              </div>
+            </div>
+             
+            
+          </div>
+        </div>
+        </form>
+            <!--Code for artist membrs-->
+               
+                 
+            
+          </div>
+        </div>
+      </div>
+
+    </div>
+</div>
+
+
+           
+            
