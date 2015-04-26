@@ -7,7 +7,7 @@ class SessionsController < ApplicationController
     session[:token] = user.session
     cookies[:id] = user.id
     if(user.artists.count == 0)
-        hash = {:name => user.name+"'s Solo Band", :image=>user.image, :page=>user.page, :location=>user.location}
+        hash = {:name => user.name+"'s Solo Band", :image=>user.image, :page=>user.page, :location=>user.location, :is_solo => true}
     	user.artists << Artist.create!(hash)
     end
     redirect_to app_path(user.id)

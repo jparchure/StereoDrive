@@ -11,17 +11,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150409210148) do
+ActiveRecord::Schema.define(version: 20150426190956) do
 
   create_table "artists", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
     t.string   "name"
     t.string   "image"
     t.string   "page"
     t.string   "location"
     t.string   "genre"
     t.string   "tagline"
+    t.boolean  "is_solo",    default: false
   end
 
   create_table "artists_users", id: false, force: :cascade do |t|
@@ -57,7 +58,6 @@ ActiveRecord::Schema.define(version: 20150409210148) do
   end
 
   create_table "tracks", force: :cascade do |t|
-    t.integer  "project_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer  "project_id"
