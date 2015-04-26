@@ -12,6 +12,7 @@ Team7::Application.routes.draw do
   post '/clips' => 'clips#create'
   post '/clips/:id' => 'clips#update'
   post '/artists/add' => 'artists#add_member'
+  post '/artists/remove' => 'artists#remove_member'
   get 'audio/:key/delete' => 'audio#delete'
   match 'auth/:provider/callback', to: 'sessions#create', via: :get
   match '/logout', to: 'sessions#destroy', via: :delete
