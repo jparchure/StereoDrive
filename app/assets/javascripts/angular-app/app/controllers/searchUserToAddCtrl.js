@@ -17,7 +17,8 @@ app.controller("searchUserToAddCtrl", ['$scope', '$routeParams', '$http', '$cook
                console.log(err);
              });
             $scope.cancel(form);
-            //$scope.$parent.getArtistData();
+
+            $scope.$parent.getMemberdata();
         }
         
         //console.log("THE EXISTING SCOPE IS: " + $scope.userData);

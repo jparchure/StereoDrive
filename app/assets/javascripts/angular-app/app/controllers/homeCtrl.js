@@ -72,7 +72,7 @@ app.controller("homeCtrl", ['$scope', '$routeParams', '$http', '$cookies', '$loc
         		deleteBand(event);
         	}
         	else{
-        		$location.url("/artists/" + event.currentTarget.id;);
+        		$location.url("/artist/" + event.currentTarget.id);
         	}
         };
         //Deleting a band
@@ -86,7 +86,8 @@ app.controller("homeCtrl", ['$scope', '$routeParams', '$http', '$cookies', '$loc
                 
         		});
                 $scope.getArtistData();
-        	}
+        	   }
+
 
         };
 
@@ -98,6 +99,7 @@ app.controller("homeCtrl", ['$scope', '$routeParams', '$http', '$cookies', '$loc
         
         $scope.toggleModal = function(){
         $scope.showModal = !$scope.showModal;
+        $scope.artistEdit=false;
         };
 
 
