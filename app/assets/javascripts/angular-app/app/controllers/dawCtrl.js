@@ -59,9 +59,7 @@ app.controller("dawCtrl", ['$scope','$routeParams','$upload','$http', 'usSpinner
             for (var i = 0; i < data.length; i++) {
                 $scope.audioFiles.push(loadSoundAndClips(data[i]));
             }
-            if (data.length == 0) {
                 hideSpinner();
-            }
         }).error(function () {
             alert("could not retrieve audio");
         });
@@ -80,6 +78,7 @@ app.controller("dawCtrl", ['$scope','$routeParams','$upload','$http', 'usSpinner
     //  Utility Functions
     /////////////////////////////////////////////////////////
     function hideSpinner() {
+	console.log("spinner hidden");
         usSpinnerService.stop('spinner');
     }
 
@@ -214,12 +213,7 @@ app.controller("dawCtrl", ['$scope','$routeParams','$upload','$http', 'usSpinner
             for (var i = 0; i < data.audio.length; i++) {
                 $scope.audioFiles.push(loadSoundAndClips(data.audio[i]));
             }
-            if (data.length == 0) {
-                hideSpinner();
-            }
-            console.log(data);
-
-
+	hideSpinner();
         }).error(function(data,status,headers,config){
 
             alert("error. could not fetch projectssss");
