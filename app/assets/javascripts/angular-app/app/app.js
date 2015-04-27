@@ -24,8 +24,15 @@ app.config(['$routeProvider',
             templateUrl: 'artist.html',
             controller: 'artistCtrl'
         })
-        .otherwise({
 
+        .when('/search/:substring?',{
+            title: 'search',
+            templateUrl: 'search.html',
+            controller: 'artistCtrl'
+        })
+
+        .otherwise({
+            
             redirectTo: '/home'
         })
     }

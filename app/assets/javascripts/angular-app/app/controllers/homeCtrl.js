@@ -100,6 +100,23 @@ app.controller("homeCtrl", ['$scope', '$routeParams', '$http', '$cookies', '$loc
         $scope.showModal = !$scope.showModal;
         };
 
+
+//showing all the projects
+    $scope.projects = [];
+    getAllProjects();
+    function getAllProjects() {
+        $http.get('/project').success(function (data) {
+
+            for (var i = 0; i < data.projects.length; i++) {
+                $scope.projects.push(data.projects[i])
+            }
+            console.log($scope.projects)
+
+        }).error(function (data, status, headers, config) {
+
+            alert("error. could not fetch projects");
+        })
+    }
 		
 	
 }]);

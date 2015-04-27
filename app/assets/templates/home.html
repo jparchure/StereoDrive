@@ -11,22 +11,11 @@
                        Projects
                     </a>
                 </li>
+                  <div ng-repeat="project in projects">
                 <li>
-                    <a href="#">Project 1</a>
+                    <a href="#">Project {{project.id}}</a>
                 </li>
-                <li>
-                    <a href="#">Project 2</a>
-                </li>
-                <li>
-                    <a href="#">Project 3</a>
-                </li>
-                <li>
-                    <a href="#">Project 4</a>
-                </li>
-                <li>
-                    <a href="#">Project 5</a>
-                </li>
-              
+                </div>
             </ul>
         </div>
       
@@ -39,7 +28,7 @@
    
           <div class="panel panel-info">
             <div class="panel-heading">
-              <h3 class="panel-title"><a href="{currentuser.page}}" editable-text="currentuser.name" e-required>{{currentuser.name}}</a></h3>
+              <h3 class="panel-title"><a href="{{currentuser.page}}" editable-text="currentuser.name" e-required>{{currentuser.name}}</a></h3>
             </div>
 
             <div class="panel-body">

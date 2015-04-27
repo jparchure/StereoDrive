@@ -8,9 +8,10 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', funct
 
     init();
     function init(){
+        getProject(1);
         initializeAudioTools();
-        getAudioAndClips();
-        getTrack();
+        //getAudioAndClips();
+        //getTrack();
         listenForFileDrop();
         initDragMarker();
     }
@@ -193,6 +194,38 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', funct
     // Get the right width/time vals and ratio
     };
 
+    $scope.createProject = function(){
+        $http.post('/project' ).success(function(data){//data is returned from track_controller.rb#create
+
+            console.log(data);
+        }).error(function(data, status, headers, config){
+            console.log(status);
+            alert("could not create project");
+        });
+    }
+    function getProject(id){
+        $http.get('/project/'+id).success(function(data){
+
+            for (var i = 0; i < data.tracks.length; i++) {
+                //var track = {number:0, name:"", key: 0, clips: []};
+                data.tracks[i].clips = [];
+                $scope.tracks.push(data.tracks[i]);
+            }
+            for (var i = 0; i < data.audio.length; i++) {
+                $scope.audioFiles.push(loadSoundAndClips(data.audio[i]));
+            }
+            if (data.length == 0) {
+                hideSpinner();
+            }
+            console.log(data);
+
+
+        }).error(function(data,status,headers,config){
+
+            alert("error. could not fetch projectssss");
+        })
+
+    }
     ///////////////////////////////////////////
     // Audio Functions
     //////////////////////////////////////////
