@@ -42,7 +42,6 @@ app.controller("artistCtrl", ['$scope', '$routeParams','$cookies','$http', '$tim
 		
 		$scope.getArtistdata();
 		$scope.getMemberdata();
-
 		$scope.searchArtist();
 
 		$scope.saveUser= function(){
