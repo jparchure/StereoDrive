@@ -1,5 +1,5 @@
 
-app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', function($scope, $upload, $http, usSpinnerService) {
+app.controller("dawCtrl", ['$scope','$routeParams','$upload','$http', 'usSpinnerService', function($scope, $routeParams, $upload, $http, usSpinnerService) {
 
     $scope.audioFiles = [];
     $scope.zoomCoefficient = 100;
@@ -8,7 +8,7 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', funct
 
     init();
     function init(){
-        getProject(1);
+        getProject($routeParams['id']);
         initializeAudioTools();
         //getAudioAndClips();
         //getTrack();
