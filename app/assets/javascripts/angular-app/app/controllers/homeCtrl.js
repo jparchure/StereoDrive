@@ -66,13 +66,13 @@ app.controller("homeCtrl", ['$scope', '$routeParams', '$http', '$cookies', '$loc
 
 
         $scope.artistAction= function(event){
-        	href="/artist/" + event.currentTarget.id;
+        	href="/artists/" + event.currentTarget.id;
         	if($scope.artistEdit){
 
         		deleteBand(event);
         	}
         	else{
-        		$location.url(href);
+        		$location.url("/artist/" + event.currentTarget.id);
         	}
         };
         //Deleting a band
@@ -86,7 +86,7 @@ app.controller("homeCtrl", ['$scope', '$routeParams', '$http', '$cookies', '$loc
                 
         		});
                 $scope.getArtistData();
-        	}
+        	   }
 
         };
 
