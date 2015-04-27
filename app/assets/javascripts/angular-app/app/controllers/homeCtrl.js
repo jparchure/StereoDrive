@@ -72,7 +72,6 @@ app.controller("homeCtrl", ['$scope', '$routeParams', '$http', '$cookies', '$loc
         		deleteBand(event);
         	}
         	else{
-                console.log()
         		$location.url("/artist/" + event.currentTarget.id);
         	}
         };
