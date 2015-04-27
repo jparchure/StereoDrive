@@ -53,6 +53,21 @@ class ArtistsController < ApplicationController
 	redirect_to root_path
      end 
   end
+  def remove_member
+     if(!@current_user.nil?)
+	user = User.find(params[:user_id])
+     	band = @current_user.artists.find(params[:artist_id])
+	if(!band.nil? && !user.nil?)
+		band.users.delete(user)
+	else
+		flash[:warning] = "You are not a part of this Artist"
+	end
+	render :nothing => true
+     else
+	flash[:warning] = "You must be logged in to do that!"
+	redirect_to root_path
+     end 
+  end
   def update
     puts(params)
     @artist = Artist.find(params[:id])
