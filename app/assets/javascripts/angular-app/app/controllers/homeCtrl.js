@@ -72,7 +72,7 @@ app.controller("homeCtrl", ['$scope', '$routeParams', '$http', '$cookies', '$loc
         		deleteBand(event);
         	}
         	else{
-        		$location.url(href);
+        		$location.url("/artists/" + event.currentTarget.id;);
         	}
         };
         //Deleting a band
