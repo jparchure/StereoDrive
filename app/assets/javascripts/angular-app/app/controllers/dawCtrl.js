@@ -338,9 +338,10 @@ app.controller("dawCtrl", ['$scope','$routeParams','$upload','$http', 'usSpinner
             number: $scope.tracks.length+1,
             name: 'track'+($scope.tracks.length+1), //needs track number in there too
             key: 0,
-            clips: []
+            clips: [],
+	    project: $routeParams['id']
         };
-        $http.post('/track', {track: track}).success(function(data){//data is returned from track_controller.rb#create
+        $http.post('/track', track ).success(function(data){//data is returned from track_controller.rb#create
 
             track.key = data.key;
             track.name = 'track'+(track.key);

@@ -1,6 +1,8 @@
 class ProjectController < ApplicationController
   def create
-    createdProject = Project.create()
+    artist = Artist.find(1) 
+    puts(artist)
+    createdProject = artist.projects.new()
 
     render :json => { 'success' => true, 'key' =>createdProject.id}
 
