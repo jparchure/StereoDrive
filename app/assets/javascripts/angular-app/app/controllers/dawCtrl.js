@@ -8,6 +8,7 @@ app.controller("dawCtrl", ['$scope','$routeParams','$upload','$http', 'usSpinner
 
     init();
     function init(){
+
         getProject($routeParams['id']);
         initializeAudioTools();
         //getAudioAndClips();
@@ -339,9 +340,10 @@ app.controller("dawCtrl", ['$scope','$routeParams','$upload','$http', 'usSpinner
             name: 'track'+($scope.tracks.length+1), //needs track number in there too
             key: 0,
             clips: [],
-	    project: $routeParams['id']
+	        project: $routeParams['id']
         };
         $http.post('/track', track ).success(function(data){//data is returned from track_controller.rb#create
+
 
             track.key = data.key;
             track.name = 'track'+(track.key);

@@ -2,7 +2,7 @@ class TrackController < ApplicationController
 
   def create
 
-    project = Project.find_by id: 1
+    project = Project.find_by id: params[:project]
 
     createdTrack = project.tracks.create!
 
