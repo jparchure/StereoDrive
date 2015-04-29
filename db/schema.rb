@@ -57,10 +57,10 @@ ActiveRecord::Schema.define(version: 20150427224957) do
   create_table "projects", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer  "artists_id"
+    t.integer  "artist_id"
   end
 
-  add_index "projects", ["artists_id"], name: "index_projects_on_artists_id"
+  add_index "projects", ["artist_id"], name: "index_projects_on_artist_id"
 
   create_table "tracks", force: :cascade do |t|
     t.integer  "project_id"
