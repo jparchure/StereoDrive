@@ -15,6 +15,16 @@ app.controller("artistCtrl", ['$scope', '$routeParams','$cookies','$http', '$tim
 			//console.log($scope.artist.genre);
 		});
 		};
+	    $scope.createProject = function(){
+		$http.post('/project' ).success(function(data){//data is returned from track_controller.rb#create
+
+		    console.log(data);
+		}).error(function(data, status, headers, config){
+		    console.log(status);
+		    alert("could not create project");
+		});
+		getProjects();
+	    };
 
 		$scope.searchArtist = function(){
 			$http.get('/search/' + $routeParams['substring']).success(function(data){
@@ -29,11 +39,8 @@ app.controller("artistCtrl", ['$scope', '$routeParams','$cookies','$http', '$tim
 				$scope.searchedartists = $scope.traversedartists;
 			});
 		};
-	    $scope.projects = [];
-	    if($routeParams['id'] != null){
-	    	getProjects();
-	    }
-	    function getProjects() {
+		var getProjects = function () {
+			$scope.projects = [];
 		$http.get('/project/list/' + $routeParams['id']).success(function (data) {
 
 		    for (var i = 0; i < data.projects.length; i++) {
@@ -45,8 +52,14 @@ app.controller("artistCtrl", ['$scope', '$routeParams','$cookies','$http', '$tim
 
 		    alert("error. could not fetch projects");
 		})
-	    }
+	    };
 
+	    
+	    if($routeParams['id'] != null){
+	    	getProjects();
+	    }
+	    
+	  
 		$scope.getMemberdata = function(){
 		$http.get('/artist/member/' + $routeParams['id']).success(function(data){
 			console.log("Befor: ", $scope.showEditButton);
