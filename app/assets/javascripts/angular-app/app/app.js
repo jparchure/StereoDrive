@@ -14,7 +14,7 @@ app.config(['$routeProvider',
             templateUrl: 'home.html',
             controller: 'homeCtrl'
         })
-        .when('/daw', {
+        .when('/daw/:id?', {
             title: 'daw',
             templateUrl: 'daw.html',
             controller: 'dawCtrl'
@@ -24,8 +24,15 @@ app.config(['$routeProvider',
             templateUrl: 'artist.html',
             controller: 'artistCtrl'
         })
-        .otherwise({
 
+        .when('/search/:substring?',{
+            title: 'search',
+            templateUrl: 'search.html',
+            controller: 'artistCtrl'
+        })
+
+        .otherwise({
+            
             redirectTo: '/home'
         })
     }

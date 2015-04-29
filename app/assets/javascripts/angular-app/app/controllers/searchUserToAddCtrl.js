@@ -1,6 +1,6 @@
 app.controller("searchUserToAddCtrl", ['$scope', '$routeParams', '$http', '$cookies', function($scope,$routeParams, $http, $cookies){
 
-
+		//$('#textdiv').animate({scrollTop: $('#textdiv').prop("scrollHeight")}, 500);
 		$scope.userToBeAdded = {artist_id: $routeParams['id']};
 		$scope.lookUpUser= function(form){
 			 if(form.$pristine || form.$invalid ){
@@ -37,5 +37,5 @@ app.controller("searchUserToAddCtrl", ['$scope', '$routeParams', '$http', '$cook
 		$scope.reset(form);
 		$scope.$parent.toggleAddUsers();
 	};
-
+	
 }])

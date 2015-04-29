@@ -1,6 +1,11 @@
 # This file is app/controllers/artists_controller.rb
 class ArtistsController < ApplicationController
   skip_before_action :verify_authenticity_token
+
+  def listall    
+    render json: Artist.all
+  end
+
   def list 
     id = params[:id]
     if(!@current_user.nil?)
@@ -39,6 +44,21 @@ class ArtistsController < ApplicationController
      	band = @current_user.artists.find(params[:artist_id])
 	if(!band.nil?)
 		band.users << member
+	else
+		flash[:warning] = "You are not a part of this Artist"
+	end
+	render :nothing => true
+     else
+	flash[:warning] = "You must be logged in to do that!"
+	redirect_to root_path
+     end 
+  end
+  def remove_member
+     if(!@current_user.nil?)
+	user = User.find(params[:user_id])
+     	band = @current_user.artists.find(params[:artist_id])
+	if(!band.nil? && !user.nil?)
+		band.users.delete(user)
 	else
 		flash[:warning] = "You are not a part of this Artist"
 	end

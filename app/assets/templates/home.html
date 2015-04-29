@@ -13,9 +13,12 @@
                 </li>
                   <div ng-repeat="project in projects">
                 <li>
-                    <a href="#">Project {{project.id}}</a>
+                    <a href="#/daw/{{project.id}}"">Project {{project.id}}</a>
                 </li>
                 </div>
+		<li>
+		    <button class="btn btn-default" type="button" ng-click="createProject()" >createProject</button>
+		</li>	
             </ul>
         </div>
       
@@ -115,7 +118,7 @@
                  <div class="panel-footer">
                  <div class="buttons" ng-show="showEditButton">
 
-<!--MODAL-->
+<!--CREATE USER DIALOG-->
                      
     
 

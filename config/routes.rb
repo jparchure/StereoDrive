@@ -1,7 +1,9 @@
 Team7::Application.routes.draw do
+
   resources :app
   resources :users
   resources :artists
+ 
   post '/audio' => 'audio#create'
   get '/audio' => 'audio#index'
   post '/track' => 'track#create'
@@ -10,6 +12,7 @@ Team7::Application.routes.draw do
   post '/clips' => 'clips#create'
   post '/clips/:id' => 'clips#update'
   post '/artists/add' => 'artists#add_member'
+  post '/artists/remove' => 'artists#remove_member'
   get 'audio/:key/delete' => 'audio#delete'
   match 'auth/:provider/callback', to: 'sessions#create', via: :get
   match '/logout', to: 'sessions#destroy', via: :delete
@@ -19,6 +22,7 @@ Team7::Application.routes.draw do
   post '/project' => 'project#create'
   get '/project' => 'project#index'
   match 'artist/member/:id', to: 'artists#members', via: :get
+  match 'search/:substring', to: 'artists#listall', via: :get 
 
   root :to => "app#index"
   # The priority is based upon order of creation:
