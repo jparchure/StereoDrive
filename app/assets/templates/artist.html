@@ -6,12 +6,7 @@
 
                 <li class="sidebar-brand">
                     <li>                   
-    <form class="form-horizontal" style="color: white">
-      search Bands:<br> 
-      <li><input style="color: black" class="search" type="text" name="searchbands" ng-model="searchBand.text">
-      <a href="#/search/{{searchBand.text}}">Search</a>      
-          </li>
-    </form>
+    
 
                     <a href="#">
                        Projects
@@ -31,6 +26,22 @@
                 </li>
                 <li>
                     <a href="#">Project 5</a>
+                </li>
+
+                <li>
+      
+      <div style="height: 80%">
+      </div>
+      <form class="form-horizontal">
+      
+     
+        <input style="margin: 5%; padding: 2%; width: 80%; height:25px; color: black" placeholder="Search Bands" class="form-control" type="text" name="searchbands" ng-model="searchBand.text">
+      <a style="width: 4px" class="glyphicon glyphicon-search" href="#/search/{{searchBand.text}}"></a>      
+      
+
+      </form>
+      
+      
                 </li>
               
             </ul>
