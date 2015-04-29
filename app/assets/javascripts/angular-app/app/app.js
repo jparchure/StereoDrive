@@ -14,7 +14,7 @@ app.config(['$routeProvider',
             templateUrl: 'home.html',
             controller: 'homeCtrl'
         })
-        .when('/daw', {
+        .when('/daw/:id?', {
             title: 'daw',
             templateUrl: 'daw.html',
             controller: 'dawCtrl'

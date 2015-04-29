@@ -1,5 +1,5 @@
 
-app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', function($scope, $upload, $http, usSpinnerService) {
+app.controller("dawCtrl", ['$scope','$routeParams','$upload','$http', 'usSpinnerService', function($scope, $routeParams, $upload, $http, usSpinnerService) {
 
     $scope.audioFiles = [];
     $scope.zoomCoefficient = 100;
@@ -8,7 +8,8 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', funct
 
     init();
     function init(){
-        getProject(1);
+
+        getProject($routeParams['id']);
         initializeAudioTools();
         //getAudioAndClips();
         //getTrack();
@@ -59,9 +60,7 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', funct
             for (var i = 0; i < data.length; i++) {
                 $scope.audioFiles.push(loadSoundAndClips(data[i]));
             }
-            if (data.length == 0) {
                 hideSpinner();
-            }
         }).error(function () {
             alert("could not retrieve audio");
         });
@@ -80,6 +79,7 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', funct
     //  Utility Functions
     /////////////////////////////////////////////////////////
     function hideSpinner() {
+	console.log("spinner hidden");
         usSpinnerService.stop('spinner');
     }
 
@@ -214,12 +214,7 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', funct
             for (var i = 0; i < data.audio.length; i++) {
                 $scope.audioFiles.push(loadSoundAndClips(data.audio[i]));
             }
-            if (data.length == 0) {
-                hideSpinner();
-            }
-            console.log(data);
-
-
+	hideSpinner();
         }).error(function(data,status,headers,config){
 
             alert("error. could not fetch projectssss");
@@ -344,9 +339,11 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', funct
             number: $scope.tracks.length+1,
             name: 'track'+($scope.tracks.length+1), //needs track number in there too
             key: 0,
-            clips: []
+            clips: [],
+	        project: $routeParams['id']
         };
-        $http.post('/track', {track: track}).success(function(data){//data is returned from track_controller.rb#create
+        $http.post('/track', track ).success(function(data){//data is returned from track_controller.rb#create
+
 
             track.key = data.key;
             track.name = 'track'+(track.key);

@@ -29,6 +29,23 @@ app.controller("artistCtrl", ['$scope', '$routeParams','$cookies','$http', '$tim
 				$scope.searchedartists = $scope.traversedartists;
 			});
 		};
+	    $scope.projects = [];
+	    if($routeParams['id'] != null){
+	    	getProjects();
+	    }
+	    function getProjects() {
+		$http.get('/project/list/' + $routeParams['id']).success(function (data) {
+
+		    for (var i = 0; i < data.projects.length; i++) {
+			$scope.projects.push(data.projects[i])
+		    }
+		    console.log($scope.projects)
+
+		}).error(function (data, status, headers, config) {
+
+		    alert("error. could not fetch projects");
+		})
+	    }
 
 		$scope.getMemberdata = function(){
 		$http.get('/artist/member/' + $routeParams['id']).success(function(data){
@@ -40,7 +57,6 @@ app.controller("artistCtrl", ['$scope', '$routeParams','$cookies','$http', '$tim
 		
 		$scope.getArtistdata();
 		$scope.getMemberdata();
-
 		$scope.searchArtist();
 
 		$scope.saveUser= function(){

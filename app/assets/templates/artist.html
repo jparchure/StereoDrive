@@ -17,22 +17,11 @@
                        Projects
                     </a>
                 </li>
+                  <div ng-repeat="project in projects">
                 <li>
-                    <a href="#">Project 1</a>
+                    <a href="#/daw/{{project.id}}"">Project {{project.id}}</a>
                 </li>
-                <li>
-                    <a href="#">Project 2</a>
-                </li>
-                <li>
-                    <a href="#">Project 3</a>
-                </li>
-                <li>
-                    <a href="#">Project 4</a>
-                </li>
-                <li>
-                    <a href="#">Project 5</a>
-                </li>
-              
+                </div>
             </ul>
                
 
