@@ -30,7 +30,9 @@ app.controller("artistCtrl", ['$scope', '$routeParams','$cookies','$http', '$tim
 			});
 		};
 	    $scope.projects = [];
-	    getProjects();
+	    if($routeParams['id'] != null){
+	    	getProjects();
+	    }
 	    function getProjects() {
 		$http.get('/project/list/' + $routeParams['id']).success(function (data) {
 
