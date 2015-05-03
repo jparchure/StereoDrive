@@ -95,5 +95,6 @@ it('deletes user correctly if delete mode is on',function(){
     httpBackend.expectDELETE("/artist/2").respond({});
 });
 
+
 });
 

@@ -6,14 +6,8 @@ describe("Create Artist Controller Testing Examples", function() {
 
  beforeEach(inject(function($controller, $injector, $rootScope) {
         routeParams={id: "1"}
-        //scope= $injector.get('$rootScope').$new();
-
-        //mainScope = parentScope.$new();
-        //homeCtrl = $controller('homeCtrl', {$scope: parentScope});
-        //scope = $injector.get('parentScope').$new();
         httpBackend = $injector.get('$httpBackend');
-        //console.log("HEllllo", $httpBackend);
-        //console.log(httpBackend);
+
         parent = $rootScope;
         pCtrl =  $injector.get('$controller')('homeCtrl', {
             $scope: parent,

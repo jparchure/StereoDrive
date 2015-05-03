@@ -7,8 +7,6 @@ app.controller("searchUserToAddCtrl", ['$scope', '$routeParams', '$http', '$cook
 			 	alert("You can not submit incomplete form");
 			 	return false;
 			 }
-			 console.log($scope.userToBeAdded);
-
             
             route='/artists/add';
 

@@ -3,7 +3,7 @@
  */
 
 	
-app.controller("artistCtrl", ['$scope', '$routeParams','$cookies','$http', '$timeout', '$location', function($scope, $routeParams,$cookies, $http, $timeout, $location){
+app.controller("artistCtrl", ['$scope', '$routeParams','$cookies','$http', '$location', function($scope, $routeParams,$cookies, $http, $location){
 		
 		currentuser_id= $cookies['id'];
 		//var memberList =[];
