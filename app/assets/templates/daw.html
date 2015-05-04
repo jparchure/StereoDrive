@@ -6,7 +6,7 @@
     <br/>
     <div class="row-fluid">
         <div class="col-md-3">
-            <div class="panel panel-success">
+            <div class="panel panel-info">
                 <div class="panel-heading">
                     Audio Files
                 </div>
@@ -42,31 +42,25 @@
                             <button class="btn btn-default" ng-click="refreshAudio()">Refresh Audio</button>
                         </div>
                     </div>
-                    <div>
+                    <div id="playlist">
                         <div class="row-fluid">
-                            <div class="col-md-offset-1 col-md-11" id="drag-marker-container">
+                            <div id="drag-marker-container">
                                 <div id="drag-marker"/>
                             </div>
                         </div>
-                        <div ng-repeat="track in tracks" class="row-fluid panel-success">
-                            <div class="col-md-1">
+                        <div ng-repeat="track in tracks" class="row-fluid panel-success track-container">
+                            <div class="track-opts">
                                 Track {{ track.key }}
                                 <br/>
                                 <button class="btn btn-danger" type="button" ng-click="removeTrack(track)">Delete</button>
                             </div>
-                            <div ng-drop="true" class="track col-md-11" ng-drop-success="onSoundDrop($data,$event,track)">
+                            <div ng-drop="true" class="track" ng-drop-success="onSoundDrop($data,$event,track)">
                                 <div class="marker"/>
                                 <canvas ng-repeat="clip in track.clips" id="{{clip.clip_id}}" class="panel clip" width="{{zoomCoefficient * clip.length}}" height="71"></canvas>
                             </div>
 
                         </div>
                         <button class="btn btn-default" type="button" ng-click="addTrack()">Add Track</button>
-                        <input class="form-control" type="text" ng-model="firebaseData"/>
-                        <button ng-click="setNewFirebaseData()">set</button>
-                        <div ng-repeat="message in messages">
-                            {{message.from+": "}}
-                            {{message.body}}
-                        </div>
                     </div>
                 </div>
         </div>

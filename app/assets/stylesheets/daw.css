@@ -6,6 +6,8 @@ body{
 #drag-marker-container{
     position: relative;
     height: 15px;
+    width: 30000px;
+    left: 100px;
 }
 
 #drag-marker {
@@ -16,6 +18,14 @@ body{
     left: 0;
 }
 
+#playlist {
+    overflow-x: scroll;
+}
+
+.track-container{
+    width: 30100px;
+}
+
 .marker{
     height: 100%;
     background: #888888;
@@ -24,14 +34,22 @@ body{
     z-index: 9999;
     left: 0;
 }
+.track-opts {
+    height: 75px;
+    width: 100px;
+    display: inline-block;
+    float: left;
+}
 
 .track {
-    background: #7FFF00;
+    display: inline;
+    background: #66FFFF;
     float: left;
     height: 75px;
     text-align: left;
     position: relative;
     border: 2px solid black;
+    width: 30000px;
 }
 
 .clip {

@@ -26,8 +26,6 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', '$fir
     var audioState;
 
     function setUpFirebase(){
-        var ref = new Firebase("https://gxguou43ikv.firebaseio-demo.com/");
-        $scope.messages = $firebaseArray(ref);
         ref2  = new Firebase("https://flickering-fire-6049.firebaseio.com/1/");
         $scope.firebaseObj = $firebaseObject(ref2);
 
@@ -663,10 +661,6 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', '$fir
     /////////////////////////////////////////////
     // Firebase Functions
     /////////////////////////////////////////////
-    $scope.setNewFirebaseData = function(){
-        $scope.messages.$add({ from: "me", body: $scope.firebaseData });
-    };
-
 
     init();
 }]);
