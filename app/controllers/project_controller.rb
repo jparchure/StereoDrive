@@ -2,8 +2,8 @@ class ProjectController < ApplicationController
   def create
     @artist = Artist.find(params[:id])
     if(!@artist.nil?) 
-    	createdProject = @artist.projects.create
-    	render :json => { 'success' => true, 'key' =>createdProject.id}
+    	createdProject = @artist.projects.create({:name=>params[:name]})
+    	render :json => { 'success' => true, 'key' =>createdProject.name}
     end
   end
 

@@ -16,14 +16,17 @@ app.controller("artistCtrl", ['$scope', '$routeParams','$cookies','$http', '$tim
 		});
 		};
 	    $scope.createProject = function(){
-		$http.post('/project',{id: $routeParams['id']}).success(function(data){//data is returned from track_controller.rb#create
+		name = prompt("Name your project!");
+		if(name != null){
+			$http.post('/project',{id: $routeParams['id'], name: name}).success(function(data){//data is returned from track_controller.rb#create
 
-		    console.log(data);
-		}).error(function(data, status, headers, config){
-		    console.log(status);
-		    alert("could not create project");
-		});
-		getProjects();
+			    console.log(data);
+			}).error(function(data, status, headers, config){
+			    console.log(status);
+			    alert("could not create project");
+			});
+			getProjects();
+		}
 	    };
 
 		$scope.searchArtist = function(){
