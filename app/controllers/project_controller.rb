@@ -8,7 +8,6 @@ class ProjectController < ApplicationController
   end
 
   def index
-
     project = @current_user.projects
 
     render :json => {'success'=> true, 'projects' => project}
@@ -42,11 +41,10 @@ class ProjectController < ApplicationController
     # This method will return signed URLs to each sound in the project
     allAudio  = Array.new
     # Get info from db
-    audio = Audio.all
 
     #get signed urls for each audio file
-    audio.each{ |a|
-      project_name = 'ExampleProject'
+    project.audios.each{ |a|
+      project_name = project.name
       sound = Hash.new
       sound['file_name'] = a.file_name
       sound['key'] = a.key
@@ -74,7 +72,7 @@ class ProjectController < ApplicationController
   end
   def create_sound_url (project, key)
     bucket = 'stereodrive.dev'
-    path = project << '/' << key << '.mp3'
+    path = project + '/' + key + '.mp3'
     expire_date = (Time.now + 10.minutes).to_i
     digest = OpenSSL::Digest.new('sha1')
     can_string = "GET\n\n\n#{expire_date}\n/#{bucket}/#{path}"

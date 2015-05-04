@@ -11,7 +11,7 @@ app.controller("dawCtrl", ['$scope','$routeParams','$upload','$http', 'usSpinner
     var projectId = $routeParams['id'];
 
     function init(){
-
+        showSpinner();
         getProject(projectId);
         initializeAudioTools();
         //getAudioAndClips();
@@ -105,7 +105,7 @@ app.controller("dawCtrl", ['$scope','$routeParams','$upload','$http', 'usSpinner
     //  Utility Functions
     /////////////////////////////////////////////////////////
     function hideSpinner() {
-	console.log("spinner hidden");
+	    console.log("spinner hidden");
         usSpinnerService.stop('spinner');
     }
 
@@ -244,7 +244,6 @@ app.controller("dawCtrl", ['$scope','$routeParams','$upload','$http', 'usSpinner
             for (var i = 0; i < data.audio.length; i++) {
                 $scope.audioFiles.push(loadSoundAndClips(data.audio[i]));
             }
-	hideSpinner();
         }).error(function(data,status,headers,config){
 
             alert("error. could not fetch projectssss");
@@ -257,7 +256,8 @@ app.controller("dawCtrl", ['$scope','$routeParams','$upload','$http', 'usSpinner
 
     $scope.refreshAudio = function() {
         console.log("refreshing Audio");
-        $http.get('project/'+projectId+'/audio').success(function (data) {
+        $http.get('/p/'+projectId+'/audio').success(function (data) {
+            console.log(data);
             for(var i = 0; i<data.length;i++){
                 var index = -1;
                 for(var j=0; j<$scope.audioFiles.length; j++){
@@ -281,8 +281,6 @@ app.controller("dawCtrl", ['$scope','$routeParams','$upload','$http', 'usSpinner
                 if (audioDeleted){
                     $scope.audioFiles.splice(i, 1);
                     i--;
-                }else{
-                    console.log("audio File found");
                 }
             }
         }).error(function () {
@@ -380,7 +378,7 @@ app.controller("dawCtrl", ['$scope','$routeParams','$upload','$http', 'usSpinner
             showSpinner();
             console.log("uploading file: " + file);
             $upload.upload({
-                url: 'project/'+projectId+'/audio',
+                url: '/p/'+projectId+'/audio',
                 file: file
             }).success(function (data, status, headers, config) {
                 if (data.success) {
@@ -461,7 +459,7 @@ app.controller("dawCtrl", ['$scope','$routeParams','$upload','$http', 'usSpinner
 
     $scope.refreshTracks = function(){
 
-        $http.get('project/'+projectId+'/track').success(function (data) {
+        $http.get('/p/'+projectId+'/track').success(function (data) {
             $scope.tracks = [];
 
             for (var i = 0; i < data.length; i++) {
@@ -471,7 +469,8 @@ app.controller("dawCtrl", ['$scope','$routeParams','$upload','$http', 'usSpinner
                     var buffer = null;
                     for(var k=0; k<$scope.audioFiles.length;k++){
                         if($scope.audioFiles[k].key == data[i].clips[j].audio_key){
-                            buffer = $scope.audioFiles[k].buffer
+                            buffer = $scope.audioFiles[k].buffer;
+                            console.log(buffer);
                         }
                     }
                     if(buffer) {
@@ -479,6 +478,7 @@ app.controller("dawCtrl", ['$scope','$routeParams','$upload','$http', 'usSpinner
                         clip.length = buffer.duration;
                         clip.buffer = buffer;
                     }else{
+                        console.log("clip not found");
                         //remove clip from tracks
                         data[i].clips.splice(j,1);
                     }
@@ -491,6 +491,7 @@ app.controller("dawCtrl", ['$scope','$routeParams','$upload','$http', 'usSpinner
                         var clip = track.clips[j];
                         attachSlider(clip);
                         element = document.getElementById(clip.clip_id);
+                        console.log(clip.buffer);
                         drawWaveform(element.width, element.height, element.getContext("2d"), clip.buffer);
                         initClipPos(clip);
                         console.log("added clip to track: " + clip.clip_id);

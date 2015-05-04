@@ -4,10 +4,10 @@ Team7::Application.routes.draw do
   resources :users
   resources :artists
  
-  post '/project/:project_id/audio' => 'audio#create'
-  get '/project/:project_id/audio' => 'audio#index'
+  post '/p/:project_id/audio' => 'audio#create'
+  get '/p/:project_id/audio' => 'audio#index'
   post '/track' => 'track#create'
-  get '/project/:project_id/track' => 'track#index'
+  get '/p/:project_id/track' => 'track#index'
   post '/deleteTrack' => 'track#delete'
   post '/clips' => 'clips#create'
   post '/clips/:id' => 'clips#update'

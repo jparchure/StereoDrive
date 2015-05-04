@@ -2,7 +2,9 @@ class AudioController < ApplicationController
 
   # upload file to s3, and on success, add the filename and key to the database
   def create
-    if(params[:file])
+    project = Project.find_by id: params[:project_id]
+
+    if(params[:file] && project)
       file = params[:file]
 
       if( ((file.content_type <=> "audio/mpeg") == 0)||((file.content_type <=> "audio/mp3") == 0)||((file.content_type <=> "audio/x-m4a") == 0))
@@ -16,20 +18,16 @@ class AudioController < ApplicationController
 
 
         # create object key  {project}/{UUID}.mp3
-        fileName = 'ExampleProject/' << uuid << '.mp3'
+        fileName = project.name + '/' + uuid + '.mp3'
         obj = bucket.object(fileName)
 
         if(obj.upload_file(file.tempfile))
-          url = create_sound_url "ExampleProject", uuid
+          url = create_sound_url project.name, uuid
 
-          project = Project.find_by id: params[:project_id]
-          if(project)
-            project.audios.create!(file_name: file.original_filename,key: uuid)
-            # create sound in track
-            render :json => { 'success' => true, 'file_name' => file.original_filename, 'key' => uuid, 'audioUrl' => url}
-          else
-            render :json => { 'success' => false, 'error' => "Could not upload"}
-          end
+          project.audios.create!(file_name: file.original_filename,key: uuid)
+          # create sound in track
+          render :json => { 'success' => true, 'file_name' => file.original_filename, 'key' => uuid, 'audioUrl' => url}
+
         else
           render :json => { 'success' => false, 'error' => "Could not upload"}
         end
@@ -45,6 +43,8 @@ class AudioController < ApplicationController
     # This will remove a sound
     key = params[:key]
     if(key)
+
+      audio = Audio.find_by key: key
       s3 = Aws::S3::Resource.new(
           :access_key_id => 'AKIAIMHCBU7BTMVYEWOA',
           :secret_access_key => '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',
@@ -53,9 +53,9 @@ class AudioController < ApplicationController
       bucket = s3.bucket('stereodrive.dev')
 
       # create object key  {project}/{UUID}.mp3
-      fileName = 'ExampleProject/' << key << '.mp3'
+      fileName = audio.project.name + '/' + key + '.mp3'
       if(bucket.object(fileName).delete)
-        Audio.where(key: key).destroy_all
+        audio.destroy
 
         # Destroy all Clips as well
 
@@ -79,7 +79,7 @@ class AudioController < ApplicationController
 
     #get signed urls for each audio file
     audio.each{ |a|
-      project_name = 'ExampleProject'
+      project_name = project.name
       sound = Hash.new
       sound['file_name'] = a.file_name
       sound['key'] = a.key
@@ -108,7 +108,7 @@ class AudioController < ApplicationController
 
   def create_sound_url (project, key)
     bucket = 'stereodrive.dev'
-    path = project << '/' << key << '.mp3'
+    path = project + '/' + key + '.mp3'
     expire_date = (Time.now + 10.minutes).to_i
     digest = OpenSSL::Digest.new('sha1')
     can_string = "GET\n\n\n#{expire_date}\n/#{bucket}/#{path}"

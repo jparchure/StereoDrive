@@ -26,7 +26,6 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h1>{{"DAW"}}</h1>
-                        <input type="number" ng-model="zoomCoefficient"></input>
                         <div class="btn-group" role="group">
                             <button class="btn btn-default" ng-click="play()">
                                 <span class="glyphicon glyphicon-play"></span>
@@ -41,6 +40,8 @@
 
                             <button class="btn btn-default" ng-click="refreshAudio()">Refresh Audio</button>
                         </div>
+                        <input type="range" max="100" min="1" ng-model="zoomCoefficient"></input>
+
                     </div>
                     <div id="playlist">
                         <div class="row-fluid">
