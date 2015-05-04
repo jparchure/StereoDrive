@@ -1,16 +1,15 @@
 class ProjectController < ApplicationController
   def create
-    @artist = Artist.find(1) 
-    createdProject = @artist.projects.create
-    puts(createdProject)
-
-    render :json => { 'success' => true, 'key' =>createdProject.id}
-
+    @artist = Artist.find(params[:id])
+    if(!@artist.nil?) 
+    	createdProject = @artist.projects.create
+    	render :json => { 'success' => true, 'key' =>createdProject.id}
+    end
   end
 
   def index
 
-    project = Project.all
+    project = @current_user.projects
 
     render :json => {'success'=> true, 'projects' => project}
 

@@ -103,9 +103,9 @@ app.controller("homeCtrl", ['$scope', '$routeParams', '$http', '$cookies', '$loc
 
 
 //showing all the projects
-    $scope.projects = [];
-    getAllProjects();
-    function getAllProjects() {
+    getProjects();
+    function getProjects() {
+    	$scope.projects = [];
         $http.get('/project').success(function (data) {
 
             for (var i = 0; i < data.projects.length; i++) {

@@ -16,7 +16,7 @@ app.controller("artistCtrl", ['$scope', '$routeParams','$cookies','$http', '$tim
 		});
 		};
 	    $scope.createProject = function(){
-		$http.post('/project' ).success(function(data){//data is returned from track_controller.rb#create
+		$http.post('/project',{id: $routeParams['id']}).success(function(data){//data is returned from track_controller.rb#create
 
 		    console.log(data);
 		}).error(function(data, status, headers, config){
