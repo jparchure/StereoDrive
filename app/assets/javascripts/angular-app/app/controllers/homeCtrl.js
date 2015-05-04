@@ -98,6 +98,7 @@ app.controller("homeCtrl", ['$scope', '$routeParams', '$http', '$cookies', '$loc
         
         $scope.toggleModal = function(){
         $scope.showModal = !$scope.showModal;
+        $scope.artistEdit=false;
         };
 
 

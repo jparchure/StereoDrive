@@ -22,7 +22,7 @@ class ArtistsController < ApplicationController
       id = params[:id]
       if(!@current_user.nil?)
         artist = Artist.find(id)
-        puts(artist)
+        puts("ARTIST INFO AS FOLLOWS:", artist.genre)
         render json: artist
       end
   end

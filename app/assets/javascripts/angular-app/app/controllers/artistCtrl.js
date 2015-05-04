@@ -12,9 +12,19 @@ app.controller("artistCtrl", ['$scope', '$routeParams','$cookies','$http', '$tim
 		$scope.getArtistdata = function(){
 		$http.get('/artists/' + $routeParams['id']).success(function(data){
 			$scope.artist=data;
-			
+			//console.log($scope.artist.genre);
 		});
 		};
+	    $scope.createProject = function(){
+		$http.post('/project' ).success(function(data){//data is returned from track_controller.rb#create
+
+		    console.log(data);
+		}).error(function(data, status, headers, config){
+		    console.log(status);
+		    alert("could not create project");
+		});
+		getProjects();
+	    };
 
 		$scope.searchArtist = function(){
 			$http.get('/search/' + $routeParams['substring']).success(function(data){
@@ -29,11 +39,8 @@ app.controller("artistCtrl", ['$scope', '$routeParams','$cookies','$http', '$tim
 				$scope.searchedartists = $scope.traversedartists;
 			});
 		};
-	    $scope.projects = [];
-	    if($routeParams['id'] != null){
-	    	getProjects();
-	    }
-	    function getProjects() {
+		var getProjects = function () {
+			$scope.projects = [];
 		$http.get('/project/list/' + $routeParams['id']).success(function (data) {
 
 		    for (var i = 0; i < data.projects.length; i++) {
@@ -45,15 +52,19 @@ app.controller("artistCtrl", ['$scope', '$routeParams','$cookies','$http', '$tim
 
 		    alert("error. could not fetch projects");
 		})
-	    }
+	    };
 
+	    
+	    if($routeParams['id'] != null){
+	    	getProjects();
+	    }
+	    
+	  
 		$scope.getMemberdata = function(){
 		$http.get('/artist/member/' + $routeParams['id']).success(function(data){
 			console.log("Befor: ", $scope.showEditButton);
 			$scope.memberlist=data;
 			showEditButton();
-			//memberList = data;
-			console.log("After: ", $scope.showEditButton);
 		});
 		};
 		
@@ -78,7 +89,12 @@ app.controller("artistCtrl", ['$scope', '$routeParams','$cookies','$http', '$tim
         $scope.addUsers = false;
         
         $scope.toggleAddUsers = function(){
-        $scope.addUsers= !$scope.addUsers;
+        
+        if($scope.artist.is_solo){
+				alert("You can't add members to solo band");
+				return false;
+			}
+		$scope.addUsers= !$scope.addUsers;
         };
 
 
@@ -89,26 +105,42 @@ app.controller("artistCtrl", ['$scope', '$routeParams','$cookies','$http', '$tim
 
 
         $scope.memberAction= function(event){
-        	href="/home/" + event.currentTarget.id;
+        	href="/artists/remove";
         	if($scope.memberEdit){
 
         		deleteArtist(event);
         	}
         	else{
-        		$location.url(href);
+        		$location.url("/home/" + event.currentTarget.id);
         	}
+
         };
         //Deleting a band
+        
         var deleteArtist = function(event){
-                if(event.currentTarget.id === currentuser_id ){
-        			alert("You can not delete yourself from the solo band");
-        		}
-        		else if(confirm('Are you sure you want to delete this?')){
-        		$http.delete(href).error(function(err){
-        			console.log(err);
                 
+                if($scope.memberlist.length===1){
+                	//If last user then delete the band
+                	if(confirm("Are you sure you want to delete " + $scope.artist.name)){
+                	$http.delete("/artists/" + $routeParams['id']).error(function(err){
+        				console.log(err);
+        				});
+                	$location.url("/home");
+                	}
+                }
+
+        		else if(confirm('Are you sure you want to banish this user from ' + $scope.artist.name)){
+        		var deleteData={user_id: event.currentTarget.id, artist_id: $routeParams['id']}
+        		$http.post(href, deleteData).error(function(err){
+        			console.log(err);
+                	
         		});
+        		if(event.currentTarget.id == currentuser_id){
+        			//If deleted self from band
+        			$location.url("/home");
+        		}
                 $scope.getMemberdata();
+                $scope.showEditButton=false;
         	}
 
         };
@@ -120,8 +152,10 @@ app.controller("artistCtrl", ['$scope', '$routeParams','$cookies','$http', '$tim
 					$scope.showEditButton=true;
 				}
 			}
+
 		};
 		
+
 		//enableEdit();
 }]);
 //$location for angular routes
