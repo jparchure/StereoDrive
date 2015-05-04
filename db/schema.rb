@@ -11,17 +11,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150326213210) do
+ActiveRecord::Schema.define(version: 20150504133103) do
 
   create_table "artists", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
     t.string   "name"
     t.string   "image"
     t.string   "page"
     t.string   "location"
     t.string   "genre"
     t.string   "tagline"
+    t.boolean  "is_solo",    default: false
   end
 
   create_table "artists_users", id: false, force: :cascade do |t|
@@ -40,6 +41,7 @@ ActiveRecord::Schema.define(version: 20150326213210) do
   end
 
   create_table "clips", force: :cascade do |t|
+    t.integer  "track_id"
     t.integer  "pos_in_track"
     t.integer  "start"
     t.integer  "end"
@@ -47,16 +49,22 @@ ActiveRecord::Schema.define(version: 20150326213210) do
     t.string   "audio_key"
     t.datetime "created_at",   null: false
     t.datetime "updated_at",   null: false
-    t.integer  "track_id"
     t.integer  "audio_id"
   end
+
+  add_index "clips", ["track_id"], name: "index_clips_on_track_id"
 
   create_table "projects", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer  "artist_id"
+    t.string   "name"
   end
 
+  add_index "projects", ["artist_id"], name: "index_projects_on_artist_id"
+
   create_table "tracks", force: :cascade do |t|
+    t.integer  "project_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

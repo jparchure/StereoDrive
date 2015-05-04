@@ -3,27 +3,23 @@
               <div id="sidebar-wrapper">
             	<ul class="sidebar-nav">
                 <ul class="sidebar-nav">
-                <li class="sidebar-brand">
-                    <a href="#">
-                       Projects
-                    </a>
-                </li>
+
                 <li>
-                    <a href="#">Project 1</a>
-                </li>
+		    <form class="form-horizontal" style="color: white">
+		      <h3 class="navbar-brand">search Bands:<h3><br> 
+			<input style="color: black" class="search" type="text" name="searchbands" ng-model="searchBand.text">
+			<a href="#/search/{{searchBand.text}}">Search</a>      
+		    </form>
+		</li>
+                <li><h3>{{artist.name}}'s Projects </h3></li>
+                <div ng-repeat="project in projects">
                 <li>
-                    <a href="#">Project 2</a>
+                    <a href="#/daw/{{project.id}}"">{{project.name}}</a>
                 </li>
-                <li>
-                    <a href="#">Project 3</a>
-                </li>
-                <li>
-                    <a href="#">Project 4</a>
-                </li>
-                <li>
-                    <a href="#">Project 5</a>
-                </li>
-              
+                </div>
+		<li>
+		    <button class="btn btn-default" type="button" ng-click="createProject()" >Create a Project</button>
+		</li>	
             </ul>
                
 
@@ -55,14 +51,14 @@
                 
          
                 <div class=" col-md-9 col-lg-12 "> 
-                 <p class="tagline"> {{artist.tagline}}</p>
+                 <p class="tagline" editable-text="artist.tagline"> {{artist.tagline}}</p>
                   <table class="table table-user-information">
                     <tbody>
                      
                    
                       <tr>
                         <td><label>Jamming Since:</label></td>
-                        <td><p editable-text="artist.origin" e-required>{{artist.created_at}}</p></td>
+                        <td><p>{{artist.created_at}}</p></td>
                       </tr>
                    
                          <tr>
@@ -100,9 +96,9 @@
 
                             <!-- buttons to submit / cancel form -->
       <span ng-show="editableForm.$visible">
-         <button data-original-title="Accept Changes" data-toggle="tooltip" type="submit" class="btn btn-sm btn-default" ng-disabled="editableForm.$waiting"><i class="glyphicon glyphicon-thumbs-up"></i></a>
+         <button data-original-title="Accept Changes" data-toggle="tooltip" type="submit" class="btn btn-sm btn-default" ng-click = saveUser() ng-disabled="editableForm.$waiting"><i class="glyphicon glyphicon-thumbs-up"></i>
         
-        <button data-original-title="Remove this user" data-toggle="tooltip" type="button" class="btn btn-sm btn-danger" ng-disabled="editableForm.$waiting" ng-click="editableForm.$cancel()"><i class="glyphicon glyphicon-remove"></i></a>
+        <button data-original-title="Remove this user" data-toggle="tooltip" type="button" class="btn btn-sm btn-danger" ng-disabled="editableForm.$waiting" ng-click="editableForm.$cancel()"><i class="glyphicon glyphicon-remove"></i>
       </span>
                         </span>
                       </div>
@@ -123,15 +119,48 @@
 
             <div class="panel-body">
                 <!--Repeat the div below for multiple bands-->
-                <div class="dis-image col-md- col-lg-2 " align="center"> <img alt="User Pic" src="https://lh5.googleusercontent.com/-b0-k99FZlyE/AAAAAAAAAAI/AAAAAAAAAAA/eu7opA4byxI/photo.jpg?sz=100" class="img-thumbnail"> </div>
-
+                <!--<div class="dis-image col-md- col-lg-2 " align="center"> <img alt="User Pic" src="https://lh5.googleusercontent.com/-b0-k99FZlyE/AAAAAAAAAAI/AAAAAAAAAAA/eu7opA4byxI/photo.jpg?sz=100" class="img-thumbnail"> </div>!-->
+                <div ng-repeat="member in memberlist" class="dis-image col-md-2 col-lg-2 " align="center" ng-click="memberAction($event);$event.preventDefault()" id ="{{member.id}}"> <img alt="User Pic" src="{{member.image}}" class="img-thumbnail wiggle"> </a></div>
               
             </div>
                  <div class="panel-footer">
-                        <a data-original-title="Broadcast Message" data-toggle="tooltip" type="button" class="btn btn-sm btn-primary"><i class="glyphicon glyphicon-plus"></i></a>
-                       
+                        <a data-original-title="Broadcast Message" data-toggle="tooltip" type="button" class="btn btn-sm btn-primary" ng-click="toggleAddUsers()"><i class="glyphicon glyphicon-plus"></i></a>
+                      	
+
+                  <span class="pull-right" ng-show="showEditButton">
+                          <!--HTML to make bands -->
+                            <a data-original-title="Edit this user" data-toggle="tooltip" type="button" class="btn btn-sm btn-warning" ng-click="toggleDelete()"ng-show="!memberEdit"><i class="glyphicon glyphicon-edit"></i></a>
+                            
+
+                            <!-- buttons to submit / cancel form -->
+
+      
+         <button data-original-title="Accept Changes" data-toggle="tooltip" type="submit" class="btn btn-sm btn-default" ng-click="toggleDelete()" ng-show="memberEdit"><i class="glyphicon glyphicon-thumbs-up"></i></a></button>
+        
+                        </span>
                     </div>
             
+          </div>
+
+          <div class="panel panel-info" ng-controller="searchUserToAddCtrl" ng-show="addUsers">
+            <div class="panel-heading">
+              <h3 class="panel-title">Members</h3>
+            </div>
+            <form name="searchUsers" novalidate>
+            <div class="panel-body">
+            <input type="text" ng-model="userToBeAdded.name" required>
+
+                <!--Repeat the div below for multiple bands-->
+                <!--<div class="dis-image col-md- col-lg-2 " align="center"> <img alt="User Pic" src="https://lh5.googleusercontent.com/-b0-k99FZlyE/AAAAAAAAAAI/AAAAAAAAAAA/eu7opA4byxI/photo.jpg?sz=100" class="img-thumbnail"> </div>!
+                <div ng-repeat="member in memberlist" class="dis-image col-md-2 col-lg-2 " align="center"><a href="#/users/{{member.id}}"> <img alt="User Pic" src="{{member.image}}" class="img-thumbnail wiggle"> </a></div>-->
+            
+            </div>
+
+                 <div class="panel-footer">
+           
+                       	<button data-original-title="Accept Changes" data-toggle="tooltip" type="submit" class="btn btn-sm btn-default" ng-click = "lookUpUser(searchUsers)"><i class="glyphicon glyphicon-thumbs-up"></i>
+                    </div>
+           </form>
           </div>
         </div>
       </div>

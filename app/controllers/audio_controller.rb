@@ -21,9 +21,15 @@ class AudioController < ApplicationController
 
         if(obj.upload_file(file.tempfile))
           url = create_sound_url "ExampleProject", uuid
-          Audio.create!(file_name: file.original_filename,key: uuid)
-          # create sound in track
-          render :json => { 'success' => true, 'file_name' => file.original_filename, 'key' => uuid, 'audioUrl' => url}
+
+          project = Project.find_by id: params[:project_id]
+          if(project)
+            project.audios.create!(file_name: file.original_filename,key: uuid)
+            # create sound in track
+            render :json => { 'success' => true, 'file_name' => file.original_filename, 'key' => uuid, 'audioUrl' => url}
+          else
+            render :json => { 'success' => false, 'error' => "Could not upload"}
+          end
         else
           render :json => { 'success' => false, 'error' => "Could not upload"}
         end
@@ -66,7 +72,10 @@ class AudioController < ApplicationController
     # This method will return signed URLs to each sound in the project
     allAudio  = Array.new
     # Get info from db
-    audio = Audio.all
+
+
+    project = Project.find_by id: params[:project_id]
+    audio = project.audios.all
 
     #get signed urls for each audio file
     audio.each{ |a|

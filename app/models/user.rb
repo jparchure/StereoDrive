@@ -5,6 +5,7 @@ class User < ActiveRecord::Base
   validates :email, presence: true, length: { maximum: 255 },format: { with: VALID_EMAIL_REGEX }
   
   has_and_belongs_to_many :artists
+  has_many :projects, through: :artists
 
   def self.omniauth(auth)
       where(provider: auth.provider, uid: auth.uid).first_or_create do |user|

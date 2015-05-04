@@ -12,7 +12,7 @@ gem 'angular-rails-templates'
 gem 'bower-rails'
 gem 'bootstrap-sass', '~> 3.3.0'
 gem 'omniauth-facebook'
-
+gem "factory_girl_rails", "~> 4.0"
 gem 'aws-sdk'
 gem 'uuidtools'
 source "https://rails-assets.org" do

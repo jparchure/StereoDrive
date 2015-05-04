@@ -1,5 +1,4 @@
-
-app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', '$firebaseArray', '$firebaseObject', '$timeout', function($scope, $upload, $http, usSpinnerService, $firebaseArray, $firebaseObject, $timeout) {
+app.controller("dawCtrl", ['$scope','$routeParams','$upload','$http', 'usSpinnerService', '$firebaseArray', '$firebaseObject', '$timeout', function($scope, $routeParams, $upload, $http, usSpinnerService, $firebaseArray, $firebaseObject, $timeout) {
 
     $scope.audioFiles = [];
     $scope.zoomCoefficient = 100;
@@ -9,11 +8,14 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', '$fir
     });
     var audioContext;
     var numOfLoadedSounds = 0;
+    var projectId = $routeParams['id'];
 
     function init(){
+
+        getProject(projectId);
         initializeAudioTools();
-        getAudioAndClips();
-        getTrack();
+        //getAudioAndClips();
+        //getTrack();
         listenForFileDrop();
         initDragMarker();
         setUpFirebase();
@@ -58,18 +60,6 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', '$fir
         audioState = $scope.firebaseObj.audioUpdates;
     }
 
-    // This function will make the API call to get the track files from our backend
-    function getTrack() {
-        $http.get('/track').success(function (data) {
-            for (var i = 0; i < data.length; i++) {
-                data[i].clips = [];
-                $scope.tracks.push(data[i]);
-            }
-        }).error(function () {
-            alert("could not retrieve tracks");
-        });
-    }
-
     function listenForFileDrop(){
         $scope.$watch('file', function () {
             upload($scope.file);
@@ -102,21 +92,6 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', '$fir
         interact.maxInteractions(Infinity);   // Allow multiple interactions
     }
 
-    // This function will make the API call to get the audio files from our backend
-    function getAudioAndClips() {
-        $http.get('/audio').success(function (data) {
-            console.log(data);
-            for (var i = 0; i < data.length; i++) {
-                $scope.audioFiles.push(loadSoundAndClips(data[i]));
-            }
-            if (data.length == 0) {
-                hideSpinner();
-            }
-        }).error(function () {
-            alert("could not retrieve audio");
-        });
-    }
-
     // This function will set up the WebAudioApi
     function initializeAudioTools() {
         try {
@@ -130,6 +105,7 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', '$fir
     //  Utility Functions
     /////////////////////////////////////////////////////////
     function hideSpinner() {
+	console.log("spinner hidden");
         usSpinnerService.stop('spinner');
     }
 
@@ -172,11 +148,13 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', '$fir
     var playing = false;
 
     $scope.stop= function(){
-        for(var i=0; i<playlist.length; i++){
-            try {
-                playlist[i].source.stop();
-            }catch(e) {
-                clearTimeout(playlist[i].timeout);
+        if(playlist) {
+            for (var i = 0; i < playlist.length; i++) {
+                try {
+                    playlist[i].source.stop();
+                } catch (e) {
+                    clearTimeout(playlist[i].timeout);
+                }
             }
         }
         playing = false;
@@ -188,11 +166,13 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', '$fir
     };
 
     $scope.pause = function(){
-        for(var i=0; i<playlist.length; i++){
-            try {
-                playlist[i].source.stop();
-            }catch(e) {
-                clearTimeout(playlist[i].timeout);
+        if(playlist) {
+            for (var i = 0; i < playlist.length; i++) {
+                try {
+                    playlist[i].source.stop();
+                } catch (e) {
+                    clearTimeout(playlist[i].timeout);
+                }
             }
         }
         playing = false;
@@ -243,13 +223,41 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', '$fir
     // Get the right width/time vals and ratio
     };
 
+    $scope.createProject = function(){
+        $http.post('/project' ).success(function(data){//data is returned from track_controller.rb#create
+
+            console.log(data);
+        }).error(function(data, status, headers, config){
+            console.log(status);
+            alert("could not create project");
+        });
+    };
+
+    function getProject(id){
+        $http.get('/project/'+id).success(function(data){
+
+            for (var i = 0; i < data.tracks.length; i++) {
+                //var track = {number:0, name:"", key: 0, clips: []};
+                data.tracks[i].clips = [];
+                $scope.tracks.push(data.tracks[i]);
+            }
+            for (var i = 0; i < data.audio.length; i++) {
+                $scope.audioFiles.push(loadSoundAndClips(data.audio[i]));
+            }
+	hideSpinner();
+        }).error(function(data,status,headers,config){
+
+            alert("error. could not fetch projectssss");
+        })
+
+    }
     ///////////////////////////////////////////
     // Audio Functions
     //////////////////////////////////////////
 
     $scope.refreshAudio = function() {
         console.log("refreshing Audio");
-        $http.get('/audio').success(function (data) {
+        $http.get('project/'+projectId+'/audio').success(function (data) {
             for(var i = 0; i<data.length;i++){
                 var index = -1;
                 for(var j=0; j<$scope.audioFiles.length; j++){
@@ -372,7 +380,7 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', '$fir
             showSpinner();
             console.log("uploading file: " + file);
             $upload.upload({
-                url: '/audio',
+                url: 'project/'+projectId+'/audio',
                 file: file
             }).success(function (data, status, headers, config) {
                 if (data.success) {
@@ -407,9 +415,11 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', '$fir
             number: $scope.tracks.length+1,
             name: 'track'+($scope.tracks.length+1), //needs track number in there too
             key: 0,
-            clips: []
+            clips: [],
+	        project: $routeParams['id']
         };
-        $http.post('/track', {track: track}).success(function(data){//data is returned from track_controller.rb#create
+        $http.post('/track', track ).success(function(data){//data is returned from track_controller.rb#create
+
 
             track.key = data.key;
             track.name = 'track'+(track.key);
@@ -451,7 +461,7 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', '$fir
 
     $scope.refreshTracks = function(){
 
-        $http.get('/track').success(function (data) {
+        $http.get('project/'+projectId+'/track').success(function (data) {
             $scope.tracks = [];
 
             for (var i = 0; i < data.length; i++) {
@@ -501,7 +511,6 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', '$fir
             var track = $scope.tracks[i];
             for(var j=0;j<track.clips.length;j++) {
                 var clip = track.clips[j];
-// TODO not done yet
                 var leftVal = parseFloat((clip.pos_in_track * $scope.zoomCoefficient)/100|| 0);
 //console.log(clip);
                 $("#"+clip.clip_id).css({left: leftVal});

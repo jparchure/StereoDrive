@@ -2,7 +2,8 @@
  * Created by saasbook on 09/02/15.
  */
 
-var app = angular.module("app", ['ngRoute', 'ui.bootstrap', 'ngCookies', 'xeditable', 'templates','angularFileUpload','angularSpinner', 'ngDraggable','firebase']);
+
+var app = angular.module("app", ['ngRoute', 'ui.bootstrap', 'ngCookies', 'xeditable', 'templates','angularFileUpload','angularSpinner', 'ngDraggable','firebase','ngAutoComplete']);
 
 app.config(['$routeProvider',
     function($routeProvider) {
@@ -11,7 +12,7 @@ app.config(['$routeProvider',
             templateUrl: 'home.html',
             controller: 'homeCtrl'
         })
-        .when('/daw', {
+        .when('/daw/:id?', {
             title: 'daw',
             templateUrl: 'daw.html',
             controller: 'dawCtrl'
@@ -21,8 +22,15 @@ app.config(['$routeProvider',
             templateUrl: 'artist.html',
             controller: 'artistCtrl'
         })
-        .otherwise({
 
+        .when('/search/:substring?',{
+            title: 'search',
+            templateUrl: 'search.html',
+            controller: 'artistCtrl'
+        })
+
+        .otherwise({
+            
             redirectTo: '/home'
         })
     }

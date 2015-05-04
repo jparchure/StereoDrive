@@ -1,19 +1,30 @@
 Team7::Application.routes.draw do
+
   resources :app
   resources :users
   resources :artists
-  post '/audio' => 'audio#create'
-  get '/audio' => 'audio#index'
+ 
+  post '/project/:project_id/audio' => 'audio#create'
+  get '/project/:project_id/audio' => 'audio#index'
   post '/track' => 'track#create'
-  get '/track' => 'track#index'
+  get '/project/:project_id/track' => 'track#index'
   post '/deleteTrack' => 'track#delete'
   post '/clips' => 'clips#create'
   post '/clips/:id' => 'clips#update'
+  post '/artists/add' => 'artists#add_member'
+  post '/artists/remove' => 'artists#remove_member'
   get 'audio/:key/delete' => 'audio#delete'
   match 'auth/:provider/callback', to: 'sessions#create', via: :get
   match '/logout', to: 'sessions#destroy', via: :delete
   match 'artist/list/:id', to: 'artists#list', via: :get
-  
+
+  get '/project/:id' => 'project#show'
+  post '/project' => 'project#create'
+  get '/project' => 'project#index'
+  get '/project/list/:id' => 'project#list'
+  match 'artist/member/:id', to: 'artists#members', via: :get
+  match 'search/:substring', to: 'artists#listall', via: :get 
+
   root :to => "app#index"
   # The priority is based upon order of creation:
   # first created -> highest priority.
