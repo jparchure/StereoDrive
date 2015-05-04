@@ -3,6 +3,10 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', '$fir
 
     $scope.audioFiles = [];
     $scope.zoomCoefficient = 100;
+
+    $scope.$watch('zoomCoefficient',function(){
+        refreshClipsAfterZoom();
+    });
     var audioContext;
     var numOfLoadedSounds = 0;
 
@@ -29,7 +33,9 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', '$fir
 
         trackState = $scope.firebaseObj.trackUpdates;
         audioState = $scope.firebaseObj.audioUpdates;
+    }
 
+    function watchFirebaseVars(){
         $timeout(function(){
             $scope.$watch('firebaseObj.trackUpdates', function(){
                 console.log("detected Change");
@@ -209,7 +215,7 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', '$fir
               }
               playlist.push({
                   buffer: clip.buffer,
-                  when: (clip.pos_in_track - markerPos)/$scope.zoomCoefficient,
+                  when: (clip.pos_in_track/100 - markerPos/$scope.zoomCoefficient),
                   start: start,
                   end: clip.buffer.duration
               })
@@ -319,6 +325,7 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', '$fir
 
                 if (numOfLoadedSounds == $scope.audioFiles.length) {
                     hideSpinner();
+                    watchFirebaseVars();
                 }
             }, function (e) {
                 alert("sounds were not loaded properly");
@@ -491,6 +498,32 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', '$fir
     /////////////////////////////////////////////
     // Clip Functions
     /////////////////////////////////////////////
+    function refreshClipsAfterZoom(){
+        for(var i=0;i<$scope.tracks.length;i++) {
+            var track = $scope.tracks[i];
+            for(var j=0;j<track.clips.length;j++) {
+                var clip = track.clips[j];
+// TODO not done yet
+                var leftVal = parseFloat((clip.pos_in_track * $scope.zoomCoefficient)/100|| 0);
+//console.log(clip);
+                $("#"+clip.clip_id).css({left: leftVal});
+            }
+        }
+
+        $timeout(function() {
+            for (var i = 0; i < $scope.tracks.length; i++) {
+                var track = $scope.tracks[i];
+                for (var j = 0; j < track.clips.length; j++) {
+                    var clip = track.clips[j];
+                    element = document.getElementById(clip.clip_id);
+                    if (element)
+                        drawWaveform(element.width, element.height, element.getContext("2d"), clip.buffer);
+
+                }
+            }
+        });
+    }
+
     $scope.onSoundDrop = function(data, event, track){
 
         var clip = {
@@ -557,16 +590,19 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', '$fir
                     var target = event.target;
 
                     // keep the dragged position in the posInTrack attribute
-                    var x = (parseFloat(clip.pos_in_track || 0) + event.dx );
-                    //x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx;
+                    var x = (parseFloat((clip.pos_in_track * 100/$scope.zoomCoefficient)|| 0) + event.dx );
                     x = x - (x%1);
                     if(x<0)
                         x=0;
+
+                    var transform = "+=" + (event.dx - (event.dx%1));
+                    $("#"+clip.clip_id).css({left: transform});
+
                     // translate the element
-                    target.style.transform = 'translate(' + x + 'px, ' + 0 + 'px)';
+                    //target.style.transform = 'translate(' + x + 'px, ' + 0 + 'px)';
 
                     // update the position attributes
-                    clip.pos_in_track = x;
+                    clip.pos_in_track = x*$scope.zoomCoefficient/100;
                 },
                 onend: function() {
                     $scope.$apply();
@@ -609,8 +645,9 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', '$fir
     }
 
     function initClipPos(clip){
-        var target = document.getElementById(clip.clip_id);
-        target.style.transform = 'translate(' + clip.pos_in_track + 'px, ' + 0 + 'px)';
+        var leftVal = parseFloat((clip.pos_in_track * $scope.zoomCoefficient/100)|| 0);
+        console.log(leftVal);
+        $("#"+clip.clip_id).css({left: leftVal});
         $scope.$apply();
     }
 
@@ -619,7 +656,7 @@ app.controller("dawCtrl", ['$scope','$upload','$http', 'usSpinnerService', '$fir
         var target = document.getElementById(clip.clip_id);
         var dx = nPosX - clip.pos_in_track;
         clip.pos_in_track = nPosX;
-        target.style.transform = 'translate(' + dx + 'px, ' + 0 + 'px)';
+        target.style.transform = 'translate(' + dx * 100/$scope.zoomCoefficient + 'px, ' + 0 + 'px)';
         $scope.$apply();
     }
 
