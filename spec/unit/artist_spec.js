@@ -66,5 +66,7 @@ it('updates artists correctly', function(){
     expect(scope.artist.image).toBe("imagecrazy.png");
     expect(scope.artist.page).toBe("heavensdemons.org");
 	});
+
+
 });
 
