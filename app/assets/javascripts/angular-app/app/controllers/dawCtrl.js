@@ -598,7 +598,7 @@ app.controller("dawCtrl", ['$scope','$routeParams','$upload','$http', 'usSpinner
                     var target = event.target;
 
                     // keep the dragged position in the posInTrack attribute
-                    var x = (parseFloat((clip.pos_in_track * 100/$scope.zoomCoefficient)|| 0) + event.dx );
+                    var x = (parseFloat((clip.pos_in_track * $scope.zoomCoefficient/100)|| 0) + event.dx );
                     x = x - (x%1);
                     if(x<0)
                         x=0;
@@ -610,7 +610,7 @@ app.controller("dawCtrl", ['$scope','$routeParams','$upload','$http', 'usSpinner
                     //target.style.transform = 'translate(' + x + 'px, ' + 0 + 'px)';
 
                     // update the position attributes
-                    clip.pos_in_track = x*$scope.zoomCoefficient/100;
+                    clip.pos_in_track = x*100.0/$scope.zoomCoefficient;
                 },
                 onend: function() {
                     $scope.$apply();
@@ -656,15 +656,6 @@ app.controller("dawCtrl", ['$scope','$routeParams','$upload','$http', 'usSpinner
         var leftVal = parseFloat((clip.pos_in_track * $scope.zoomCoefficient/100)|| 0);
         console.log(leftVal);
         $("#"+clip.clip_id).css({left: leftVal});
-        $scope.$apply();
-    }
-
-    function setNewClipPosition(clip, nPosX){
-        console.log("changing clip Pos");
-        var target = document.getElementById(clip.clip_id);
-        var dx = nPosX - clip.pos_in_track;
-        clip.pos_in_track = nPosX;
-        target.style.transform = 'translate(' + dx * 100/$scope.zoomCoefficient + 'px, ' + 0 + 'px)';
         $scope.$apply();
     }
 
