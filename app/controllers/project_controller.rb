@@ -25,7 +25,7 @@ class ProjectController < ApplicationController
   end
 
   def show
-    project = Project.find_by!(id: (params[:id] ) )
+    project = @current_user.projects.find_by!(id: (params[:id] ) )
 
 
     allTrack  = Array.new
