@@ -51,8 +51,6 @@
                         </div>
                         <div ng-repeat="track in tracks" class="row-fluid panel-success track-container">
                             <div class="track-opts">
-                                Track {{ track.key }}
-                                <br/>
                                 <button class="btn btn-danger" type="button" id="deleteTrack" ng-click="removeTrack(track)">Delete</button>
                             </div>
                             <div ng-drop="true" class="track" ng-drop-success="onSoundDrop($data,$event,track)">

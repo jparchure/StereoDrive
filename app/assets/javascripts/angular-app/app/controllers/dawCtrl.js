@@ -241,6 +241,9 @@ app.controller("dawCtrl", ['$scope','$routeParams','$upload','$http', 'usSpinner
                 data.tracks[i].clips = [];
                 $scope.tracks.push(data.tracks[i]);
             }
+            if(data.audio.length == 0){
+                hideSpinner();
+            }
             for (var i = 0; i < data.audio.length; i++) {
                 $scope.audioFiles.push(loadSoundAndClips(data.audio[i]));
             }
