@@ -3,7 +3,7 @@
               <div id="sidebar-wrapper">
             	<ul class="sidebar-nav">
                 <ul class="sidebar-nav">
-
+              <div  style="height: 825px">
                 <li class="sidebar-brand">
                     <li>                   
     
@@ -27,17 +27,22 @@
                 <li>
                     <a href="#">Project 5</a>
                 </li>
+              </div>  
 
                 <li>
       
-      <div style="height: 80%">
+      <div >
       </div>
       <form class="form-horizontal">
-      
-     
-        <input style="margin: 5%; padding: 2%; width: 80%; height:25px; color: black" placeholder="Search Bands" class="form-control" type="text" name="searchbands" ng-model="searchBand.text">
-      <a style="width: 4px" class="glyphicon glyphicon-search" href="#/search/{{searchBand.text}}"></a>      
-      
+      <div style="width:100; padding-bottom: 10px; position: fixed; bottom: 0" >
+        <a style=" padding-top: 5px; float: right; width: 0" class="glyphicon glyphicon-search" href="#/search/{{searchBand.text}}"></a> 
+        <div style="padding-left: 10px; overflow: hidden">
+        <input style="height: 25px; color: black" placeholder="Search Bands" class="form-control" type="text" name="searchbands" ng-model="searchBand.text">
+           </div>
+        
+
+
+      </div>
 
       </form>
       

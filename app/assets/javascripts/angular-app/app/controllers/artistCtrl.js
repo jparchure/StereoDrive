@@ -18,14 +18,14 @@ app.controller("artistCtrl", ['$scope', '$routeParams','$cookies','$http',functi
 		$scope.searchArtist = function(){
 			$http.get('/search/' + $routeParams['substring']).success(function(data){
 				var allartists = data;
-				$scope.traversedartists = [];
+				traversedartists = [];
 				console.log(allartists);
 				for(var i = 0; i<allartists.length; i++){
 					if (allartists[i].name.toLowerCase().indexOf($routeParams['substring'].toLowerCase()) >= 0) {
-						$scope.traversedartists.push(allartists[i]);
+						traversedartists.push(allartists[i]);
 					};
 				}
-				$scope.searchedartists = $scope.traversedartists;
+				$scope.searchedartists = traversedartists;
 			});
 		};
 

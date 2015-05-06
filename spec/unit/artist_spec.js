@@ -68,3 +68,5 @@ it('updates artists correctly', function(){
 	});
 });
 
+});
+
