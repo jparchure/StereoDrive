@@ -13,7 +13,7 @@
   <%= javascript_include_tag "https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true&libraries=places" %>
    <%= csrf_meta_tags %>
 </head>
-<body style = "padding-top: 50px;">
+<body style = "padding-top: 50px; align:center; background-size:cover; background-repeat: no-repeat; background-image:url(http://s28.postimg.org/ubezx8whp/Stereo_Drive_BG.png)">
 <nav class='navbar-inverse navbar-fixed-top' role='navigation'>
     <div class='container'>
         <div class='navbar-header'>
@@ -37,6 +37,8 @@
     </div>
 </nav>
 <%= yield %>
+
+
 
 </body>
 </html>

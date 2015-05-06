@@ -6,6 +6,7 @@ app.controller("homeCtrl", ['$scope', '$routeParams', '$http', '$cookies', '$loc
 
         current_user_id= $cookies['id'];
        
+        
 
         if($routeParams['op']){ //If accessing others' profile, check for route params
             route='/users/'+ $routeParams['op'];
@@ -35,6 +36,7 @@ app.controller("homeCtrl", ['$scope', '$routeParams', '$http', '$cookies', '$loc
 
         $scope.getUserData();
         $scope.getArtistData();
+        
 
         $scope.saveUser= function(){
             route='/users/' + current_user_id;
