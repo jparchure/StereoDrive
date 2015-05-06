@@ -12,7 +12,7 @@ app.controller("createArtistCtrl", ['$scope', '$routeParams', '$http', '$cookies
             
             route='/artists';
 
-
+            console.log("GENRE SENT: ", $scope.userData.genre);
             $http.post(route, $scope.userData).error(function(err) {
                 if(err.field && err.msg) {
             // err like {field: "name", msg: "Server-side error for this username!"} 

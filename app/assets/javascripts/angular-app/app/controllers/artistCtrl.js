@@ -12,7 +12,7 @@ app.controller("artistCtrl", ['$scope', '$routeParams','$cookies','$http', '$loc
 		$scope.getArtistdata = function(){
 		$http.get('/artists/' + $routeParams['id']).success(function(data){
 			$scope.artist=data;
-			//console.log($scope.artist.genre);
+			console.log("GENRE IS", $scope.artist.genre);
 		});
 		};
 	    $scope.createProject = function(){
@@ -32,14 +32,14 @@ app.controller("artistCtrl", ['$scope', '$routeParams','$cookies','$http', '$loc
 		$scope.searchArtist = function(){
 			$http.get('/search/' + $routeParams['substring']).success(function(data){
 				var allartists = data;
-				$scope.traversedartists = [];
+				traversedartists = [];
 				console.log(allartists);
 				for(var i = 0; i<allartists.length; i++){
 					if (allartists[i].name.toLowerCase().indexOf($routeParams['substring'].toLowerCase()) >= 0) {
-						$scope.traversedartists.push(allartists[i]);
+						traversedartists.push(allartists[i]);
 					};
 				}
-				$scope.searchedartists = $scope.traversedartists;
+				$scope.searchedartists = traversedartists;
 			});
 		};
 		var getProjects = function () {
@@ -49,7 +49,6 @@ app.controller("artistCtrl", ['$scope', '$routeParams','$cookies','$http', '$loc
 		    for (var i = 0; i < data.projects.length; i++) {
 			$scope.projects.push(data.projects[i])
 		    }
-		    console.log($scope.projects)
 
 		}).error(function (data, status, headers, config) {
 
@@ -65,7 +64,6 @@ app.controller("artistCtrl", ['$scope', '$routeParams','$cookies','$http', '$loc
 	  
 		$scope.getMemberdata = function(){
 		$http.get('/artist/member/' + $routeParams['id']).success(function(data){
-			console.log("Befor: ", $scope.showEditButton);
 			$scope.memberlist=data;
 			showEditButton();
 		});

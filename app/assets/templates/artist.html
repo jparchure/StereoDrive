@@ -4,24 +4,48 @@
             	<ul class="sidebar-nav">
                 <ul class="sidebar-nav">
 
-                <li>
 
-		    <form class="form-horizontal" style="color: white">
-		      <h3 class="navbar-brand">search Bands:<h3><br> 
-			<input style="color: black" class="search" type="text" name="searchbands" ng-model="searchBand.text">
-			<a href="#/search/{{searchBand.text}}">Search</a>      
-		    </form>
-		</li>
+
+              <div  style="height: 825px">
+                <li class="sidebar-brand">
+                    
+
+                
                 <li><h3>{{artist.name}}'s Projects </h3></li>
                 <div ng-repeat="project in projects">
                 <li>
                     <a href="#/daw/{{project.id}}">{{project.name}}</a>
 
                 </li>
+
                 </div>
 		<li>
 		    <button class="btn btn-default" type="button" ng-click="createProject()" >Create a Project</button>
 		</li>	
+
+              </div>  
+
+                <li>
+      
+      <div >
+      </div>
+      <form class="form-horizontal">
+      <div style="width:100; padding-bottom: 10px; position: fixed; bottom: 0" >
+        <a style=" padding-top: 5px; float: right; width: 0" class="glyphicon glyphicon-search" href="#/search/{{searchBand.text}}"></a> 
+        <div style="padding-left: 10px; overflow: hidden">
+        <input style="height: 25px; color: black" placeholder="Search Bands" class="form-control" type="text" name="searchbands" ng-model="searchBand.text">
+           </div>
+        
+
+
+      </div>
+
+      </form>
+      
+      
+                </li>
+              
+
             </ul>
                
 
@@ -122,7 +146,7 @@
             <div class="panel-body">
                 <!--Repeat the div below for multiple bands-->
                 <!--<div class="dis-image col-md- col-lg-2 " align="center"> <img alt="User Pic" src="https://lh5.googleusercontent.com/-b0-k99FZlyE/AAAAAAAAAAI/AAAAAAAAAAA/eu7opA4byxI/photo.jpg?sz=100" class="img-thumbnail"> </div>!-->
-                <div ng-repeat="member in memberlist" class="dis-image col-md-2 col-lg-2 " align="center" ng-click="memberAction($event);$event.preventDefault()" id ="{{member.id}}"> <img alt="User Pic" src="{{member.image}}" class="img-thumbnail wiggle"> </a></div>
+                <div ng-repeat="member in memberlist" class="dis-image col-md-2 col-lg-2 " align="center" ng-click="memberAction($event);$event.preventDefault()" id ="{{member.id}}"> <img alt="User Pic" src="{{member.image}}" class="img-thumbnail wiggle"></div>
               
             </div>
                  <div class="panel-footer">

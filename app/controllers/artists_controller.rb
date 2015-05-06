@@ -22,7 +22,6 @@ class ArtistsController < ApplicationController
       id = params[:id]
       if(!@current_user.nil?)
         artist = Artist.find(id)
-        puts("ARTIST INFO AS FOLLOWS:", artist.genre)
         render json: artist
       end
   end
@@ -32,7 +31,6 @@ class ArtistsController < ApplicationController
       id = params[:id]
       if(!@current_user.nil?)
         artist = Artist.find(id)
-        puts(artist.users)
         render json: artist.users
       end
   end
@@ -69,7 +67,6 @@ class ArtistsController < ApplicationController
      end 
   end
   def update
-    puts(params)
     @artist = Artist.find(params[:id])
     #@current_user= User.find()
 
@@ -85,7 +82,6 @@ class ArtistsController < ApplicationController
       @artist.update(updated_artist)
       #Update the user
       if(!@artist)
-        puts("Failed")
         flash[:warning] = "Sorry update failed"
       end
     end
@@ -94,16 +90,14 @@ class ArtistsController < ApplicationController
 
   def create
 	if(!@current_user.nil?)
-          puts(params)
           artist = params
-          hash = {:name => params["name"], :image=>params["image"], :page=>params["page"], :location=>params["location"]}
+          hash = {:name => params["name"], :image=>params["image"], :page=>params["page"], :location=>params["location"], :genre=> params["genre"], :tagline=> params["tagline"]}
     	  @current_user.artists << Artist.create!(hash)
 	end
   render :nothing=>true
   end
   def destroy
 	if(!@current_user.nil?)
-    puts(params)
 	  artist = @current_user.artists.find(params["id"])
 	  artist.destroy
 	end
