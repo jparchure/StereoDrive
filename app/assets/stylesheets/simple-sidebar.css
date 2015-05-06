@@ -14,6 +14,31 @@
     transition: all 0.5s ease;
 }
 
+#footer {
+   position:absolute;
+   bottom:0;
+   width:100%;
+   height:30px;   /* Height of the footer */
+   background:#6cf;
+}
+
+#searchbar {
+   position:absolute;
+   bottom:0;
+   width:100%;
+   height:30px;   /* Height of the footer */
+   background:#6cf;
+}
+
+#searchicon {
+   position:absolute;
+   bottom:0;
+   width:100%;
+   height:30px;   /* Height of the footer */
+   background:#6cf;
+}
+
+
 #wrapper.toggled {
     padding-right: 250px;
 }
