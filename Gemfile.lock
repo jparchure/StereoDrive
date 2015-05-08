@@ -72,6 +72,7 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.9.1)
+    database_cleaner (1.4.1)
     diff-lcs (1.2.5)
     erubis (2.7.0)
     execjs (2.4.0)
@@ -214,6 +215,7 @@ DEPENDENCIES
   bower-rails
   capybara
   coffee-rails
+  database_cleaner
   factory_girl_rails (~> 4.0)
   jquery-rails
   omniauth-facebook
